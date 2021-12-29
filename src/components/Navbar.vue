@@ -26,6 +26,13 @@
               >地圖</router-link
             >
           </li>
+
+          <li class="nav-item">
+            <router-link to="/leaderboard" class="nav-link" href="#"
+              >排行榜</router-link
+            >
+          </li>
+
           <li class="nav-item">
             <router-link class="nav-link" to="/productsview" href="#"
               >捐助</router-link

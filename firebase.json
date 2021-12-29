@@ -12,15 +12,12 @@
     ],
     "rewrites": [
       {
-        "source": "**", 
+        "source": "**",
         "destination": "/index.html"
       }
     ]
   },
   "storage": {
     "rules": "storage.rules"
-  },
-  "functions": {
-    "runtime": "nodejs10"
   }
 }

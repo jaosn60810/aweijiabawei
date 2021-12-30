@@ -11,6 +11,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import './assets/reset.scss';
 import './assets/app.scss';
+import '@fortawesome/fontawesome-free/css/all.css';
+import '@fortawesome/fontawesome-free/js/all.js';
 import 'jquery';
 import Swal from 'sweetalert2';
 import VueFirestore from 'vue-firestore';
@@ -18,6 +20,7 @@ import VueRouter from 'vue-router';
 import Vue2Filters from 'vue2-filters';
 import VueCarousel from 'vue-carousel';
 import Vuex from 'vuex';
+
 require('firebase/firestore');
 
 Vue.use(VueCarousel);

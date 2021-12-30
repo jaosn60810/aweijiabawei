@@ -13,7 +13,11 @@
               id="cityName"
               class="form-control"
               v-model="select.city"
-              @change="cityChange"
+              @change="
+                cityChange();
+                updateMap();
+                showPopup(shelter[0].shelterId, 12);
+              "
             >
               <option value="all">全部</option>
               <option :value="city" v-for="city in cities" :key="city">
@@ -28,7 +32,15 @@
             >請選擇動物收容所:</label
           >
           <div class="col-sm-9">
-            <select id="areaName" class="form-control" v-model="select.store">
+            <select
+              id="areaName"
+              class="form-control"
+              v-model="select.store"
+              @change="
+                updateMap();
+                showPopup(shelter[0].shelterId, 15);
+              "
+            >
               <option value="all">請選擇動物收容所</option>
               <option
                 :value="a.shelterName"
@@ -50,7 +62,7 @@
             v-for="a in shelter"
             :key="a.shelterName"
           >
-            <div class="card-body" @click="showPopup(a.shelterId)">
+            <div class="card-body" @click="showPopup(a.shelterId, 15)">
               <p class="card-title h3">
                 <strong>{{ a.shelterName }}</strong>
               </p>
@@ -213,8 +225,6 @@ export default {
             ? icons.red
             : icons.green;
         // 透過藥局經緯度疊加標記
-
-        console.log(data.updateTime.toLocaleString());
         const marker = L.marker([data.latitude, data.longitude], {
           title: data.shelterId,
           icon,
@@ -233,12 +243,12 @@ export default {
         this.markers.push(marker);
       });
     },
-    showPopup(id) {
+    showPopup(id, zoom) {
       this.markers.forEach((marker) => {
         const markerID = marker.options.title;
         const position = marker.getLatLng();
         if (markerID === id) {
-          openStreetMap.setView(position, 15);
+          openStreetMap.setView(position, zoom);
           marker.openPopup();
         }
       });

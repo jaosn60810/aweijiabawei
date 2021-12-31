@@ -26,7 +26,7 @@
                   aria-controls="pills-login"
                   aria-selected="true"
                   style="color: rgb(5, 28, 34);"
-                  >Login</a
+                  >登入</a
                 >
               </li>
               <li class="nav-item">
@@ -39,7 +39,7 @@
                   aria-controls="pills-register"
                   aria-selected="false"
                   style="color:rgb(5, 28, 34);"
-                  >Signup</a
+                  >註冊</a
                 >
               </li>
             </ul>
@@ -52,89 +52,121 @@
                 role="tabpanel"
                 aria-labelledby="pills-login-tab"
               >
-                <h5 class="text-center">Login Please</h5>
+                <h5 class="text-center">登入帳號</h5>
                 <div class="login-input text-left mx-3 my-2">
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input
-                      type="email"
-                      v-model="email"
-                      class="form-control"
-                      aria-describedby="emailHelp"
-                      placeholder="Enter email"
-                    />
-                    <small class="form-text text-muted"
-                      >We'll never share your email with anyone else.</small
+                  <form @submit.prevent="login">
+                    <div class="form-group">
+                      <label for="login-account">帳號</label>
+                      <input
+                        type="text"
+                        v-model="loginAccount"
+                        class="form-control"
+                        aria-describedby="emailHelp"
+                        placeholder="輸入帳號"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="login-password">密碼</label>
+                      <input
+                        type="password"
+                        @keyup.enter="login"
+                        v-model="loginPassword"
+                        class="form-control"
+                        placeholder="密碼"
+                      />
+                    </div>
+                    <button
+                      class="btn btn-primary"
+                      style="background-color: cadetblue; border-color:transparent ; color:rgb(5, 28, 34);"
                     >
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input
-                      type="password"
-                      @keyup.enter="login"
-                      v-model="password"
-                      class="form-control"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    @click="login"
-                    style="background-color: cadetblue; border-color:transparent ; color:rgb(5, 28, 34);"
-                  >
-                    Login
-                  </button>
+                      登入
+                    </button>
+                  </form>
                 </div>
               </div>
 
               <!-- Signup tag -->
+
               <div
                 class="tab-pane fade"
                 id="pills-register"
                 role="tabpanel"
                 aria-labelledby="pills-login-tab"
               >
-                <h5 class="text-center">Create New Account</h5>
+                <h5 class="text-center">創建帳號</h5>
+
                 <div class="login-input text-left mx-3 my-2">
-                  <div class="form-group">
-                    <label for="name">Your name</label>
-                    <input
-                      type="text"
-                      v-model="name"
-                      class="form-control"
-                      placeholder="Your beautiful name"
-                    />
-                  </div>
+                  <form @submit.prevent="sendConfirmEmail">
+                    <div class="form-group">
+                      <label for="account">帳號</label>
+                      <input
+                        type="text"
+                        v-model="account"
+                        class="form-control register-account"
+                        placeholder="帳號名稱"
+                        required
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="email">電子信箱</label>
+                      <input
+                        type="email"
+                        v-model="email"
+                        class="form-control register-email"
+                        aria-describedby="emailHelp"
+                        placeholder="電子信箱"
+                        required
+                      />
+                    </div>
 
-                  <div class="form-group">
-                    <label for="email">Email address</label>
-                    <input
-                      type="email"
-                      v-model="email"
-                      class="form-control"
-                      aria-describedby="emailHelp"
-                      placeholder="Enter email"
-                    />
-                  </div>
+                    <button
+                      class="btn btn-primary"
+                      style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                    >
+                      取得驗證碼
+                    </button>
+                  </form>
+                  <form @submit.prevent="register">
+                    <div class="form-group mt-3">
+                      <label for="verify-code">驗證碼</label>
+                      <input
+                        type="text"
+                        v-model="verifyCode"
+                        class="form-control"
+                        placeholder="驗證碼"
+                        required
+                      />
+                    </div>
 
-                  <div class="form-group">
-                    <label for="password">Password</label>
-                    <input
-                      type="password"
-                      v-model="password"
-                      class="form-control"
-                      placeholder="Password"
-                    />
-                  </div>
+                    <div class="form-group">
+                      <label for="password">密碼</label>
+                      <input
+                        type="password"
+                        v-model="password"
+                        class="form-control"
+                        placeholder="Password"
+                        required
+                      />
+                    </div>
 
-                  <button
-                    class="btn btn-primary"
-                    @click="register"
-                    style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                  >
-                    Signup
-                  </button>
+                    <div class="form-group">
+                      <label for="name">名字</label>
+                      <input
+                        type="text"
+                        v-model="name"
+                        class="form-control"
+                        placeholder="Your beautiful name"
+                        required
+                      />
+                    </div>
+
+                    <button
+                      class="btn btn-primary"
+                      style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                    >
+                      註冊
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -153,14 +185,18 @@ export default {
   name: 'Login',
   data() {
     return {
-      name: null,
-      email: null,
-      password: null,
+      loginAccount: '',
+      loginPassword: '',
+      name: '',
+      email: '',
+      password: '',
+      account: '',
+      verifyCode: '',
     };
   },
 
   methods: {
-    register() {
+    registerOld() {
       fb.auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((user) => {
@@ -197,8 +233,131 @@ export default {
           console.log(error);
         });
     },
+    register() {
+      var myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
 
+      var raw = JSON.stringify({
+        account: this.account,
+        password: this.password,
+        userName: this.name,
+        emailAddress: this.email,
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        `https://finalproject-336509.appspot.com/api/auth/register?verifyCode=${this.verifyCode}`,
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.msg === '註冊成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '註冊成功',
+              text: '歡迎光臨',
+            });
+            this.loginAccount = this.account;
+            this.loginPassword = this.password;
+            this.name = '';
+            this.email = '';
+            this.password = '';
+            this.account = '';
+            this.verifyCode = '';
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '註冊失敗',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
+    sendConfirmEmail() {
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+
+      fetch(
+        `https://finalproject-336509.appspot.com/api/auth/sendemail?account=${this.account}&emailaddress=${this.email}`,
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.msg === '驗證碼已寄出') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '驗證碼已寄出',
+              text: '請至信箱領取驗證碼',
+            });
+            $('.register-account').attr('disabled', true);
+            $('.register-email').attr('disabled', true);
+          } else if (result.msg === '帳號已存在') {
+            window.Swal.fire({
+              icon: 'error',
+              title: '帳號已存在',
+            });
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '此信箱已經領取過驗證碼',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
     login() {
+      var myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: this.loginAccount,
+        password: this.loginPassword,
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/Auth/Login',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          // Handle Errors here.
+
+          //var errorMessage = error.message;
+          if (result.msg === '登入成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '登入成功',
+              text: '歡迎光臨',
+            });
+            localStorage.setItem('token', JSON.stringify(result.token));
+            $('#login').modal('hide');
+            this.$router.replace('/adminforadmin/profile');
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '帳號密碼錯誤',
+              text: '請輸入正確帳號密碼',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
+    loginOld() {
       fb.auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then((user) => {

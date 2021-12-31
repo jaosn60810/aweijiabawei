@@ -49,15 +49,16 @@
             data-target="#login"
             v-if="login === null"
             style="border-color: cadetblue; color: cadetblue;"
-            >Login/ Signup</a
+            >登入/ 註冊</a
           >
           <a
             class="btn my-2 my-sm-0"
-            @click="logout()"
-            v-if="login != null"
+            @click.stop="logout()"
+            v-if="login !== null"
             style="border-color: cadetblue; color: cadetblue;"
-            >Logout</a
           >
+            登出
+          </a>
           <a
             class="fas fa-shopping-cart mx-3 my-3"
             data-toggle="modal"
@@ -87,11 +88,12 @@ export default {
   },
   data() {
     return {
-      login: fb.auth().currentUser, //若沒有currentuser則會返回null
+      // login: fb.auth().currentUser, //若沒有currentuser則會返回null
+      login: JSON.parse(localStorage.getItem('token')),
     };
   },
   methods: {
-    logout() {
+    logoutOld() {
       fb.auth().signOut();
       this.$store
         .commit('logoutuser')
@@ -105,10 +107,25 @@ export default {
           console.log(error);
         });
     },
-    Membercenter() {
+    logout() {
+      localStorage.removeItem('token');
+      window.Toast.fire({
+        type: 'success',
+        title: '登出成功',
+      });
+      this.login = null;
+    },
+    MembercenterOld() {
       if (fb.auth().currentUser) {
         this.gotoadmin();
       } else if (fb.auth().currentUser === null) {
+        $('#login').modal('show');
+      }
+    },
+    Membercenter() {
+      if (localStorage.getItem('token') !== null) {
+        this.$router.replace('/adminforadmin/profile');
+      } else {
         $('#login').modal('show');
       }
     },

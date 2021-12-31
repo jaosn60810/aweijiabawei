@@ -251,9 +251,47 @@ export default {
     },
   },
   created() {
-    const user = fb.auth().currentUser;
-    this.account.photoURL = user.photoURL;
-    this.account.email = user.email;
+    // const user = fb.auth().currentUser;
+    // this.account.photoURL = user.photoURL;
+    // this.account.email = user.email;
+    let token = localStorage.getItem('token');
+
+    function parseJwt(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join('')
+      );
+
+      return JSON.parse(jsonPayload);
+    }
+
+    let payload = parseJwt(token);
+
+    var myHeaders = new Headers();
+    myHeaders.append('Authorization', `Bearer ${token}`);
+
+    var raw = '';
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    fetch(
+      `https://finalproject-336509.appspot.com/api/user/mydata?account=${payload.given_name}`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error));
   },
 };
 </script>

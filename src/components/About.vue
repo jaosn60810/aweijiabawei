@@ -1,8 +1,8 @@
 <template>
-  <div class="about">
-    <div class="row no-gutters">
+  <div class="about container-fluid">
+    <div class="row no-gutters justify-content-center">
       <!-- 選擇所在區域 -->
-      <div class="toolbox col-sm-6 p-2 bg-white">
+      <div class="toolbox w-75  col-sm-6 p-2 bg-white">
         <!-- 選城市 -->
         <div class="form-group row ">
           <label for="cityName" class="col-sm-3 col-form-label text-left "
@@ -53,7 +53,7 @@
           </div>
         </div>
         <!-- 各收容所資料 -->
-        <div class="overflow-auto bd-links ">
+        <div class="overflow-auto bd-links">
           <div
             class="card "
             :class="{
@@ -110,7 +110,7 @@
       </div>
 
       <!-- 顯示收容所位置 -->
-      <div class="col-sm-6">
+      <div class="col-sm-6 w-75 ">
         <div id="map"></div>
       </div>
     </div>

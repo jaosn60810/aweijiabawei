@@ -1,9 +1,9 @@
 <template>
   <div class="profiles">
     <div class="container py-3">
-      <h2 style="text-align: left; margin-bottom: 50px; margin-top: 20px;">
+      <!-- <h2 style="text-align: left; margin-bottom: 50px; margin-top: 20px;">
         You can edit your personal information here!
-      </h2>
+      </h2> -->
       <ul class="nav nav-tabs px-3">
         <li class="nav-item">
           <a
@@ -11,7 +11,7 @@
             href="#profile"
             data-toggle="tab"
             style="color:cadetblue"
-            >Profile</a
+            >會員資訊</a
           >
         </li>
         <li class="nav-item">
@@ -20,7 +20,7 @@
             href="#account"
             data-toggle="tab"
             style="color:cadetblue"
-            >Account settings</a
+            >設定</a
           >
         </li>
       </ul>
@@ -29,99 +29,148 @@
         <!-- Profile tag -->
         <div class="tab-pane fade show active" id="profile">
           <div class="login-input text-left mx-3 my-2">
-            <div class="form-row my-3">
-              <div class="form-group col">
-                <input
-                  class="form-control"
-                  placeholder="Full name"
-                  v-model="profile.name"
-                />
-              </div>
-              <div class="form-group col">
-                <input
-                  class="form-control"
-                  placeholder="Phone"
-                  v-model="profile.phone"
-                />
-              </div>
-            </div>
-            <div class="form-row my-3">
+            <div class="form-group my-3">
+              <label class="form-label">姓名</label>
               <input
                 class="form-control"
-                placeholder="Address"
-                v-model="profile.address"
+                placeholder="姓名"
+                v-model="profile.name"
+                disabled
               />
             </div>
-            <div class="form-row my-3">
-              <div class="form-group col-8">
-                <input
-                  class="form-control"
-                  placeholder="Postcode"
-                  v-model="profile.postcode"
-                />
-              </div>
-              <div class="form-group col-4">
-                <button type="button" class="btn" @click="updateProfile()">
-                  Save Changes
-                </button>
-              </div>
+
+            <div class="form-group my-3">
+              <label class="form-label">點數</label>
+              <input
+                class="form-control"
+                placeholder="點數"
+                v-model="profile.remainingPoints"
+                disabled
+              />
+            </div>
+
+            <div class="form-group ">
+              <button
+                class="btn btn-primary"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                type="button"
+                @click="addValue()"
+              >
+                把錢換成愛心
+              </button>
+            </div>
+
+            <div class="form-group my-3">
+              <label class="form-label">本月捐款</label>
+              <input
+                class="form-control"
+                v-model="profile.monthDonation"
+                disabled
+              />
+            </div>
+
+            <div class="form-group my-3">
+              <label class="form-label">本年捐款</label>
+              <input
+                class="form-control"
+                v-model="profile.yearDonation"
+                disabled
+              />
+            </div>
+
+            <div class="form-group my-3">
+              <label class="form-label">總捐款</label>
+              <input
+                class="form-control"
+                v-model="profile.soFarDonation"
+                disabled
+              />
+            </div>
+
+            <div class="form-group my-3">
+              <label class="form-label">User ID</label>
+              <input
+                class="form-control"
+                placeholder="User ID"
+                v-model="profile.postcode"
+                disabled
+              />
             </div>
           </div>
         </div>
-        <!-- Account setting tag -->
+
+        <!-- Account setting tag  -->
         <div class="tab-pane fade" id="account">
           <div class="login-input text-left mx-3 my-2">
-            <div class="form-row my-3">
-              <div class="col">
-                <input
-                  class="form-control"
-                  placeholder="User name"
-                  v-model="account.name"
-                />
-              </div>
-              <div class="col">
-                <input
-                  class="form-control"
-                  placeholder="Email address"
-                  v-model="account.email"
-                />
-              </div>
+            <div class="form-group my-3">
+              <label class="form-label">名稱</label>
+              <input
+                class="form-control"
+                placeholder="User name"
+                v-model="account.name"
+              />
             </div>
-            <div class="form-row my-3">
-              <div class="form-group col-5">
-                <input
-                  type="file"
-                  class="form-control"
-                  placeholder="profile picture"
-                  @change="uploadImage"
-                />
-                <!-- 當用戶更改<input>、<select>和<textarea> 元素並提交更改時，change事件在這個元素上觸發 -->
-                <label for="">for your profile picture</label>
-              </div>
-              <div class="form-group col-1">
-                <div class="img-wrap">
-                  <img :src="account.photoURL" alt="" width="80px" />
-                  <span
-                    v-if="account.photoURL"
-                    class="btn delete-img"
-                    @click="deleteImage"
-                    style="background-color:transparent; font-size: small; padding-left: 5px;"
-                    >X</span
-                  >
-                </div>
-              </div>
-              <div class="form-group col-6">
-                <button
-                  type="button"
-                  class="btn mr-3"
-                  @click="Resetemailandusername"
-                >
-                  Save Changes
-                </button>
-                <button type="button" class="btn" @click="ResetPasswordEmail">
-                  Reset password
-                </button>
-              </div>
+
+            <div class="form-group my-3">
+              <!-- 當用戶更改<input>、<select>和<textarea> 元素並提交更改時，change事件在這個元素上觸發 -->
+              <label for="">大頭貼</label>
+              <input
+                class="form-control"
+                placeholder="profile picture"
+                v-model="account.photoURL"
+              />
+            </div>
+
+            <div class="form-group my-3">
+              <button
+                type="button"
+                class="btn btn-primary"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                @click="Resetemailandusername"
+              >
+                修改資料
+              </button>
+            </div>
+
+            <div class="form-group my-3">
+              <label class="form-label">電子信箱</label>
+              <input
+                class="form-control"
+                placeholder="電子信箱"
+                v-model="account.email"
+              />
+            </div>
+
+            <div class="form-group my-3">
+              <button
+                type="button"
+                class="btn btn-primary"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                @click="Resetemailandusername"
+              >
+                修改電子信箱
+              </button>
+            </div>
+
+            <div class="form-group my-3">
+              <label for="">密碼</label>
+              <input
+                class="form-control"
+                placeholder="profile picture"
+                @change="uploadImage"
+                v-model="account.password"
+              />
+            </div>
+
+            <div class="form-group my-3">
+              <button
+                type="button"
+                class="btn btn-primary"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                @click="Resetemailandusername"
+              >
+                修改密碼
+              </button>
             </div>
           </div>
         </div>
@@ -132,7 +181,8 @@
 
 <script>
 // @ is an alias to /src
-import { fb, db } from '../firebase';
+// import { fb, db } from '../firebase';
+import { fb } from '../firebase';
 
 export default {
   name: 'Profiles',
@@ -144,6 +194,11 @@ export default {
         phone: null,
         address: null,
         postcode: null,
+        allDonation: [],
+        monthDonation: '',
+        yearDonation: '',
+        soFarDonation: '',
+        remainingPoints: '',
       },
       account: {
         name: null,
@@ -156,12 +211,12 @@ export default {
       },
     };
   },
-  firestore() {
-    const user = fb.auth().currentUser;
-    return {
-      profiles: db.collection('profiles').doc(user.uid),
-    };
-  },
+  // firestore() {
+  //   const user = fb.auth().currentUser;
+  //   return {
+  //     profiles: db.collection('profiles').doc(user.uid),
+  //   };
+  // },
   methods: {
     deleteImage() {
       let image = fb.storage().refFromURL(this.account.photoURL);
@@ -227,6 +282,12 @@ export default {
         title: 'Updated it successfully',
       });
     },
+    addValue() {
+      if (this.profile.remainingPoints === '恭喜您將愛心全數捐出') {
+        this.profile.remainingPoints = 0;
+      }
+      this.profile.remainingPoints += 1000;
+    },
     uploadImage(e) {
       if (e.target.files[0]) {
         let file = e.target.files[0];
@@ -250,11 +311,11 @@ export default {
       }
     },
   },
-  created() {
+  mounted() {
     // const user = fb.auth().currentUser;
     // this.account.photoURL = user.photoURL;
     // this.account.email = user.email;
-    let token = localStorage.getItem('token');
+    let token = JSON.parse(localStorage.getItem('token'));
 
     function parseJwt(token) {
       var base64Url = token.split('.')[1];
@@ -274,14 +335,12 @@ export default {
     let payload = parseJwt(token);
 
     var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${token}`);
-
-    var raw = '';
+    let bearerToken = 'Bearer ' + token;
+    myHeaders.append('Authorization', bearerToken);
 
     var requestOptions = {
       method: 'GET',
       headers: myHeaders,
-      body: raw,
       redirect: 'follow',
     };
 
@@ -289,8 +348,39 @@ export default {
       `https://finalproject-336509.appspot.com/api/user/mydata?account=${payload.given_name}`,
       requestOptions
     )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((response) => response.json())
+      .then((result) => {
+        let {
+          userId,
+          account,
+          password,
+          userName,
+          emailAddress,
+          remainingPoints,
+        } = result.userData;
+        this.profile.name = userName;
+        this.profile.postcode = userId;
+        this.profile.remainingPoints =
+          remainingPoints || '恭喜您將愛心全數捐出';
+
+        this.account.name = account;
+        this.account.email = emailAddress;
+        this.account.password = password;
+        this.account.uid = userId;
+        this.account.photoURL = 'https://i.pravatar.cc';
+
+        let {
+          allDonation,
+          monthDonation,
+          yearDonation,
+          soFarDonation,
+        } = result;
+
+        this.profile.allDonation = allDonation;
+        this.profile.monthDonation = monthDonation || '正要開始';
+        this.profile.yearDonation = yearDonation || '正要開始';
+        this.profile.soFarDonation = soFarDonation || '正要開始';
+      })
       .catch((error) => console.log('error', error));
   },
 };

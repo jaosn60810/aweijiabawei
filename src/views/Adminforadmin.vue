@@ -1,21 +1,26 @@
 <template>
-  <div class="adminforadmin">
-    <div class="page-wrapper default-theme sidebar-bg bg1 toggled">
-      <a id="show-sidebar" class="btn-sidebar btn-sm btn-dark pull-left">
-        <i class="fas fa-bars" @click="closeMenu"></i>
+  <div class="adminforadmin ">
+    <div class="page-wrapper default-theme sidebar-bg bg1 toggled ">
+      <a
+        id="show-sidebar"
+        class="btn-sidebar btn-sm btn-dark pull-left"
+        @click="closeMenu"
+      >
+        <i class="fas fa-bars"></i>
       </a>
-      <nav id="sidebar" class="sidebar-wrapper">
+      <nav id="sidebar" class="sidebar-wrapper ">
         <div class="sidebar-content">
           <!-- sidebar-brand  -->
-          <div class="sidebar-item sidebar-brand">
-            <a href="#">pro sidebar</a>
-            <div id="close-sidebar">
-              <i class="fas fa-times" @click="closeMenu"></i>
+          <div class="sidebar-item sidebar-brand justify-content-end">
+            <!-- <a href="#">pro sidebar</a> -->
+            <a href="javascript:;" class="h3">{{ name }}</a>
+            <div id="close-sidebar" @click="closeMenu">
+              <i class="fas fa-times-circle"></i>
             </div>
           </div>
           <!-- sidebar-header  -->
           <div class="sidebar-item sidebar-header d-flex flex-nowrap">
-            <div class="user-pic">
+            <div class="user-pic w-100">
               <img
                 class="img-responsive img-rounded"
                 :src="photoURL"
@@ -23,28 +28,28 @@
               />
             </div>
             <div class="user-info">
-              <span class="user-email">{{ email }}</span>
-              <span
+              <!-- <span class="user-email">{{ email }}</span> -->
+              <!-- <span
                 class="admin"
                 style="color:cadetblue; font-weight: bold;  text-align: left;"
-                >ADMIN</span
-              >
-              <span class="user-status" style="text-align: left;">
+                >ADMIN</span -->
+              <!-- > -->
+              <!-- <span class="user-status" style="text-align: left;">
                 <i class="fa fa-circle"></i>
                 <span style="text-align: left;">Online</span>
-              </span>
+              </span> -->
             </div>
           </div>
           <!-- sidebar-menu  -->
           <div class=" sidebar-item sidebar-menu">
             <ul>
               <li class="header-menu">
-                <span>Menu</span>
+                <span>選單</span>
               </li>
               <li>
                 <router-link to="/adminforadmin/profile">
                   <i class="fa fa-book"></i>
-                  <span class="menu-text">Profiles</span>
+                  <span class="menu-text">會員資訊</span>
                 </router-link>
               </li>
               <li>
@@ -56,13 +61,13 @@
               <li>
                 <router-link to="/">
                   <i class="fa fa-folder"></i>
-                  <span class="menu-text">Home</span>
+                  <span class="menu-text">首頁</span>
                 </router-link>
               </li>
               <li>
-                <a href="#" @click="logout()">
+                <a href="javascript:;" @click="logout()">
                   <i class="fa fa-folder"></i>
-                  <span class="menu-text">Logout</span>
+                  <span class="menu-text">登出</span>
                 </a>
               </li>
             </ul>
@@ -96,7 +101,7 @@ export default {
     closeMenu() {
       $('.page-wrapper').toggleClass('toggled');
     },
-    logout() {
+    logoutOld() {
       this.$router.replace('/');
       fb.auth()
         .signOut()
@@ -107,16 +112,68 @@ export default {
           console.log(error);
         });
     },
+    logout() {
+      this.$router.replace('/');
+      localStorage.removeItem('token');
+      window.Toast.fire({
+        icon: 'success',
+        title: '登出成功',
+      });
+      this.login = null;
+    },
   },
+
   firestore() {
     return {
       profiles: db.collection('profiles'),
     };
   },
   created() {
-    var user = fb.auth().currentUser;
-    this.email = user.email;
-    this.photoURL = user.photoURL;
+    // var user = fb.auth().currentUser;
+    // this.email = user.email;
+    // this.photoURL = user.photoURL;
+
+    let token = JSON.parse(localStorage.getItem('token'));
+
+    function parseJwt(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join('')
+      );
+
+      return JSON.parse(jsonPayload);
+    }
+
+    let payload = parseJwt(token);
+
+    var myHeaders = new Headers();
+    let bearerToken = 'Bearer ' + token;
+    myHeaders.append('Authorization', bearerToken);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch(
+      `https://finalproject-336509.appspot.com/api/user/mydata?account=${payload.given_name}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        let { emailAddress, userName } = result.userData;
+        this.email = emailAddress;
+        this.photoURL = 'https://i.pravatar.cc';
+        this.name = userName;
+      })
+      .catch((error) => console.log('error', error));
   },
 };
 </script>

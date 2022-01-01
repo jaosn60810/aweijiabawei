@@ -99,7 +99,7 @@ export default {
         .commit('logoutuser')
         .then(() => {
           window.Toast.fire({
-            type: 'success',
+            icon: 'success',
             title: "You're logged out!",
           });
         })
@@ -110,7 +110,7 @@ export default {
     logout() {
       localStorage.removeItem('token');
       window.Toast.fire({
-        type: 'success',
+        icon: 'success',
         title: '登出成功',
       });
       this.login = null;

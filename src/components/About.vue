@@ -44,7 +44,7 @@
               <option value="all">請選擇動物收容所</option>
               <option
                 :value="a.shelterName"
-                v-for="a in shelter"
+                v-for="a in cityShelters"
                 :key="a.shelterName"
               >
                 {{ a.shelterName }}
@@ -149,6 +149,15 @@ export default {
   computed: {
     cities() {
       return [...new Set(this.shelterData.map(({ city }) => city))];
+    },
+    cityShelters() {
+      return this.shelterData.filter((shelter) => {
+        if (this.select.city === 'all' && this.select.store === 'all') {
+          return shelter.shelterName;
+        } else {
+          return shelter.city === this.select.city;
+        }
+      });
     },
     shelter() {
       return this.shelterData.filter((shelter) => {

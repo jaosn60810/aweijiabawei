@@ -8,8 +8,8 @@
     </h2>
     <ol>
       <li>
-        <mark>{{ leaderboardChartData[0].key }}</mark>
-        <small>{{ leaderboardChartData[0].monthlyDonation }}</small>
+        <mark> aaa </mark>
+        <small> 401 </small>
       </li>
       <li>
         <mark>bbb</mark>
@@ -92,15 +92,34 @@ export default {
       type: Number,
       default: 0,
     },
-    leaderboardChartData: {
-      type: Array,
-      default: () => [],
-    },
+    // leaderboardChartData: {
+    //   type: Array,
+    //   default: () => [],
+    // },
   },
   data() {
     return {
       leaderboardChartTitle: ['本月最高', '本年最高', '歷來最高'],
+      leaderboardChartData: {},
+      soFarDonation: [],
     };
+  },
+  mounted() {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+
+    fetch(
+      'https://finalproject-336509.appspot.com/api/user/rank',
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        this.leaderboardChartData = result;
+        this.soFarDonation = this.leaderboardChartData.soFarDonation;
+      })
+      .catch((error) => console.log('error', error));
   },
 };
 </script>

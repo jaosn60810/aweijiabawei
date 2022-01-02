@@ -155,18 +155,18 @@
                         type="password"
                         v-model="password"
                         class="form-control"
-                        placeholder="Password"
+                        placeholder="密碼"
                         required
                       />
                     </div>
 
                     <div class="form-group">
-                      <label for="name">名字</label>
+                      <label for="name">姓名</label>
                       <input
                         type="text"
                         v-model="name"
                         class="form-control"
-                        placeholder="Your beautiful name"
+                        placeholder="姓名"
                         required
                       />
                     </div>

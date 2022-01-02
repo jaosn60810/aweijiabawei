@@ -238,10 +238,10 @@ export default {
       myHeaders.append('Content-Type', 'application/json');
 
       var raw = JSON.stringify({
-        account: this.account,
-        password: this.password,
-        userName: this.name,
-        emailAddress: this.email,
+        account: this.account.trim(),
+        password: this.password.trim(),
+        userName: this.name.trim(),
+        emailAddress: this.email.trim(),
       });
 
       var requestOptions = {

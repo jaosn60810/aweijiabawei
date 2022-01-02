@@ -126,6 +126,28 @@
           </div>
           <!-- 燈箱 body 區 -->
           <div class="modal-body">
+            <b-carousel
+              id="carousel-1"
+              :interval="4000"
+              controls
+              indicators
+              background="#ababab"
+              img-width="1024"
+              img-height="480"
+              style="text-shadow: 1px 1px 2px #333;"
+            >
+              <!-- Slides with image only -->
+              <b-carousel-slide
+                :img-src="image"
+                v-for="image in shelterImages"
+                :key="image"
+                class="modal-shelterCity-img"
+              ></b-carousel-slide>
+            </b-carousel>
+          </div>
+
+          <!-- 燈箱 body 區 -->
+          <div class="modal-body">
             <!-- 收容所進度條 -->
             <!--食物進度條 -->
             <b-progress
@@ -202,6 +224,7 @@ export default {
     },
     info(shelterCity) {
       $('#itemInfo').modal('show');
+
       this.shelterCity = shelterCity;
     },
     sortByAll() {
@@ -264,6 +287,13 @@ export default {
   width: 100%;
   height: 100%;
   max-height: 250px;
+  object-fit: cover;
+}
+
+.modal-shelterCity-img {
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
   object-fit: cover;
 }
 

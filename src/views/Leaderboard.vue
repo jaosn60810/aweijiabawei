@@ -6,17 +6,14 @@
         <LeaderboardChart
           class="col-12 col-md-3"
           :leaderboard-chart-title-num="0"
-          :leaderboard-chart-data="leaderboardChartData.m"
         />
         <LeaderboardChart
           class="col-12 col-md-3"
-          :leaderboard-chart-title-num="0"
-          :leaderboard-chart-data="leaderboardChartData.y"
+          :leaderboard-chart-title-num="1"
         />
         <LeaderboardChart
           class="col-12 col-md-3"
-          :leaderboard-chart-title-num="0"
-          :leaderboard-chart-data="leaderboardChartData.f"
+          :leaderboard-chart-title-num="2"
         />
       </div>
 
@@ -30,7 +27,16 @@
             <li class="DataList_top" v-for="(item, index) in List" :key="index">
               <div class="DataList_left one">{{ index + 1 }}</div>
               <div class="DataList_left two">{{ item.name }}</div>
-              <div class="DataList_left three">{{ item.question }}</div>
+              <div class="DataList_left three">
+                <div class="user__avatar">
+                  <img
+                    :src="
+                      'https://i.pravatar.cc/150?img=' +
+                        (Math.floor(Math.random() * 25) + 1)
+                    "
+                  />
+                </div>
+              </div>
               <div class="DataList_left four">{{ item.times }}</div>
               <div class="DataList_left five">{{ item.state }}</div>
             </li>
@@ -67,20 +73,7 @@ export default {
   created() {
     this.List = LeaderboardData;
   },
-  mounted() {
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-    };
 
-    fetch(
-      'https://finalproject-336509.appspot.com/api/user/rank',
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => (this.leaderboardChartData = result))
-      .catch((error) => console.log('error', error));
-  },
   computed: {
     classOption() {
       return {
@@ -147,5 +140,26 @@ ul {
   width: 14%;
   margin-left: 1%;
   color: greenyellow;
+}
+
+.user__avatar {
+  border-radius: 50%;
+  height: 64px;
+  overflow: hidden;
+  position: relative;
+  width: 64px;
+  z-index: 9;
+}
+
+.user__avatar img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in;
+  width: 100%;
+}
+
+.user__avatar:hover img {
+  filter: blur(1px) brightness(0.75);
+  transform: scale(1.05);
 }
 </style>

@@ -112,7 +112,7 @@ export default {
           console.log(error);
         });
     },
-    logout() {
+    logoutoldv2() {
       this.$router.replace('/');
       localStorage.removeItem('token');
       window.Toast.fire({
@@ -120,6 +120,61 @@ export default {
         title: '登出成功',
       });
       this.login = null;
+    },
+    logout() {
+      var myHeaders = new Headers();
+      let token = JSON.parse(localStorage.getItem('token'));
+
+      function parseJwt(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join('')
+        );
+        return JSON.parse(jsonPayload);
+      }
+
+      let payload = parseJwt(token);
+
+      myHeaders.append('Authorization', `Bearer ${token}`);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify(payload.given_name);
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/Auth/ClearToken',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.msg === 'Token已清除') {
+            localStorage.removeItem('token');
+            window.Toast.fire({
+              icon: 'success',
+              title: '登出成功',
+            });
+            this.login = null;
+            this.$router.replace('/');
+          } else {
+            window.Toast.fire({
+              icon: 'error',
+              title: '登出失敗',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
     },
   },
 

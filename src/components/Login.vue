@@ -96,7 +96,7 @@
                 <h5 class="text-center">創建帳號</h5>
 
                 <div class="login-input text-left mx-3 my-2">
-                  <form @submit.prevent="sendConfirmEmail">
+                  <form @submit.prevent="checkAccountUnique">
                     <div class="form-group">
                       <label for="account">帳號</label>
                       <input
@@ -107,7 +107,17 @@
                         required
                       />
                     </div>
-                    <div class="form-group">
+
+                    <button
+                      class="btn btn-primary"
+                      style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                    >
+                      確認帳號可否使用
+                    </button>
+                  </form>
+
+                  <form @submit.prevent="sendConfirmEmail">
+                    <div class="form-group mt-3">
                       <label for="email">電子信箱</label>
                       <input
                         type="email"
@@ -126,6 +136,7 @@
                       取得驗證碼
                     </button>
                   </form>
+
                   <form @submit.prevent="register">
                     <div class="form-group mt-3">
                       <label for="verify-code">驗證碼</label>
@@ -242,6 +253,7 @@ export default {
         password: this.password.trim(),
         userName: this.name.trim(),
         emailAddress: this.email.trim(),
+        verifyCode: this.verifyCode.trim(),
       });
 
       var requestOptions = {
@@ -252,7 +264,7 @@ export default {
       };
 
       fetch(
-        `https://finalproject-336509.appspot.com/api/auth/register?verifyCode=${this.verifyCode}`,
+        `https://finalproject-336509.appspot.com/api/auth/register`,
         requestOptions
       )
         .then((response) => response.json())
@@ -270,23 +282,67 @@ export default {
             this.password = '';
             this.account = '';
             this.verifyCode = '';
+          } else if (result.msg === '驗證碼錯誤') {
+            window.Swal.fire({
+              icon: 'error',
+              title: '驗證碼錯誤',
+            });
           } else {
             window.Swal.fire({
               icon: 'error',
               title: '註冊失敗',
+            });
+            console.log(result);
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
+    checkAccountUnique() {
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+
+      fetch(
+        `https://finalproject-336509.appspot.com/api/auth/isaccountexist?account=${this.account}`,
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.msg === '帳號存在') {
+            window.Swal.fire({
+              icon: 'error',
+              title: '已有此帳號',
+            });
+            return;
+          } else if (result.msg === '帳號不存在') {
+            $('.register-account').attr('disabled', true);
+            window.Swal.fire({
+              icon: 'success',
+              title: '可以使用此帳號',
             });
           }
         })
         .catch((error) => console.log('error', error));
     },
     sendConfirmEmail() {
-      const requestOptions = {
-        method: 'GET',
+      var myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: this.account.trim(),
+        emailaddress: this.email.trim(),
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
         redirect: 'follow',
       };
 
       fetch(
-        `https://finalproject-336509.appspot.com/api/auth/sendemail?account=${this.account}&emailaddress=${this.email}`,
+        'https://finalproject-336509.appspot.com/api/auth/sendemail',
         requestOptions
       )
         .then((response) => response.json())

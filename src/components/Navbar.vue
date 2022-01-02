@@ -110,27 +110,27 @@ export default {
     logout() {
       var myHeaders = new Headers();
       let token = JSON.parse(localStorage.getItem('token'));
+      let account = JSON.parse(localStorage.getItem('account'));
+      // function parseJwt(token) {
+      //   var base64Url = token.split('.')[1];
+      //   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      //   var jsonPayload = decodeURIComponent(
+      //     atob(base64)
+      //       .split('')
+      //       .map(function(c) {
+      //         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      //       })
+      //       .join('')
+      //   );
+      //   return JSON.parse(jsonPayload);
+      // }
 
-      function parseJwt(token) {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split('')
-            .map(function(c) {
-              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join('')
-        );
-        return JSON.parse(jsonPayload);
-      }
-
-      let payload = parseJwt(token);
+      // let payload = parseJwt(token);
 
       myHeaders.append('Authorization', `Bearer ${token}`);
       myHeaders.append('Content-Type', 'application/json');
 
-      var raw = JSON.stringify(payload.given_name);
+      var raw = JSON.stringify(account);
 
       var requestOptions = {
         method: 'POST',

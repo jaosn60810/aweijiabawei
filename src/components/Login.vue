@@ -395,6 +395,7 @@ export default {
 
           //var errorMessage = error.message;
           if (result.msg === '登入成功') {
+            localStorage.setItem('account', JSON.stringify(this.loginAccount));
             window.Swal.fire({
               icon: 'success',
               title: '登入成功',

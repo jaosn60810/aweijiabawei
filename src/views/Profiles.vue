@@ -126,7 +126,7 @@
                 type="button"
                 class="btn btn-primary"
                 style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                @click="Resetemailandusername"
+                @click="resetName"
               >
                 修改資料
               </button>
@@ -230,6 +230,52 @@ export default {
           console.log('an error occurred');
         });
     },
+    resetName() {
+      let token = JSON.parse(localStorage.getItem('token'));
+      let bearerToken = 'Bearer ' + token;
+
+      // function parseJwt(token) {
+      //   var base64Url = token.split('.')[1];
+      //   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      //   var jsonPayload = decodeURIComponent(
+      //     atob(base64)
+      //       .split('')
+      //       .map(function(c) {
+      //         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      //       })
+      //       .join('')
+      //   );
+      //   return JSON.parse(jsonPayload);
+      // }
+
+      // let payload = parseJwt(token);
+
+      let account = localStorage.getItem('account');
+
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', bearerToken);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: account,
+        newUserName: this.account.name,
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/Auth/Update/username',
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log('error', error));
+    },
     Resetemailandusername() {
       var user = fb.auth().currentUser;
       user
@@ -316,26 +362,27 @@ export default {
     // this.account.photoURL = user.photoURL;
     // this.account.email = user.email;
     let token = JSON.parse(localStorage.getItem('token'));
+    let account = JSON.parse(localStorage.getItem('account'));
 
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1];
-      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-          })
-          .join('')
-      );
+    // function parseJwt(token) {
+    //   var base64Url = token.split('.')[1];
+    //   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    //   var jsonPayload = decodeURIComponent(
+    //     atob(base64)
+    //       .split('')
+    //       .map(function(c) {
+    //         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    //       })
+    //       .join('')
+    //   );
+    //   return JSON.parse(jsonPayload);
+    // }
 
-      return JSON.parse(jsonPayload);
-    }
-
-    let payload = parseJwt(token);
+    // let payload = parseJwt(token);
 
     var myHeaders = new Headers();
     let bearerToken = 'Bearer ' + token;
+
     myHeaders.append('Authorization', bearerToken);
 
     var requestOptions = {
@@ -344,11 +391,8 @@ export default {
       redirect: 'follow',
     };
 
-    // console.log(
-    //   `https://finalproject-336509.appspot.com/api/user/mydata?account=${payload.given_name}`
-    // );
     fetch(
-      `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${payload.given_name}`,
+      `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${account}`,
       requestOptions
     )
       .then((response) => response.json())

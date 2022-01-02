@@ -112,15 +112,6 @@ export default {
           console.log(error);
         });
     },
-    logoutoldv2() {
-      this.$router.replace('/');
-      localStorage.removeItem('token');
-      window.Toast.fire({
-        icon: 'success',
-        title: '登出成功',
-      });
-      this.login = null;
-    },
     logout() {
       var myHeaders = new Headers();
       let token = JSON.parse(localStorage.getItem('token'));
@@ -218,7 +209,7 @@ export default {
     };
 
     fetch(
-      `https://finalproject-336509.appspot.com/api/user/mydata?account=${payload.given_name}`,
+      `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${payload.given_name}`,
       requestOptions
     )
       .then((response) => response.json())

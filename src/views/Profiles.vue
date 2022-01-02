@@ -344,8 +344,11 @@ export default {
       redirect: 'follow',
     };
 
+    // console.log(
+    //   `https://finalproject-336509.appspot.com/api/user/mydata?account=${payload.given_name}`
+    // );
     fetch(
-      `https://finalproject-336509.appspot.com/api/user/mydata?account=${payload.given_name}`,
+      `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${payload.given_name}`,
       requestOptions
     )
       .then((response) => response.json())

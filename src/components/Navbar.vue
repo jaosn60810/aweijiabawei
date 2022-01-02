@@ -147,6 +147,7 @@ export default {
         .then((result) => {
           if (result.msg === 'Token已清除') {
             localStorage.removeItem('token');
+            localStorage.removeItem('account');
             window.Toast.fire({
               icon: 'success',
               title: '登出成功',

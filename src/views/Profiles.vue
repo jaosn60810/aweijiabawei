@@ -201,6 +201,7 @@ export default {
         remainingPoints: '',
       },
       account: {
+        account: null,
         name: null,
         email: null,
         emailVerified: null,
@@ -250,7 +251,7 @@ export default {
 
       // let payload = parseJwt(token);
 
-      let account = localStorage.getItem('account');
+      let account = JSON.parse(localStorage.getItem('account'));
 
       var myHeaders = new Headers();
       myHeaders.append('Authorization', bearerToken);
@@ -272,8 +273,23 @@ export default {
         'https://finalproject-336509.appspot.com/api/Auth/Update/username',
         requestOptions
       )
-        .then((response) => response.text())
-        .then((result) => console.log(result))
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          if (result.msg === '更新使用者名稱成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '更新使用者名稱成功',
+            });
+            this.profile.name = this.account.name;
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '帳號密碼錯誤',
+              text: '請輸入正確帳號密碼',
+            });
+          }
+        })
         .catch((error) => console.log('error', error));
     },
     Resetemailandusername() {
@@ -399,7 +415,7 @@ export default {
       .then((result) => {
         let {
           userId,
-          account,
+          // account,
           password,
           userName,
           emailAddress,
@@ -410,7 +426,8 @@ export default {
         this.profile.remainingPoints =
           remainingPoints || '恭喜您將愛心全數捐出';
 
-        this.account.name = account;
+        this.account.account = account;
+        this.account.name = userName;
         this.account.email = emailAddress;
         this.account.password = password;
         this.account.uid = userId;

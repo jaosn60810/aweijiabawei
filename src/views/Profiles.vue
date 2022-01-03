@@ -629,7 +629,12 @@ export default {
       `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${account}`,
       requestOptions
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status !== 200) {
+          localStorage.clear();
+        }
+        return response.json();
+      })
       .then((result) => {
         let {
           userId,

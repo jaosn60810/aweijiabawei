@@ -163,10 +163,12 @@ export default {
             this.login = null;
             this.$router.replace('/');
           } else {
-            window.Toast.fire({
-              icon: 'error',
-              title: '登出失敗',
-            });
+            // window.Toast.fire({
+            //   icon: 'error',
+            //   title: '登出失敗',
+            // });
+            localStorage.clear();
+            this.$router.replace('/');
           }
         })
         .catch((error) => console.log('error', error));
@@ -219,7 +221,12 @@ export default {
       `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${account}`,
       requestOptions
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status !== 200) {
+          localStorage.clear();
+        }
+        return response.json();
+      })
       .then((result) => {
         let { emailAddress, userName } = result.userData;
         this.email = emailAddress;

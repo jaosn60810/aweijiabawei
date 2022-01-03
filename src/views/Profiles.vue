@@ -49,12 +49,22 @@
               />
             </div>
 
+            <div class="form-group my-3">
+              <label class="form-label">加值金額</label>
+              <input
+                type="number"
+                class="form-control"
+                placeholder="點數"
+                v-model="pointsWantToAdd"
+              />
+            </div>
+
             <div class="form-group ">
               <button
                 class="btn btn-primary"
                 style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
                 type="button"
-                @click="addValue()"
+                @click="addPoints"
               >
                 把錢換成愛心
               </button>
@@ -239,6 +249,7 @@ export default {
         photoURL: null,
       },
       verifyCode: null,
+      pointsWantToAdd: 0,
     };
   },
   // firestore() {
@@ -510,6 +521,52 @@ export default {
         this.profile.remainingPoints = 0;
       }
       this.profile.remainingPoints += 1000;
+    },
+    addPoints() {
+      let token = JSON.parse(localStorage.getItem('token'));
+      let bearerToken = 'Bearer ' + token;
+
+      let account = JSON.parse(localStorage.getItem('account'));
+
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', bearerToken);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: account,
+        money: parseInt(this.pointsWantToAdd),
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/userdonation/moneytopoint',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.msg === '儲值成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '儲值成功',
+            });
+            if (this.profile.remainingPoints === '恭喜您將愛心全數捐出') {
+              this.profile.remainingPoints = 0;
+            }
+            this.profile.remainingPoints += this.pointsWantToAdd * 100;
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '儲值錯誤',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
     },
     uploadImage(e) {
       if (e.target.files[0]) {

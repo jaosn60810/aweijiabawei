@@ -171,7 +171,11 @@ export default {
             this.$router.replace('/');
           }
         })
-        .catch((error) => console.log('error', error));
+        .catch((error) => {
+          console.log('error', error);
+          localStorage.clear();
+          this.$router.replace('/');
+        });
     },
   },
 

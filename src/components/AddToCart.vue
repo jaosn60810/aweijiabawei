@@ -8,13 +8,7 @@
       打賞
     </button>
     <Cart></Cart> -->
-    <button
-      class="btn btn-primary mb-3 mx-auto w-75"
-      @click="addToCart"
-      style="background-color:cadetblue; border-color: transparent;"
-    >
-      打賞
-    </button>
+
     <div
       class="modal fade"
       id="miniCart"
@@ -43,7 +37,7 @@
             v-for="(item, index) in this.$store.state.cart"
             :key="index"
           >
-            <div class="col-4">
+            <div class="col-8">
               <!-- <img
                 :src="item.productImage"
                 width="80px"
@@ -70,17 +64,47 @@
                 ></b-carousel-slide>
               </b-carousel>
             </div>
-            <div class="col-8">
-              <h5 class="text-left">
+            <div class="col-4">
+              <!-- <h5 class="text-left">
                 {{ item.productName }}
                 <span
                   class="float-right myMOUSE"
                   @click="$store.commit('removeFromCart', item)"
                   >X</span
                 >
-              </h5>
-              <h5 class="text-left">{{ item.productPrice | currency }}</h5>
-              <h5 class="text-left">Quantity: {{ item.productQuantity }}</h5>
+              </h5> -->
+              <!-- <h5 class="text-left">{{ item.productPrice | currency }}</h5>
+              <h5 class="text-left">Quantity: {{ item.productQuantity }}</h5> -->
+              <div class="form-group my-3">
+                <label class="form-label">食物</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="點數"
+                  v-model="donationFoodPoints"
+                />
+              </div>
+
+              <div class="form-group my-3">
+                <label class="form-label">醫療</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="點數"
+                  v-model="donationMedicalPoints"
+                />
+              </div>
+
+              <div class="form-group my-3">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                  @click="donateFood"
+                >
+                  捐贈
+                </button>
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -138,12 +162,46 @@ export default {
         productImage: this.image,
         productQuantity: 1,
       },
+      donationFoodPoints: 0,
+      donationMedicalPoints: 0,
     };
   },
   methods: {
     addToCart() {
       $('#miniCart').modal('show');
       this.$store.commit('addToCart', this.item);
+    },
+    donateFood() {
+      let token = JSON.parse(localStorage.getItem('token'));
+      let bearerToken = 'Bearer ' + token;
+
+      let account = JSON.parse(localStorage.getItem('account'));
+
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', bearerToken);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: account,
+        donationPoints: parseInt(this.donationFoodPoints),
+        shelterId: parseInt(this.item.productId),
+        purposeId: 1,
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/userdonation/donatePoints',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => console.log(result))
+        .catch((error) => console.log('error', error));
     },
   },
   components: {
@@ -153,4 +211,11 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.modal-shelterCity-img {
+  width: 100%;
+  height: 100%;
+  max-height: 250px;
+  object-fit: cover;
+}
+</style>

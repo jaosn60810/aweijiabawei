@@ -133,6 +133,26 @@
             </div>
 
             <div class="form-group my-3">
+              <label class="form-label">帳號</label>
+              <input
+                class="form-control"
+                placeholder="帳號"
+                v-model="account.account"
+              />
+            </div>
+
+            <div class="form-group my-3">
+              <button
+                type="button"
+                class="btn btn-primary"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                @click="resetAccount"
+              >
+                修改帳號
+              </button>
+            </div>
+
+            <div class="form-group my-3">
               <label class="form-label">電子信箱</label>
               <input
                 class="form-control"
@@ -146,7 +166,7 @@
                 type="button"
                 class="btn btn-primary"
                 style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                @click="Resetemailandusername"
+                @click="resetEmail"
               >
                 修改電子信箱
               </button>
@@ -231,6 +251,53 @@ export default {
           console.log('an error occurred');
         });
     },
+    resetAccount() {
+      let token = JSON.parse(localStorage.getItem('token'));
+      let bearerToken = 'Bearer ' + token;
+
+      let account = JSON.parse(localStorage.getItem('account'));
+
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', bearerToken);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: account,
+        newAccount: this.account.account,
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/Auth/Update/account',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          if (result.msg === '更新帳號成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '更新帳號成功',
+            });
+            localStorage.setItem(
+              'account',
+              JSON.stringify(this.account.account)
+            );
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '錯誤',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
     resetName() {
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
@@ -285,13 +352,13 @@ export default {
           } else {
             window.Swal.fire({
               icon: 'error',
-              title: '帳號密碼錯誤',
-              text: '請輸入正確帳號密碼',
+              title: '錯誤',
             });
           }
         })
         .catch((error) => console.log('error', error));
     },
+    resetEmail() {},
     Resetemailandusername() {
       var user = fb.auth().currentUser;
       user

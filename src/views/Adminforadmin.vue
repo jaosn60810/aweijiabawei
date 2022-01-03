@@ -114,7 +114,9 @@ export default {
     },
     logout() {
       var myHeaders = new Headers();
+
       let token = JSON.parse(localStorage.getItem('token'));
+
       let account = JSON.parse(localStorage.getItem('account'));
 
       // function parseJwt(token) {

@@ -114,9 +114,54 @@ router.beforeEach((to, from, next) => {
   }
 
   const token = localStorage.getItem('token');
+
+  // if (
+  //   localStorage.getItem('account') === '' ||
+  //   localStorage.getItem('token') === ''
+  // ) {
+  //   localStorage.clear();
+  // }
+
+  // let token = JSON.parse(localStorage.getItem('token'));
+  // let account = JSON.parse(localStorage.getItem('account'));
+
+  // var myHeaders = new Headers();
+  // let bearerToken = 'Bearer ' + token;
+
+  // myHeaders.append('Authorization', bearerToken);
+
+  // var requestOptions = {
+  //   method: 'GET',
+  //   headers: myHeaders,
+  //   redirect: 'follow',
+  // };
+
+  // let access = null;
+
+  // if (token && account) {
+  //   fetch(
+  //     `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${account}`,
+  //     requestOptions
+  //   )
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       access = JSON.stringify(result);
+  //       console.log(!access);
+  //       if (!access) {
+  //         localStorage.clear();
+  //         next('/');
+  //       } else {
+  //         next();
+  //       }
+  //     })
+  //     .catch((error) => console.log('error', error));
+  // } else {
+  //   next();
+  // }
   if (requiresAuth && !token) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
+    localStorage.clear();
     next('/');
   } else {
     next();

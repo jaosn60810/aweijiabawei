@@ -86,16 +86,6 @@
                 disabled
               />
             </div>
-
-            <div class="form-group my-3">
-              <label class="form-label">User ID</label>
-              <input
-                class="form-control"
-                placeholder="User ID"
-                v-model="profile.postcode"
-                disabled
-              />
-            </div>
           </div>
         </div>
 
@@ -155,13 +145,30 @@
             <div class="form-group my-3">
               <label class="form-label">電子信箱</label>
               <input
-                class="form-control"
+                class="form-control account-email"
                 placeholder="電子信箱"
                 v-model="account.email"
               />
             </div>
 
             <div class="form-group my-3">
+              <label class="form-label">驗證碼</label>
+              <input
+                class="form-control"
+                placeholder="驗證碼"
+                v-model="verifyCode"
+              />
+            </div>
+
+            <div class="form-group my-3">
+              <button
+                type="button"
+                class="btn btn-primary mr-3"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                @click="sendConfirmEmail"
+              >
+                取得驗證碼
+              </button>
               <button
                 type="button"
                 class="btn btn-primary"
@@ -172,7 +179,7 @@
               </button>
             </div>
 
-            <div class="form-group my-3">
+            <!-- <div class="form-group my-3">
               <label for="">密碼</label>
               <input
                 class="form-control"
@@ -180,18 +187,18 @@
                 @change="uploadImage"
                 v-model="account.password"
               />
-            </div>
+            </div> -->
 
-            <div class="form-group my-3">
+            <!-- <div class="form-group my-3">
               <button
                 type="button"
                 class="btn btn-primary"
                 style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                @click="Resetemailandusername"
+                @click="resetPassword"
               >
                 修改密碼
               </button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -203,6 +210,7 @@
 // @ is an alias to /src
 // import { fb, db } from '../firebase';
 import { fb } from '../firebase';
+import $ from 'jquery';
 
 export default {
   name: 'Profiles',
@@ -230,6 +238,7 @@ export default {
         uid: null,
         photoURL: null,
       },
+      verifyCode: null,
     };
   },
   // firestore() {
@@ -263,7 +272,7 @@ export default {
 
       var raw = JSON.stringify({
         account: account,
-        newAccount: this.account.account,
+        newAccount: this.account.account.trim(),
       });
 
       var requestOptions = {
@@ -326,7 +335,7 @@ export default {
 
       var raw = JSON.stringify({
         account: account,
-        newUserName: this.account.name,
+        newUserName: this.account.name.trim(),
       });
 
       var requestOptions = {
@@ -358,7 +367,92 @@ export default {
         })
         .catch((error) => console.log('error', error));
     },
-    resetEmail() {},
+    sendConfirmEmail() {
+      var myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+
+      let account = JSON.parse(localStorage.getItem('account'));
+
+      var raw = JSON.stringify({
+        account: account,
+        emailaddress: this.account.email.trim(),
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/auth/sendemail',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.msg === '驗證碼已寄出') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '驗證碼已寄出',
+              text: '請至信箱領取驗證碼',
+            });
+
+            $('.account-email').attr('disabled', true);
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '此信箱已經領取過驗證碼',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
+    resetEmail() {
+      let token = JSON.parse(localStorage.getItem('token'));
+      let bearerToken = 'Bearer ' + token;
+
+      let account = JSON.parse(localStorage.getItem('account'));
+
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', bearerToken);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: account,
+        newEmailAddress: this.account.email.trim(),
+        verifyCode: this.verifyCode.trim(),
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/Auth/Update/email',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.msg === '更新使用者信箱成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '更新使用者信箱成功',
+            });
+            $('.account-email').attr('disabled', false);
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '失敗',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
+    resetPassword() {},
     Resetemailandusername() {
       var user = fb.auth().currentUser;
       user

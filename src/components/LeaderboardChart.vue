@@ -102,6 +102,8 @@ export default {
       leaderboardChartTitle: ['本月最高', '本年最高', '歷來最高'],
       leaderboardChartData: {},
       soFarDonation: [],
+      monthDonation: [],
+      yearDonation: [],
     };
   },
   mounted() {
@@ -118,6 +120,8 @@ export default {
       .then((result) => {
         this.leaderboardChartData = result;
         this.soFarDonation = this.leaderboardChartData.soFarDonation;
+        this.monthDonation = this.leaderboardChartData.monthDonation;
+        this.yearDonation = this.leaderboardChartData.yearDonation;
       })
       .catch((error) => console.log('error', error));
   },

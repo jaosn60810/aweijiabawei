@@ -92,22 +92,22 @@
               Continue shopping
             </button>
             <!-- 若為登入狀態則進入結帳頁面 -->
-            <a
+            <!-- <a
               class="btn btn-primary"
               href="#"
               v-if="login != null"
               @click="checkout"
               >Check your Cart</a
-            >
+            > -->
             <!-- 若為未登入狀態則跳出登入視窗 -->
-            <a
+            <!-- <a
               class="btn btn-primary"
               data-toggle="modal"
               data-target="#login"
               @click="checkout"
               v-if="login === null"
               >Check your Cart</a
-            >
+            > -->
           </div>
         </div>
       </div>

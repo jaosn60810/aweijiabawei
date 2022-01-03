@@ -154,10 +154,12 @@ export default {
             });
             this.login = null;
           } else {
-            window.Toast.fire({
-              icon: 'error',
-              title: '登出失敗',
-            });
+            // window.Toast.fire({
+            //   icon: 'error',
+            //   title: '登出失敗',
+            // });
+            localStorage.clear();
+            this.$router.replace('/');
           }
         })
         .catch((error) => console.log('error', error));

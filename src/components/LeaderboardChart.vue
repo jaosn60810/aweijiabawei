@@ -7,11 +7,13 @@
       {{ leaderboardChartTitle[leaderboardChartTitleNum] }}
     </h2>
     <ol>
-      <li>
-        <mark> aaa </mark>
-        <small> 401 </small>
+      <li v-for="item in leaderboardChartDataShow" :key="item.account">
+        <mark>{{ item.account }} </mark>
+        <small
+          >{{ item[leaderboardChartDataName[leaderboardChartTitleNum]] }}
+        </small>
       </li>
-      <li>
+      <!-- <li>
         <mark>bbb</mark>
         <small>301</small>
       </li>
@@ -46,7 +48,7 @@
       <li>
         <mark>kkk</mark>
         <small>203</small>
-      </li>
+      </li> -->
     </ol>
 
     <svg style="display: none;">
@@ -100,10 +102,16 @@ export default {
   data() {
     return {
       leaderboardChartTitle: ['本月最高', '本年最高', '歷來最高'],
+      leaderboardChartDataName: [
+        'monthDonation',
+        'yearDonation',
+        'soFarDonation',
+      ],
       leaderboardChartData: {},
       soFarDonation: [],
       monthDonation: [],
       yearDonation: [],
+      leaderboardChartDataShow: [],
     };
   },
   mounted() {
@@ -113,11 +121,19 @@ export default {
     };
 
     fetch(
-      'https://finalproject-336509.appspot.com/api/user/rank',
+      'https://finalproject-336509.appspot.com/api/userdonation/rank',
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
+        if (this.leaderboardChartTitleNum === 0) {
+          this.leaderboardChartDataShow = result.monthDonation;
+        } else if (this.leaderboardChartTitleNum === 1) {
+          this.leaderboardChartDataShow = result.yearDonation;
+        } else {
+          this.leaderboardChartDataShow = result.soFarDonation;
+        }
+
         this.leaderboardChartData = result;
         this.soFarDonation = this.leaderboardChartData.soFarDonation;
         this.monthDonation = this.leaderboardChartData.monthDonation;

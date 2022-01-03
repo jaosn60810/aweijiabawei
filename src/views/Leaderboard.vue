@@ -22,11 +22,12 @@
           :data="List"
           class="seamless-warp col-10"
           :class-option="classOption"
+          ref="seamlessScroll"
         >
           <ul>
             <li class="DataList_top" v-for="(item, index) in List" :key="index">
-              <div class="DataList_left one">{{ index + 1 }}</div>
-              <div class="DataList_left two">{{ item.name }}</div>
+              <div class="DataList_left one">{{ item.name }}</div>
+              <div class="DataList_left two">{{ item.question }}</div>
               <div class="DataList_left three">
                 <div class="user__avatar">
                   <img
@@ -68,10 +69,36 @@ export default {
     return {
       List: [],
       leaderboardChartData: {},
+      personalData: [],
     };
   },
   created() {
     this.List = LeaderboardData;
+  },
+  mounted() {
+    let token = JSON.parse(localStorage.getItem('token'));
+    let account = JSON.parse(localStorage.getItem('account'));
+
+    var myHeaders = new Headers();
+    let bearerToken = 'Bearer ' + token;
+
+    myHeaders.append('Authorization', bearerToken);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    fetch(
+      `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${account}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        this.personalData = result.allDonation;
+      })
+      .catch((error) => console.log('error', error));
   },
 
   computed: {
@@ -122,23 +149,23 @@ ul {
   text-align: center;
 }
 .one {
-  width: 8%;
+  width: 20%;
 }
 .two {
-  width: 26%;
-  margin-left: 1%;
+  width: 20%;
+  // margin-left: 1%;
 }
 .three {
-  width: 29%;
-  margin-left: 1%;
+  width: 20%;
+  // margin-left: 1%;
 }
 .four {
-  width: 19%;
-  margin-left: 1%;
+  width: 20%;
+  // margin-left: 1%;
 }
 .five {
-  width: 14%;
-  margin-left: 1%;
+  width: 20%;
+  // margin-left: 1%;
   color: greenyellow;
 }
 

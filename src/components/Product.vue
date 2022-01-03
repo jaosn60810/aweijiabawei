@@ -51,7 +51,7 @@
           <!-- 卡片列表 -->
           <div
             class=" col-md-4 col-lg-3  mb-3"
-            v-for="(shelterCity, index) in shelterCities"
+            v-for="(shelterCity, index) in shelterData"
             :key="index"
           >
             <!-- 每張卡片 -->
@@ -69,7 +69,7 @@
 
               <!-- 收容所卡片名稱區 -->
               <div class="card-body d-flex flex-column">
-                <p class="card-title fs-6">{{ shelterCity.ShelterName }}</p>
+                <p class="card-title fs-6">{{ shelterCity.shelterName }}</p>
               </div>
               <!-- 收容所卡片按鈕區-->
               <div class="card-body d-flex row">
@@ -77,16 +77,17 @@
                 <div class="col-6">
                   <a
                     class="btn mb-3 btn-info mx-auto w-75"
-                    @click="info(shelterCity)"
+                    @click="
+                      info(shelterCity);
+                      shelterDataNeedFoodAndMedical();
+                    "
                     >資訊</a
                   >
                 </div>
                 <!-- 收容所卡片打賞按鈕 -->
                 <AddToCart
-                  :image="getImage(shelterImages)"
-                  :id="shelterCity.ShelterOrder"
-                  :price="shelterCity.MaxAmls"
-                  :name="shelterCity.ShelterName"
+                  :shelter-data="shelterCity"
+                  :shelter-images="shelterImages"
                   class="col-6"
                 >
                 </AddToCart>
@@ -112,7 +113,7 @@
           <div class="modal-header">
             <!-- 燈箱 head 區收容所名稱 -->
             <p class="modal-title text-left h2" id="exampleModalLabel">
-              {{ shelterCity.ShelterName }}
+              {{ shelterCity.shelterName }}
             </p>
             <!-- 燈箱 head 關閉 X 按鈕 -->
             <button
@@ -151,35 +152,35 @@
             <!-- 收容所進度條 -->
             <!--食物進度條 -->
             <b-progress
-              :max="shelterCity.MaxAmls"
+              :max="shelterCity.shelterNeedFood"
               height="2rem"
               animated
               show-value
               class="mb-3"
             >
-              <b-progress-bar :value="getDogNum(shelterCity)">
+              <b-progress-bar :value="shelterCity.shelterNeedFood / 3">
                 <span class="progress-text"
                   >捐款點數進度:
                   <strong
-                    >{{ getDogNum(shelterCity) }} /
-                    {{ shelterCity.MaxAmls }}</strong
+                    >{{ Math.floor(shelterCity.shelterNeedFood / 3) }} /
+                    {{ shelterCity.shelterNeedFood }}</strong
                   ></span
                 >
               </b-progress-bar>
             </b-progress>
             <!--醫療進度條 -->
             <b-progress
-              :max="shelterCity.MaxAmls"
+              :max="shelterCity.shelterNeedMedical"
               height="2rem"
               animated
               show-value
             >
-              <b-progress-bar :value="getCatNum(shelterCity)">
+              <b-progress-bar :value="shelterCity.shelterNeedMedical / 2">
                 <span class="progress-text"
                   >捐款點數進度:
                   <strong
-                    >{{ getDogNum(shelterCity) }} /
-                    {{ shelterCity.MaxAmls }}</strong
+                    >{{ Math.floor(shelterCity.shelterNeedMedical / 2) }} /
+                    {{ shelterCity.shelterNeedMedical }}</strong
                   ></span
                 >
               </b-progress-bar>
@@ -216,6 +217,9 @@ export default {
       animalShelters: animalShelters,
       activeBtn: 'all',
       shelterImages: [],
+      shelterData: [],
+      shelterNeedFood: [],
+      shelterNeedMedical: [],
     };
   },
   methods: {
@@ -273,6 +277,60 @@ export default {
       dogImgArr[i] = this.productsImages[randomNum];
     }
     this.shelterImages = dogImgArr;
+  },
+  mounted() {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+    fetch('https://finalproject-336509.appspot.com/api/shelter', requestOptions)
+      .then((response) => response.json())
+      .then((result) => (this.shelterData = result))
+      .catch((error) => console.log('error', error));
+
+    fetch(
+      'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => (this.shelterNeedFood = result))
+      .catch((error) => console.log('error', error));
+
+    fetch(
+      'https://finalproject-336509.appspot.com/api/shelter/shelterrank/2',
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => (this.shelterNeedMedical = result))
+      .catch((error) => console.log('error', error));
+  },
+  computed: {
+    shelterDataNeedFoodAndMedical() {
+      this.shelterData.forEach((itemShelterData) => {
+        // 食物
+        this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+          if (itemShelterData.shelterName === itemShelterNeedFood.shelterName) {
+            itemShelterData.shelterNeedFood =
+              itemShelterNeedFood.shelterNeedPoints;
+            itemShelterData.shelterGetFood =
+              itemShelterNeedFood.shelterGetPoints;
+          }
+        });
+
+        // 醫療
+        this.shelterNeedMedical.forEach((itemShelterNeedMedical) => {
+          if (
+            itemShelterData.shelterName === itemShelterNeedMedical.shelterName
+          ) {
+            itemShelterData.shelterNeedMedical =
+              itemShelterNeedMedical.shelterNeedPoints;
+            itemShelterData.shelterGetMedical =
+              itemShelterNeedMedical.shelterGetPoints;
+          }
+        });
+      });
+      return this.shelterData;
+    },
   },
 };
 </script>

@@ -49,7 +49,7 @@
               />
             </div>
 
-            <div class="form-group my-3">
+            <!-- <div class="form-group my-3">
               <label class="form-label">加值金額</label>
               <input
                 type="number"
@@ -57,17 +57,94 @@
                 placeholder="點數"
                 v-model="pointsWantToAdd"
               />
-            </div>
+            </div> -->
 
             <div class="form-group ">
+              <p class="form-label">加值金額</p>
               <button
-                class="btn btn-primary"
+                class="btn btn-primary mr-3"
                 style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
                 type="button"
-                @click="addPoints"
+                data-toggle="modal"
+                data-target="#addPointInfo"
+                @click="addPointCheckModalShow(30)"
               >
-                把錢換成愛心
+                30元
               </button>
+              <button
+                class="btn btn-primary mr-3"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                type="button"
+                data-toggle="modal"
+                data-target="#addPointInfo"
+                @click="addPointCheckModalShow(50)"
+              >
+                50元
+              </button>
+              <button
+                class="btn btn-primary mr-3"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                type="button"
+                data-toggle="modal"
+                data-target="#addPointInfo"
+                @click="addPointCheckModalShow(100)"
+              >
+                100元
+              </button>
+              <button
+                class="btn btn-primary mr-3"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                type="button"
+                data-toggle="modal"
+                data-target="#addPointInfo"
+                @click="addPointCheckModalShow(1000)"
+              >
+                1000元
+              </button>
+
+              <!-- Modal -->
+              <div
+                class="modal fade"
+                id="addPointInfo"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <p class="modal-title" id="exampleModalLabel">
+                        確認
+                      </p>
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p class="display-4">
+                        加值<strong class="fs-1">{{ pointsWantToAdd }}</strong
+                        >元
+                      </p>
+                    </div>
+                    <div class="modal-footer ">
+                      <a
+                        href="https://core.newebpay.com/EPG/ahhwayee/FLSjw3"
+                        type="button"
+                        class="btn btn-primary"
+                        @click="addPoints(pointsWantToAdd)"
+                        target="_blank"
+                      >
+                        確認
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="form-group my-3">
@@ -106,7 +183,7 @@
               <label class="form-label">名稱</label>
               <input
                 class="form-control"
-                placeholder="User name"
+                placeholder="名稱"
                 v-model="account.name"
               />
             </div>
@@ -116,7 +193,7 @@
               <label for="">大頭貼</label>
               <input
                 class="form-control"
-                placeholder="profile picture"
+                placeholder="大頭貼網址"
                 v-model="account.photoURL"
               />
             </div>
@@ -189,17 +266,16 @@
               </button>
             </div>
 
-            <!-- <div class="form-group my-3">
-              <label for="">密碼</label>
+            <div class="form-group my-3">
+              <label for="form-label">密碼</label>
               <input
                 class="form-control"
-                placeholder="profile picture"
-                @change="uploadImage"
+                placeholder="密碼"
                 v-model="account.password"
               />
-            </div> -->
+            </div>
 
-            <!-- <div class="form-group my-3">
+            <div class="form-group my-3">
               <button
                 type="button"
                 class="btn btn-primary"
@@ -208,7 +284,7 @@
               >
                 修改密碼
               </button>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -463,7 +539,49 @@ export default {
         })
         .catch((error) => console.log('error', error));
     },
-    resetPassword() {},
+    resetPassword() {
+      let token = JSON.parse(localStorage.getItem('token'));
+      let bearerToken = 'Bearer ' + token;
+
+      let account = JSON.parse(localStorage.getItem('account'));
+
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', bearerToken);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: account,
+        newPassword: this.account.password.trim(),
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/Auth/Update/password',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          if (result.msg === '更新密碼成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '更新密碼成功',
+            });
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '錯誤',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
     Resetemailandusername() {
       var user = fb.auth().currentUser;
       user
@@ -522,6 +640,10 @@ export default {
       }
       this.profile.remainingPoints += 1000;
     },
+    addPointCheckModalShow(money) {
+      // $('#addPointInfo').modal('show');
+      this.pointsWantToAdd = money;
+    },
     addPoints() {
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
@@ -534,7 +656,7 @@ export default {
 
       var raw = JSON.stringify({
         account: account,
-        money: parseInt(this.pointsWantToAdd),
+        money: this.pointsWantToAdd,
       });
 
       var requestOptions = {
@@ -551,6 +673,7 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           if (result.msg === '儲值成功') {
+            $('#addPointInfo').modal('hide');
             window.Swal.fire({
               icon: 'success',
               title: '儲值成功',

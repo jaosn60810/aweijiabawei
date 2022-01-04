@@ -68,7 +68,7 @@
               </p>
 
               <p class="card-text">
-                <i class="fas fa-drumstick-bite fa-3x"></i>
+                <i class="fas fa-bone fa-3x"></i>
               </p>
               <b-progress
                 :max="a.containMaxNumber"

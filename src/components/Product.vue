@@ -246,8 +246,8 @@
                 <!-- Slides with image only -->
                 <b-carousel-slide
                   :img-src="image"
-                  v-for="(image, index) in shelterImages"
-                  :key="index"
+                  v-for="image in shelterImages"
+                  :key="image"
                   class="modal-shelterCity-img"
                 ></b-carousel-slide>
               </b-carousel>
@@ -274,6 +274,17 @@
               </div>
 
               <div class="form-group my-3">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                  @click="donateFood()"
+                >
+                  捐贈食物
+                </button>
+              </div>
+
+              <div class="form-group my-3">
                 <label class="form-label">醫療</label>
                 <input
                   type="number"
@@ -288,9 +299,9 @@
                   type="button"
                   class="btn btn-primary"
                   style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                  @click="donateFood"
+                  @click="donateMedical"
                 >
-                  捐贈
+                  捐贈醫療
                 </button>
               </div>
             </div>
@@ -410,6 +421,11 @@ export default {
       this.shelterImages = dogImgArr;
     },
     donateFood() {
+      if (localStorage.getItem('token') === null) {
+        $('#miniCart').modal('hide');
+        $('#login').modal('show');
+        return;
+      }
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
 
@@ -438,8 +454,74 @@ export default {
         requestOptions
       )
         .then((response) => response.json())
-        .then((result) => console.log(result))
+        .then((result) => {
+          if (result.msg === '捐點成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '捐點成功',
+            });
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '錯誤',
+            });
+          }
+        })
         .catch((error) => console.log('error', error));
+    },
+    donateMedical() {
+      if (localStorage.getItem('token') === null) {
+        $('#miniCart').modal('hide');
+        $('#login').modal('show');
+        return;
+      }
+      let token = JSON.parse(localStorage.getItem('token'));
+      let bearerToken = 'Bearer ' + token;
+
+      let account = JSON.parse(localStorage.getItem('account'));
+
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', bearerToken);
+      myHeaders.append('Content-Type', 'application/json');
+
+      var raw = JSON.stringify({
+        account: account,
+        donationPoints: parseInt(this.donationMedicalPoints),
+        shelterId: parseInt(this.shelterCity.shelterId),
+        purposeId: 2,
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      fetch(
+        'https://finalproject-336509.appspot.com/api/userdonation/donatePoints',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.msg === '捐點成功') {
+            window.Swal.fire({
+              icon: 'success',
+              title: '捐點成功',
+            });
+          } else {
+            window.Swal.fire({
+              icon: 'error',
+              title: '錯誤',
+            });
+          }
+        })
+        .catch((error) => console.log('error', error));
+    },
+    goToLogin() {
+      if (localStorage.getItem('token') === null) {
+        $('#login').modal('show');
+      }
     },
   },
   firestore() {

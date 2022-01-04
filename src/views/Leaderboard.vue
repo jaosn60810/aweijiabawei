@@ -25,9 +25,13 @@
           ref="seamlessScroll"
         >
           <ul>
-            <li class="DataList_top" v-for="(item, index) in List" :key="index">
-              <div class="DataList_left one">{{ item.name }}</div>
-              <div class="DataList_left two">{{ item.question }}</div>
+            <li
+              class="DataList_top"
+              v-for="item in personalData"
+              :key="item.donationId"
+            >
+              <div class="DataList_left one">{{ item.donationId }}</div>
+              <div class="DataList_left two">{{ item.donationPoints }}</div>
               <div class="DataList_left three">
                 <div class="user__avatar">
                   <img
@@ -38,8 +42,10 @@
                   />
                 </div>
               </div>
-              <div class="DataList_left four">{{ item.times }}</div>
-              <div class="DataList_left five">{{ item.state }}</div>
+              <div class="DataList_left four">
+                {{ new Date(item.donationTime).toLocaleString() }}
+              </div>
+              <div class="DataList_left five">{{ item.purposeId }}</div>
             </li>
           </ul>
         </vue-seamless-scroll>

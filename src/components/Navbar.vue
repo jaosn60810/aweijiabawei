@@ -4,6 +4,16 @@
       class="navbar navbar-expand-lg navbar-light"
       style="background-color: #e3f2fd;"
     >
+      <a class="navbar-brand " href="#"
+        ><img
+          src="https://ae01.alicdn.com/kf/HTB1zkIyLXXXXXcMXXXXq6xXFXXXd/13-10-4CM-Baby-Pet-Cute-Dog-Cartoon-Window-Decals-Funny-Animal-Car-Sticker-Accessories-Black.jpg_Q90.jpg_.webp"
+          alt=""
+          width="100"
+          height="100"
+          class="d-inline-block align-center rounded-circle"
+        />
+        阿偉呷飽未</a
+      >
       <button
         class="navbar-toggler"
         type="button"
@@ -18,26 +28,29 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <router-link to="/" class="nav-link" href="#">首頁</router-link>
+            <!-- <router-link to="/" class="nav-link" href="#">首頁</router-link> -->
+            <router-link to="/productsview" class="nav-link" href="#"
+              >首頁</router-link
+            >
           </li>
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link to="/aboutview" class="nav-link" href="#"
               >地圖</router-link
             >
-          </li>
+          </li> -->
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link to="/leaderboard" class="nav-link" href="#"
               >排行榜</router-link
             >
-          </li>
+          </li> -->
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link class="nav-link" to="/productsview" href="#"
               >捐助</router-link
             >
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" @click="Membercenter">會員中心</a>
           </li>
@@ -59,12 +72,12 @@
           >
             登出
           </a>
-          <a
+          <!-- <a
             class="fas fa-shopping-cart mx-3 my-3"
             data-toggle="modal"
             data-target="#miniCart"
             style="color: cadetblue;"
-          ></a>
+          ></a> -->
         </form>
       </div>
     </nav>

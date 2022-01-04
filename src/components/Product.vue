@@ -3,8 +3,8 @@
     <div class="container-fluid">
       <div class="row mt-5">
         <!-- 測攔 -->
-        <div class="col-4 ">
-          <div class="list-group w-50 mx-auto">
+        <div class="col-2 ">
+          <div class="list-group mx-auto">
             <!-- 又餓又病按鈕 -->
 
             <button
@@ -46,21 +46,21 @@
           </div>
 
           <!-- 跑馬燈 -->
-          <div class="mt-5">
+          <div class="mt-5 w-100">
             <vue-seamless-scroll
               :data="List"
               class="seamless-warp "
               :class-option="classOption"
               ref="seamlessScroll"
             >
-              <ul>
+              <ul class="w-100">
                 <li
-                  class="DataList_top row w-100 bg-success"
+                  class="DataList_top row mx-0 w-100 bg-success"
                   v-for="item in List"
                   :key="item.name"
                 >
-                  <div class="col-3">{{ item.name }}</div>
-                  <div class="col-3">
+                  <div class="col-3 p-0">{{ item.name }}</div>
+                  <div class="col-3 p-0">
                     <div>
                       <!-- <img
                         :src="
@@ -89,7 +89,7 @@
                       ></b-avatar>
                     </div>
                   </div>
-                  <div class="col-6 ">
+                  <div class="col-6 p-0">
                     幫助 {{ Math.floor(Math.random() * 25) + 1 }} 隻毛孩的{{
                       (Math.floor(Math.random() * 25) + 1) % 2 === 0
                         ? '罐罐'
@@ -103,7 +103,7 @@
         </div>
 
         <!-- 卡片區 -->
-        <div class="col-8 row">
+        <div class="col-10 row">
           <!-- 卡片列表 -->
           <div
             class=" col-md-4 col-lg-3  mb-3"
@@ -365,7 +365,7 @@
                 alt=""
               /> -->
               <!-- 卡片幻燈片 -->
-              <b-carousel
+              <!-- <b-carousel
                 id="carousel-2"
                 :interval="4000"
                 controls
@@ -374,15 +374,31 @@
                 img-width="1024"
                 img-height="480"
                 style="text-shadow: 1px 1px 2px #333;"
-              >
-                <!-- Slides with image only -->
-                <b-carousel-slide
+              > -->
+              <!-- Slides with image only -->
+              <!-- <b-carousel-slide
                   :img-src="shelterCity.shelterImgUrl"
                   v-for="image in shelterImages"
                   :key="image"
                   class="modal-shelterCity-img"
                 ></b-carousel-slide>
-              </b-carousel>
+              </b-carousel> -->
+
+              <!-- 新卡片頭貼 -->
+              <div class="product-avatar-list">
+                <b-avatar
+                  badge-variant="info"
+                  :src="shelterCity.shelterImgUrl"
+                  size="20rem"
+                >
+                </b-avatar
+                ><b-avatar size="7rem" class="product-avatar  "
+                  ><strong class="danger">{{
+                    shelterCity.shelterImgName
+                  }}</strong>
+                  <span>來自{{ shelterCity.shelterName }}</span>
+                </b-avatar>
+              </div>
             </div>
             <div class="col-4">
               <!-- <h5 class="text-left">
@@ -948,5 +964,13 @@ ul {
 .user__avatar:hover img {
   filter: blur(1px) brightness(0.75);
   transform: scale(1.05);
+}
+
+.product-avatar-list {
+  // position: relative;
+}
+
+.product-avatar {
+  transform: translate(5rem, -5rem);
 }
 </style>

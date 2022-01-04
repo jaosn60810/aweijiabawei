@@ -46,20 +46,20 @@
               <li class="header-menu">
                 <span>選單</span>
               </li>
-              <li>
+              <!-- <li>
                 <router-link to="/adminforadmin/profile">
                   <i class="fa fa-book"></i>
                   <span class="menu-text">會員資訊</span>
                 </router-link>
-              </li>
-              <li>
+              </li> -->
+              <!-- <li>
                 <router-link to="/adminforadmin/addnewproduct">
                   <i class="fa fa-book"></i>
                   <span class="menu-text">Add new Products</span>
                 </router-link>
-              </li>
+              </li> -->
               <li>
-                <router-link to="/">
+                <router-link to="/productsview">
                   <i class="fa fa-folder"></i>
                   <span class="menu-text">首頁</span>
                 </router-link>

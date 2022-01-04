@@ -3,8 +3,8 @@
     <div class="container-fluid">
       <div class="row mt-5">
         <!-- 測攔 -->
-        <div class="col-2">
-          <div class="list-group ">
+        <div class="col-4 ">
+          <div class="list-group w-50 mx-auto">
             <!-- 又餓又病按鈕 -->
 
             <button
@@ -14,9 +14,7 @@
               @click="sortByAll"
               :class="{ active: activeBtn === 'all' }"
             >
-              <i class="fas fa-drumstick-bite food-icon"></i>
-              <span>&nbsp;&times;&nbsp;</span>
-              <i class="fas fa-briefcase-medical medical-icon"></i>
+              <div>需要罐罐和醫療 <i class="fas fa-dollar-sign"></i></div>
             </button>
             <!-- 有點餓按鈕 -->
             <button
@@ -29,7 +27,7 @@
               "
               :class="{ active: activeBtn === 'hungry' }"
             >
-              <i class="fas fa-drumstick-bite food-icon"></i>
+              <div>需要罐罐 <i class="fas fa-bone "></i></div>
             </button>
             <!-- 有點病按鈕 -->
             <button
@@ -41,13 +39,71 @@
               "
               :class="{ active: activeBtn === 'sick' }"
             >
-              <i class="fas fa-briefcase-medical medical-icon"></i>
+              <div>
+                需要醫療 <i class="fas fa-briefcase-medical medical-icon"></i>
+              </div>
             </button>
+          </div>
+
+          <!-- 跑馬燈 -->
+          <div class="mt-5">
+            <vue-seamless-scroll
+              :data="List"
+              class="seamless-warp "
+              :class-option="classOption"
+              ref="seamlessScroll"
+            >
+              <ul>
+                <li
+                  class="DataList_top row w-100 bg-success"
+                  v-for="item in List"
+                  :key="item.name"
+                >
+                  <div class="col-3">{{ item.name }}</div>
+                  <div class="col-3">
+                    <div>
+                      <!-- <img
+                        :src="
+                          'https://i.pravatar.cc/150?img=' +
+                            (Math.floor(Math.random() * 25) + 1)
+                        "
+                      /> -->
+                      <b-avatar
+                        variant="info"
+                        :badge-variant="
+                          Math.floor(Math.random() * 25) % 2 === 0
+                            ? 'info'
+                            : 'danger'
+                        "
+                        src="https://placekitten.com/300/300"
+                        size="4rem"
+                      >
+                        <template #badge
+                          ><b-icon
+                            :icon="
+                              Math.floor(Math.random() * 25) % 2 === 0
+                                ? 'star-fill'
+                                : 'suit-heart-fill'
+                            "
+                          ></b-icon></template
+                      ></b-avatar>
+                    </div>
+                  </div>
+                  <div class="col-6 ">
+                    幫助 {{ Math.floor(Math.random() * 25) + 1 }} 隻毛孩的{{
+                      (Math.floor(Math.random() * 25) + 1) % 2 === 0
+                        ? '罐罐'
+                        : '醫療'
+                    }}
+                  </div>
+                </li>
+              </ul>
+            </vue-seamless-scroll>
           </div>
         </div>
 
         <!-- 卡片區 -->
-        <div class="col-10 row">
+        <div class="col-8 row">
           <!-- 卡片列表 -->
           <div
             class=" col-md-4 col-lg-3  mb-3"
@@ -55,26 +111,70 @@
             :key="index"
           >
             <!-- 每張卡片 -->
-            <div class="card product-item h-100">
+            <div
+              class="card product-item h-100"
+              :style="{
+                background:
+                  index === 0
+                    ? firstCardColor
+                    : index === 1
+                    ? secondCardColor
+                    : index === 2
+                    ? thirdCardColor
+                    : 'white',
+              }"
+            >
+              <!-- 收容所卡片狀態 -->
+              <div class="card-body d-flex flex-column">
+                <p class="card-title h5 my-3">
+                  <strong>{{ shelterCity.shelterImgName }}</strong>
+                  <br />
+                  急需罐罐與醫療
+                </p>
+              </div>
+
+              <b-form-rating
+                id="rating-readonly"
+                icon-empty="heart"
+                icon-half="heart-half"
+                icon-full="heart-fill"
+                icon-clear="slash-circle"
+                show-clear
+                :value="howManyStars(index)"
+                show-value
+                readonly
+                class="mb-2"
+                color="#ff00ff"
+              ></b-form-rating>
+
+              <!-- 收容所卡片名稱區 -->
+              <!-- <div class="card-body d-flex flex-column">
+                <p class="card-title h5 my-3">
+                  {{ shelterCity.shelterName }}
+                </p>
+              </div> -->
+
               <!-- 卡片幻燈片 -->
               <carousel id="pic" :perPage="1" :paginationPadding="3">
                 <slide v-for="(image, index) in shelterImages" :key="index">
-                  <img
-                    :src="image"
-                    class="card-img-top shelterCity-img"
-                    alt="..."
-                  />
+                  <div class="shelterCity-img-list">
+                    <img
+                      :src="shelterCity.shelterImgUrl"
+                      class="card-img-top shelterCity-img  "
+                      alt="..."
+                    />
+                  </div>
                 </slide>
               </carousel>
 
-              <!-- 收容所卡片名稱區 -->
-              <div class="card-body d-flex flex-column">
-                <p class="card-title fs-6">{{ shelterCity.shelterName }}</p>
-              </div>
+              <p class="card-text h3">
+                <strong>{{ shelterCity.shelterImgName }}</strong>
+              </p>
+
               <!-- 收容所卡片按鈕區-->
               <div class="card-body d-flex row">
                 <!-- 收容所卡片資訊按鈕 -->
-                <div class="col-6 ">
+                <!-- <div class="col-6 ">
                   <a
                     class="btn mb-3 btn-info mx-auto w-75"
                     @click="
@@ -83,10 +183,13 @@
                     "
                     >資訊</a
                   >
-                </div>
-                <div class="col-6 ">
+                </div> -->
+                <div class="col-12 ">
                   <button
-                    @click="donateInfo(shelterCity)"
+                    @click="
+                      donateInfo(shelterCity);
+                      shelterDataNeedFoodAndMedical;
+                    "
                     class="btn btn-primary mb-3 mx-auto w-75"
                     style="background-color:cadetblue; border-color: transparent;"
                   >
@@ -166,7 +269,7 @@
             <p class="mt-3">
               還有
               <strong>{{ shelterCity.shelterNeedFood / 100 }}</strong>
-              隻肚子餓的狗狗
+              隻肚子餓的毛孩
             </p>
 
             <b-progress
@@ -189,7 +292,7 @@
             <p class="mt-3">
               還有
               <strong>{{ shelterCity.shelterNeedMedical / 100 }}</strong>
-              隻生病的狗狗
+              隻生病的毛孩
             </p>
 
             <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
@@ -236,6 +339,7 @@
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
+          <!-- 燈相 header -->
           <div class="modal-header">
             <p class="modal-title text-left h2" id="exampleModalLabel">
               {{ shelterCity.shelterName }}
@@ -249,7 +353,10 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+
+          <!-- 燈箱 body 上半部 -->
           <div class="modal-body row">
+            <!-- 卡片幻燈片區 -->
             <div class="col-8">
               <!-- <img
                 :src="item.productImage"
@@ -270,60 +377,12 @@
               >
                 <!-- Slides with image only -->
                 <b-carousel-slide
-                  :img-src="image"
+                  :img-src="shelterCity.shelterImgUrl"
                   v-for="image in shelterImages"
                   :key="image"
                   class="modal-shelterCity-img"
                 ></b-carousel-slide>
               </b-carousel>
-
-              <!-- 進度條 -->
-              <div>
-                <!-- 收容所進度條 -->
-                <!--食物進度條 -->
-                <i class="fas fa-bone fa-3x"></i>
-                <p class="mt-3">
-                  還有
-                  <strong>{{ shelterCity.shelterNeedFood / 100 }}</strong>
-                  隻肚子餓的狗狗
-                </p>
-
-                <b-progress
-                  :max="shelterCity.shelterNeedFood"
-                  height="1rem"
-                  class="mb-3"
-                >
-                  <b-progress-bar :value="shelterCity.shelterNeedFood / 3">
-                    <!-- <span class="progress-text"
-                  >捐款點數進度:
-                  <strong
-                    >{{ Math.floor(shelterCity.shelterNeedFood / 3) }} /
-                    {{ shelterCity.shelterNeedFood }}</strong
-                  ></span
-                > -->
-                  </b-progress-bar>
-                </b-progress>
-
-                <!--醫療進度條 -->
-                <i class="fas fa-briefcase-medical fa-3x  "></i>
-                <p class="mt-3">
-                  還有
-                  <strong>{{ shelterCity.shelterNeedMedical / 100 }}</strong>
-                  隻生病的狗狗
-                </p>
-
-                <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
-                  <b-progress-bar :value="shelterCity.shelterNeedMedical / 2">
-                    <!-- <span class="progress-text"
-                  >捐款點數進度:
-                  <strong
-                    >{{ Math.floor(shelterCity.shelterNeedMedical / 2) }} /
-                    {{ shelterCity.shelterNeedMedical }}</strong
-                  ></span
-                > -->
-                  </b-progress-bar>
-                </b-progress>
-              </div>
             </div>
             <div class="col-4">
               <!-- <h5 class="text-left">
@@ -337,7 +396,9 @@
               <!-- <h5 class="text-left">{{ item.productPrice | currency }}</h5>
               <h5 class="text-left">Quantity: {{ item.productQuantity }}</h5> -->
               <div class="form-group my-3">
-                <label class="form-label">食物</label>
+                <label class="form-label">
+                  <i class="fas fa-bone "></i>{{ transferPointToFoods }}</label
+                >
                 <input
                   type="number"
                   class="form-control"
@@ -358,7 +419,10 @@
               </div>
 
               <div class="form-group my-3">
-                <label class="form-label">醫療</label>
+                <label class="form-label">
+                  <i class="fas fa-briefcase-medical  "></i
+                  >{{ transferPointToMedical }}</label
+                >
                 <input
                   type="number"
                   class="form-control"
@@ -377,6 +441,79 @@
                   捐贈醫療
                 </button>
               </div>
+            </div>
+          </div>
+
+          <!-- 燈箱 body 下半部 -->
+          <div class="modal-body ">
+            <!-- 進度條 -->
+            <div class="">
+              <!-- 收容所進度條 -->
+              <!--食物進度條 -->
+              <div class="h6 mt-3">
+                <i class="fas fa-bone "></i> 還有
+                <strong>{{ shelterCity.shelterNeedFood / 100 }}</strong>
+                隻肚子餓的毛孩
+              </div>
+
+              <b-progress
+                :max="shelterCity.shelterNeedFood"
+                height="1rem"
+                class="mb-3"
+              >
+                <b-progress-bar
+                  :value="shelterCity.shelterNeedFood / 3"
+                  variant="danger"
+                >
+                  <!-- <span class="progress-text"
+                  >捐款點數進度:
+                  <strong
+                    >{{ Math.floor(shelterCity.shelterNeedFood / 3) }} /
+                    {{ shelterCity.shelterNeedFood }}</strong
+                  ></span
+                > -->
+                </b-progress-bar>
+              </b-progress>
+
+              <!--醫療進度條 -->
+              <div class="h6 mt-3">
+                <i class="fas fa-briefcase-medical   "></i>
+                還有
+                <strong>{{ shelterCity.shelterNeedMedical / 100 }}</strong>
+                隻生病的毛孩
+              </div>
+
+              <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
+                <b-progress-bar
+                  :value="shelterCity.shelterNeedMedical / 2"
+                  variant="danger"
+                >
+                  <!-- <span class="progress-text"
+                  >捐款點數進度:
+                  <strong
+                    >{{ Math.floor(shelterCity.shelterNeedMedical / 2) }} /
+                    {{ shelterCity.shelterNeedMedical }}</strong
+                  ></span
+                > -->
+                </b-progress-bar>
+              </b-progress>
+            </div>
+
+            <!-- 資訊區 -->
+            <div class="mt-3">
+              地址:
+              <a
+                href="https://www.google.com.tw/maps/place/${data.address}"
+                target="_blank"
+                title="Google Map"
+              >
+                {{ shelterCity.address }}</a
+              ><br />
+              電話: {{ shelterCity.shelterPhoneNumber }}<br />
+              <span style="color: #d45345;"
+                >更新時間:
+                {{ new Date(shelterCity.updateTime).toLocaleString() }}</span
+              ><br />
             </div>
           </div>
 
@@ -422,9 +559,13 @@ import dogImg from '../assets/data/dogImg.json';
 import animalShelters from '../assets/data/animal-shelter.json';
 import shelterCities from '../assets/data/shelterCity.json';
 
+import vueSeamlessScroll from 'vue-seamless-scroll';
+import LeaderboardData from '../assets/data/leaderboardData.json';
+
 export default {
   name: 'product',
   components: {
+    vueSeamlessScroll,
     // AddToCart,
   },
   data() {
@@ -442,6 +583,10 @@ export default {
       shelterNeedMedical: [],
       donationFoodPoints: 0,
       donationMedicalPoints: 0,
+      List: LeaderboardData,
+      firstCardColor: '#dc3545',
+      secondCardColor: '#e04b59',
+      thirdCardColor: '#e4606d',
     };
   },
   methods: {
@@ -461,6 +606,7 @@ export default {
     donateInfo(shelterCity) {
       $('#miniCart').modal('show');
       this.shelterCity = shelterCity;
+      console.log(this.shelterCity);
     },
     sortByAll() {
       this.activeBtn = 'all';
@@ -597,6 +743,9 @@ export default {
         $('#login').modal('show');
       }
     },
+    howManyStars(index) {
+      return 5 - index / 10;
+    },
   },
   firestore() {
     return {
@@ -665,6 +814,25 @@ export default {
       });
       return this.shelterData;
     },
+    transferPointToFoods() {
+      return `增加 ${this.donationFoodPoints / 10} 個罐罐`;
+    },
+    transferPointToMedical() {
+      return `增加 ${this.donationMedicalPoints / 10} 健康度`;
+    },
+    classOption() {
+      return {
+        step: 0.2, // 数值越大速度滚动越快
+        limitMoveNum: 4, // 开始无缝滚动的数据量 this.dataList.length
+        hoverStop: true, // 是否开启鼠标悬停stop
+        direction: 1, // 0向下 1向上 2向左 3向右
+        openWatch: true, // 开启数据实时监控刷新dom
+        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+        singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
+        waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
+        autoPlay: true,
+      };
+    },
   },
 };
 </script>
@@ -675,17 +843,21 @@ export default {
   padding-bottom: 3rem;
 }
 
-.shelterCity-img {
-  width: 100%;
-  height: 100%;
-  max-height: 250px;
+.modal-shelterCity-img {
+  // width: 100%;
+  // height: 100%;
+  // max-height: 250px;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
 }
 
-.modal-shelterCity-img {
-  width: 100%;
-  height: 100%;
-  max-height: 250px;
+.shelterCity-img-list {
+  // height: 300px;
+}
+.shelterCity-img {
+  width: 200px;
+  height: 200px;
   object-fit: cover;
 }
 
@@ -706,5 +878,75 @@ export default {
 
 .medical-icon {
   display: inline-block;
+}
+
+.textStyle {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.seamless-warp {
+  width: 100%;
+  height: 50vh;
+  overflow: hidden;
+}
+ul {
+  padding: 0;
+}
+.DataList_top {
+  list-style: none;
+  width: 100%;
+  height: 4rem;
+  background-color: #4383c1;
+  margin-top: 0.5rem;
+  color: white;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+.DataList_left {
+  float: left;
+  text-align: center;
+}
+.one {
+  width: 20%;
+}
+.two {
+  width: 20%;
+  // margin-left: 1%;
+}
+.three {
+  width: 20%;
+  // margin-left: 1%;
+}
+.four {
+  width: 20%;
+  // margin-left: 1%;
+}
+.five {
+  // width: 20%;
+  // margin-left: 1%;
+  color: greenyellow;
+}
+
+.user__avatar {
+  border-radius: 50%;
+  height: 64px;
+  overflow: hidden;
+  position: relative;
+  width: 64px;
+  z-index: 9;
+}
+
+.user__avatar img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in;
+  width: 100%;
+}
+
+.user__avatar:hover img {
+  filter: blur(1px) brightness(0.75);
+  transform: scale(1.05);
 }
 </style>

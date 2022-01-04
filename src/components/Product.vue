@@ -158,43 +158,68 @@
           </div>
 
           <!-- 燈箱 body 區 -->
+          <!-- 進度條區 -->
           <div class="modal-body">
             <!-- 收容所進度條 -->
             <!--食物進度條 -->
+            <i class="fas fa-bone fa-3x"></i>
+            <p class="mt-3">
+              還有
+              <strong>{{ shelterCity.shelterNeedFood / 100 }}</strong>
+              隻肚子餓的狗狗
+            </p>
+
             <b-progress
               :max="shelterCity.shelterNeedFood"
-              height="2rem"
-              animated
-              show-value
+              height="1rem"
               class="mb-3"
             >
               <b-progress-bar :value="shelterCity.shelterNeedFood / 3">
-                <span class="progress-text"
+                <!-- <span class="progress-text"
                   >捐款點數進度:
                   <strong
                     >{{ Math.floor(shelterCity.shelterNeedFood / 3) }} /
                     {{ shelterCity.shelterNeedFood }}</strong
                   ></span
-                >
+                > -->
               </b-progress-bar>
             </b-progress>
             <!--醫療進度條 -->
-            <b-progress
-              :max="shelterCity.shelterNeedMedical"
-              height="2rem"
-              animated
-              show-value
-            >
+            <i class="fas fa-briefcase-medical fa-3x  "></i>
+            <p class="mt-3">
+              還有
+              <strong>{{ shelterCity.shelterNeedMedical / 100 }}</strong>
+              隻生病的狗狗
+            </p>
+
+            <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
               <b-progress-bar :value="shelterCity.shelterNeedMedical / 2">
-                <span class="progress-text"
+                <!-- <span class="progress-text"
                   >捐款點數進度:
                   <strong
                     >{{ Math.floor(shelterCity.shelterNeedMedical / 2) }} /
                     {{ shelterCity.shelterNeedMedical }}</strong
                   ></span
-                >
+                > -->
               </b-progress-bar>
             </b-progress>
+          </div>
+
+          <!-- 資訊區 -->
+          <div class="modal-body">
+            地址:
+            <a
+              href="https://www.google.com.tw/maps/place/${data.address}"
+              target="_blank"
+              title="Google Map"
+            >
+              {{ shelterCity.address }}</a
+            ><br />
+            電話: {{ shelterCity.shelterPhoneNumber }}<br />
+            <span style="color: #d45345;"
+              >更新時間:
+              {{ new Date(shelterCity.updateTime).toLocaleString() }}</span
+            ><br />
           </div>
         </div>
       </div>
@@ -213,7 +238,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <p class="modal-title text-left h2" id="exampleModalLabel">
-              My cart
+              {{ shelterCity.shelterName }}
             </p>
             <button
               type="button"
@@ -251,6 +276,54 @@
                   class="modal-shelterCity-img"
                 ></b-carousel-slide>
               </b-carousel>
+
+              <!-- 進度條 -->
+              <div>
+                <!-- 收容所進度條 -->
+                <!--食物進度條 -->
+                <i class="fas fa-bone fa-3x"></i>
+                <p class="mt-3">
+                  還有
+                  <strong>{{ shelterCity.shelterNeedFood / 100 }}</strong>
+                  隻肚子餓的狗狗
+                </p>
+
+                <b-progress
+                  :max="shelterCity.shelterNeedFood"
+                  height="1rem"
+                  class="mb-3"
+                >
+                  <b-progress-bar :value="shelterCity.shelterNeedFood / 3">
+                    <!-- <span class="progress-text"
+                  >捐款點數進度:
+                  <strong
+                    >{{ Math.floor(shelterCity.shelterNeedFood / 3) }} /
+                    {{ shelterCity.shelterNeedFood }}</strong
+                  ></span
+                > -->
+                  </b-progress-bar>
+                </b-progress>
+
+                <!--醫療進度條 -->
+                <i class="fas fa-briefcase-medical fa-3x  "></i>
+                <p class="mt-3">
+                  還有
+                  <strong>{{ shelterCity.shelterNeedMedical / 100 }}</strong>
+                  隻生病的狗狗
+                </p>
+
+                <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
+                  <b-progress-bar :value="shelterCity.shelterNeedMedical / 2">
+                    <!-- <span class="progress-text"
+                  >捐款點數進度:
+                  <strong
+                    >{{ Math.floor(shelterCity.shelterNeedMedical / 2) }} /
+                    {{ shelterCity.shelterNeedMedical }}</strong
+                  ></span
+                > -->
+                  </b-progress-bar>
+                </b-progress>
+              </div>
             </div>
             <div class="col-4">
               <!-- <h5 class="text-left">
@@ -306,24 +379,25 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button
+
+          <!-- <div class="modal-footer"> -->
+          <!-- <button
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
             >
               Continue shopping
-            </button>
-            <!-- 若為登入狀態則進入結帳頁面 -->
-            <!-- <a
+            </button> -->
+          <!-- 若為登入狀態則進入結帳頁面 -->
+          <!-- <a
               class="btn btn-primary"
               href="#"
               v-if="login != null"
               @click="checkout"
               >Check your Cart</a
             > -->
-            <!-- 若為未登入狀態則跳出登入視窗 -->
-            <!-- <a
+          <!-- 若為未登入狀態則跳出登入視窗 -->
+          <!-- <a
               class="btn btn-primary"
               data-toggle="modal"
               data-target="#login"
@@ -331,7 +405,7 @@
               v-if="login === null"
               >Check your Cart</a
             > -->
-          </div>
+          <!-- </div> -->
         </div>
       </div>
     </div>

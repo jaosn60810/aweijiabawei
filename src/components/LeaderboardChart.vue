@@ -1,19 +1,28 @@
 <template>
-  <div id="leaderboardChart" class="leaderboard">
-    <h2 class="leaderboardChart-title">
-      <svg class="ico-cup">
-        <use xlink:href="#cup"></use>
-      </svg>
-      {{ leaderboardChartTitle[leaderboardChartTitleNum] }}
-    </h2>
-    <ol>
-      <li v-for="item in leaderboardChartDataShow" :key="item.account">
-        <mark>{{ item.account }} </mark>
-        <small
-          >{{ item[leaderboardChartDataName[leaderboardChartTitleNum]] }}
-        </small>
-      </li>
-      <!-- <li>
+  <div id="leaderboardChart" class=" container-fluid">
+    <div class=" row">
+      <div
+        class="col-10 leaderboard mx-auto"
+        v-if="leaderboardChartTitleNum === 3"
+      >
+        <p class="leaderboardChart-title h1 ">
+          <svg class="ico-cup">
+            <use xlink:href="#cup"></use>
+          </svg>
+          {{ leaderboardChartTitle[leaderboardChartTitleNum] }}
+        </p>
+        <ol>
+          <li
+            v-for="item in leaderboardChartDataShow.slice(0, 10)"
+            :key="item.account"
+            class=" pt-5"
+          >
+            <mark>{{ item.account }} </mark>
+            <mark>{{ item.account }} </mark>
+            <mark>{{ item.account }} </mark>
+            <small>{{ item.account }} </small>
+          </li>
+          <!-- <li>
         <mark>bbb</mark>
         <small>301</small>
       </li>
@@ -49,22 +58,22 @@
         <mark>kkk</mark>
         <small>203</small>
       </li> -->
-    </ol>
+        </ol>
 
-    <svg style="display: none;">
-      <symbol
-        id="cup"
-        x="0px"
-        y="0px"
-        width="25px"
-        height="26px"
-        viewBox="0 0 25 26"
-        enable-background="new 0 0 25 26"
-        xml:space="preserve"
-      >
-        <path
-          fill="#F26856"
-          d="M21.215,1.428c-0.744,0-1.438,0.213-2.024,0.579V0.865c0-0.478-0.394-0.865-0.88-0.865H6.69
+        <svg style="display: none;">
+          <symbol
+            id="cup"
+            x="0px"
+            y="0px"
+            width="25px"
+            height="26px"
+            viewBox="0 0 25 26"
+            enable-background="new 0 0 25 26"
+            xml:space="preserve"
+          >
+            <path
+              fill="#F26856"
+              d="M21.215,1.428c-0.744,0-1.438,0.213-2.024,0.579V0.865c0-0.478-0.394-0.865-0.88-0.865H6.69
 	C6.204,0,5.81,0.387,5.81,0.865v1.142C5.224,1.641,4.53,1.428,3.785,1.428C1.698,1.428,0,3.097,0,5.148
 	C0,7.2,1.698,8.869,3.785,8.869h1.453c0.315,0,0.572,0.252,0.572,0.562c0,0.311-0.257,0.563-0.572,0.563
 	c-0.486,0-0.88,0.388-0.88,0.865c0,0.478,0.395,0.865,0.88,0.865c0.421,0,0.816-0.111,1.158-0.303
@@ -81,9 +90,43 @@
 	C13.195,16.578,13.344,17.436,13.673,18.301z M12.5,14.276c-2.856,0-4.93-2.638-4.93-6.273V1.73h9.859v6.273
 	C17.43,11.638,15.357,14.276,12.5,14.276z M21.215,7.138h-1.452c-0.197,0-0.39,0.024-0.572,0.07v-2.06
 	c0-1.097,0.908-1.99,2.024-1.99c1.117,0,2.025,0.893,2.025,1.99C23.241,6.246,22.333,7.138,21.215,7.138z"
-        />
-      </symbol>
-    </svg>
+            />
+          </symbol>
+        </svg>
+      </div>
+
+      <div class="mt-5" v-if="!(leaderboardChartTitleNum === 3)">
+        <b-card
+          class="h1"
+          :header="leaderboardChartTitle[leaderboardChartTitleNum]"
+        >
+          <b-list-group>
+            <b-list-group-item
+              class="d-flex align-items-center"
+              v-for="(item, index) in leaderboardChartDataShow.slice(0, 10)"
+              :key="item.account"
+            >
+              <b-avatar
+                :badge="`${index + 1}`"
+                variant="info"
+                badge-variant="danger"
+                src="https://placekitten.com/300/300"
+                class="mr-3"
+                size="6rem"
+              ></b-avatar>
+              <span class="mx-auto h3">{{ item.account }}</span>
+              <span class="h3"
+                ><b-badge>
+                  {{
+                    item[leaderboardChartDataName[leaderboardChartTitleNum]]
+                  }}</b-badge
+                ></span
+              >
+            </b-list-group-item>
+          </b-list-group>
+        </b-card>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -94,6 +137,7 @@ export default {
       type: Number,
       default: 0,
     },
+
     // leaderboardChartData: {
     //   type: Array,
     //   default: () => [],
@@ -101,7 +145,7 @@ export default {
   },
   data() {
     return {
-      leaderboardChartTitle: ['本月最高', '本年最高', '歷來最高'],
+      leaderboardChartTitle: ['本月最高', '本年最高', '歷來最高', '捐款紀錄'],
       leaderboardChartDataName: [
         'monthDonation',
         'yearDonation',
@@ -169,6 +213,8 @@ Body
 //   font-family: 'Open Sans', sans-serif;
 // }
 
+// $main-color: rgb(248, 38, 11);
+$main-color: rgb(220, 53, 69);
 /*--------------------
 Leaderboard
 --------------------*/
@@ -176,7 +222,7 @@ Leaderboard
   margin-top: 3rem;
   margin-bottom: 3rem;
   min-width: 250px;
-  max-width: 285px;
+  // max-width: 285px;
   padding: 0;
 
   // position: absolute;
@@ -190,7 +236,7 @@ Leaderboard
   box-shadow: 0 7px 30px rgba(62, 9, 11, 0.3);
 
   .leaderboardChart-title {
-    font-size: 18px;
+    // font-size: 18px;
     color: #e1e1e1;
     padding: 12px 13px 18px;
 
@@ -227,7 +273,7 @@ Leaderboard
         width: 20px;
         height: 20px;
         line-height: 20px;
-        color: #c24448;
+        color: $main-color;
         background: #fff;
         border-radius: 20px;
         text-align: center;
@@ -243,7 +289,7 @@ Leaderboard
         padding: 18px 10px 18px 50px;
         margin: 0;
         background: none;
-        color: #fff;
+        color: black;
 
         &::before,
         &::after {
@@ -289,16 +335,16 @@ Leaderboard
       }
 
       &:nth-child(1) {
-        background: #fa6855;
+        background: $main-color;
         &::after {
-          background: #fa6855;
+          background: $main-color;
         }
       }
 
       &:nth-child(2) {
-        background: #e0574f;
+        background: lighten($main-color, 5%);
         &::after {
-          background: #e0574f;
+          background: lighten($main-color, 5%);
           box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
         }
 
@@ -312,9 +358,9 @@ Leaderboard
       }
 
       &:nth-child(3) {
-        background: #d7514d;
+        background: lighten($main-color, 10%);
         &::after {
-          background: #d7514d;
+          background: lighten($main-color, 10%);
           box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
         }
 
@@ -327,29 +373,125 @@ Leaderboard
         }
       }
 
-      &:nth-child(n + 4) {
-        background: #cd4b4b;
+      &:nth-child(4) {
+        background: lighten($main-color, 15%);
         &::after {
-          background: #cd4b4b;
-          box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+          background: lighten($main-color, 15%);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
         }
 
         & mark {
           &::before,
           &::after {
-            top: -7px;
-            bottom: auto;
-            border-top: none;
-            border-bottom: 6px solid #a63d3d;
+            border-top: 2px solid #b0433f;
+            bottom: -3px;
           }
         }
       }
 
+      &:nth-child(5) {
+        background: lighten($main-color, 20%);
+        &::after {
+          background: lighten($main-color, 20%);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
+        }
+
+        & mark {
+          &::before,
+          &::after {
+            border-top: 2px solid #b0433f;
+            bottom: -3px;
+          }
+        }
+      }
+
+      &:nth-child(6) {
+        background: lighten($main-color, 25%);
+        &::after {
+          background: lighten($main-color, 25%);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
+        }
+
+        & mark {
+          &::before,
+          &::after {
+            border-top: 2px solid #b0433f;
+            bottom: -3px;
+          }
+        }
+      }
+
+      &:nth-child(7) {
+        background: lighten($main-color, 30%);
+        &::after {
+          background: lighten($main-color, 30%);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
+        }
+
+        & mark {
+          &::before,
+          &::after {
+            border-top: 2px solid #b0433f;
+            bottom: -3px;
+          }
+        }
+      }
+
+      &:nth-child(8) {
+        background: lighten($main-color, 35%);
+        &::after {
+          background: lighten($main-color, 35%);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
+        }
+
+        & mark {
+          &::before,
+          &::after {
+            border-top: 2px solid #b0433f;
+            bottom: -3px;
+          }
+        }
+      }
+
+      &:nth-child(9) {
+        background: lighten($main-color, 40%);
+        &::after {
+          background: lighten($main-color, 40%);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.11);
+        }
+
+        & mark {
+          &::before,
+          &::after {
+            border-top: 2px solid #b0433f;
+            bottom: -3px;
+          }
+        }
+      }
+
+      // &:nth-child(n + 4) {
+      //   background: lighten($main-color, 15%);
+      //   &::after {
+      //     background: lighten($main-color, 15%);
+      //     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
+      //   }
+
+      //   & mark {
+      //     &::before,
+      //     &::after {
+      //       top: -7px;
+      //       bottom: auto;
+      //       border-top: none;
+      //       border-bottom: 6px solid #a63d3d;
+      //     }
+      //   }
+      // }
+
       &:last-child {
-        background: #c24448;
+        background: lighten($main-color, 45%);
         border-radius: 0 0 10px 10px;
         &::after {
-          background: #c24448;
+          background: lighten($main-color, 45%);
           box-shadow: 0 -2.5px 0 rgba(0, 0, 0, 0.12);
           border-radius: 0 0 10px 10px;
         }

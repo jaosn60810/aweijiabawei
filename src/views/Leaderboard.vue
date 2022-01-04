@@ -2,22 +2,27 @@
   <div id="Leaderboard">
     <Navbar></Navbar>
     <div class="container-fluid">
+      <div class="row justify-content-around" v-if="token">
+        <LeaderboardChart class="col-12 " :leaderboard-chart-title-num="3" />
+      </div>
       <div class="row justify-content-around">
         <LeaderboardChart
-          class="col-12 col-md-3"
+          class="col-12 col-md-4"
           :leaderboard-chart-title-num="0"
         />
+
         <LeaderboardChart
-          class="col-12 col-md-3"
+          class="col-12 col-md-4"
           :leaderboard-chart-title-num="1"
         />
+
         <LeaderboardChart
-          class="col-12 col-md-3"
+          class="col-12 col-md-4"
           :leaderboard-chart-title-num="2"
         />
       </div>
 
-      <div class="row justify-content-center scollbox">
+      <!-- <div class="row justify-content-center scollbox">
         <vue-seamless-scroll
           :data="List"
           class="seamless-warp col-10"
@@ -49,7 +54,7 @@
             </li>
           </ul>
         </vue-seamless-scroll>
-      </div>
+      </div> -->
     </div>
     <Cart></Cart>
   </div>
@@ -59,7 +64,7 @@
 import Navbar from '../components/Navbar';
 import Cart from '../components/Cart';
 
-import vueSeamlessScroll from 'vue-seamless-scroll';
+// import vueSeamlessScroll from 'vue-seamless-scroll';
 import LeaderboardData from '../assets/data/leaderboardData.json';
 import LeaderboardChart from '../components/LeaderboardChart.vue';
 
@@ -67,7 +72,7 @@ export default {
   name: 'aboutview',
   components: {
     Navbar,
-    vueSeamlessScroll,
+    // vueSeamlessScroll,
     LeaderboardChart,
     Cart,
   },
@@ -76,6 +81,7 @@ export default {
       List: [],
       leaderboardChartData: {},
       personalData: [],
+      token: JSON.parse(localStorage.getItem('token')),
     };
   },
   created() {

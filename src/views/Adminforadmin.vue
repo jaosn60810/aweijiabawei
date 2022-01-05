@@ -9,7 +9,7 @@
         <i class="fas fa-bars"></i>
       </a>
       <nav id="sidebar" class="sidebar-wrapper ">
-        <div class="sidebar-content">
+        <div class="sidebar-content ">
           <!-- sidebar-brand  -->
           <div class="sidebar-item sidebar-brand justify-content-end">
             <!-- <a href="#">pro sidebar</a> -->

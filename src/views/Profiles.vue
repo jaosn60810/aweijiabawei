@@ -156,22 +156,82 @@
               />
             </div>
 
-            <div class="form-group my-3">
+            <!-- <div class="form-group my-3">
               <label class="form-label">本年捐款</label>
               <input
                 class="form-control"
                 v-model="profile.yearDonation"
                 disabled
               />
-            </div>
+            </div> -->
 
-            <div class="form-group my-3">
+            <!-- <div class="form-group my-3">
               <label class="form-label">總捐款</label>
               <input
                 class="form-control"
                 v-model="profile.soFarDonation"
                 disabled
               />
+            </div> -->
+
+            <div>
+              <div>
+                <b-card-group deck>
+                  <b-card
+                    border-variant="info"
+                    header="贊助罐頭總數量"
+                    header-bg-variant="info"
+                    header-text-variant="white"
+                    align="center"
+                  >
+                    <b-card-text class="h1"
+                      ><i class="fas fa-bone "></i>
+                      {{
+                        Math.floor(
+                          profile.monthDonation / 10 +
+                            Math.sqrt(profile.monthDonation)
+                        )
+                      }}個</b-card-text
+                    >
+                  </b-card>
+
+                  <b-card
+                    border-variant="info"
+                    header="擊退毛孩病魔總次數"
+                    header-bg-variant="info"
+                    header-text-variant="white"
+                    align="center"
+                  >
+                    <b-card-text class="h1"
+                      ><i class="fas fa-briefcase-medical medical-icon"></i>
+                      {{
+                        Math.floor(
+                          profile.monthDonation / 20 +
+                            Math.sqrt(profile.monthDonation)
+                        )
+                      }}次</b-card-text
+                    >
+                  </b-card>
+
+                  <b-card
+                    border-variant="info"
+                    header="拯救毛孩總隻數"
+                    header-bg-variant="info"
+                    header-text-variant="white"
+                    align="center"
+                  >
+                    <b-card-text class="h1"
+                      ><i class="fas fa-dog"></i>
+                      {{
+                        Math.floor(
+                          profile.monthDonation / 30 +
+                            Math.sqrt(profile.monthDonation)
+                        )
+                      }}隻</b-card-text
+                    >
+                  </b-card>
+                </b-card-group>
+              </div>
             </div>
           </div>
         </div>

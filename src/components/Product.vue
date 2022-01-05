@@ -55,11 +55,11 @@
             >
               <ul class="w-100">
                 <li
-                  class="DataList_top row mx-0 w-100 bg-success"
-                  v-for="item in List"
-                  :key="item.name"
+                  class="DataList_top row mx-0 w-100 bg-info"
+                  v-for="(item, index) in List"
+                  :key="index"
                 >
-                  <div class="col-3 p-0">{{ item.name }}</div>
+                  <div class="col-3 p-0">{{ item.account }}</div>
                   <div class="col-3 p-0">
                     <div>
                       <!-- <img
@@ -71,17 +71,18 @@
                       <b-avatar
                         variant="info"
                         :badge-variant="
-                          Math.floor(Math.random() * 25) % 2 === 0
-                            ? 'info'
-                            : 'danger'
+                          item.shelterId % 2 === 0 ? 'warning' : 'danger'
                         "
-                        src="https://placekitten.com/300/300"
-                        size="4rem"
+                        :src="
+                          'https://placekitten.com/300/300?image=' +
+                            item.shelterId
+                        "
+                        size="2rem"
                       >
                         <template #badge
                           ><b-icon
                             :icon="
-                              Math.floor(Math.random() * 25) % 2 === 0
+                              item.shelterId % 2 === 0
                                 ? 'star-fill'
                                 : 'suit-heart-fill'
                             "
@@ -90,10 +91,9 @@
                     </div>
                   </div>
                   <div class="col-6 p-0">
-                    幫助 {{ Math.floor(Math.random() * 25) + 1 }} 隻毛孩的{{
-                      (Math.floor(Math.random() * 25) + 1) % 2 === 0
-                        ? '罐罐'
-                        : '醫療'
+                    幫助<strong>{{ Math.floor(Math.random() * 25) + 1 }}</strong
+                    >隻 <br />毛孩的{{
+                      item.shelterId % 2 === 0 ? '罐罐' : '醫療'
                     }}
                   </div>
                 </li>
@@ -577,9 +577,10 @@ import $ from 'jquery';
 import dogImg from '../assets/data/dogImg.json';
 import animalShelters from '../assets/data/animal-shelter.json';
 import shelterCities from '../assets/data/shelterCity.json';
+import marquee from '../assets/data/marquee.json';
 
 import vueSeamlessScroll from 'vue-seamless-scroll';
-import LeaderboardData from '../assets/data/leaderboardData.json';
+// import LeaderboardData from '../assets/data/leaderboardData.json';
 
 export default {
   name: 'product',
@@ -602,10 +603,12 @@ export default {
       shelterNeedMedical: [],
       donationFoodPoints: 0,
       donationMedicalPoints: 0,
-      List: LeaderboardData,
+      List: marquee,
       firstCardColor: '#dc3545',
       secondCardColor: '#e04b59',
       thirdCardColor: '#e4606d',
+      thisWeekDonation: [],
+      thisWeekDonationRandomNumber: Math.floor(Math.random() * 25) + 1,
     };
   },
   methods: {
@@ -805,6 +808,15 @@ export default {
       .then((response) => response.json())
       .then((result) => (this.shelterNeedMedical = result))
       .catch((error) => console.log('error', error));
+    if (!this.thisWeekDonation.length) {
+      fetch(
+        'https://finalproject-336509.appspot.com/api/userdonation/marquee',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => (this.thisWeekDonation = result))
+        .catch((error) => console.log('error', error));
+    }
   },
   computed: {
     shelterDataNeedFoodAndMedical() {
@@ -839,6 +851,7 @@ export default {
     transferPointToMedical() {
       return `增加 ${this.donationMedicalPoints / 10} 健康度`;
     },
+
     classOption() {
       return {
         step: 0.2, // 数值越大速度滚动越快
@@ -857,6 +870,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.list-group-item.active {
+  background-color: rgb(227, 242, 253);
+  color: black;
+}
 .product {
   background: #f2f2f2;
   padding-bottom: 3rem;

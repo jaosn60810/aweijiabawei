@@ -60,47 +60,49 @@
             </div> -->
 
             <div class="form-group ">
-              <p class="form-label">加值金額</p>
-              <button
-                class="btn btn-primary mr-3"
-                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                type="button"
-                data-toggle="modal"
-                data-target="#addPointInfo"
-                @click="addPointCheckModalShow(30)"
-              >
-                30元
-              </button>
-              <button
-                class="btn btn-primary mr-3"
-                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                type="button"
-                data-toggle="modal"
-                data-target="#addPointInfo"
-                @click="addPointCheckModalShow(50)"
-              >
-                50元
-              </button>
-              <button
-                class="btn btn-primary mr-3"
-                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                type="button"
-                data-toggle="modal"
-                data-target="#addPointInfo"
-                @click="addPointCheckModalShow(100)"
-              >
-                100元
-              </button>
-              <button
-                class="btn btn-primary mr-3"
-                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                type="button"
-                data-toggle="modal"
-                data-target="#addPointInfo"
-                @click="addPointCheckModalShow(1000)"
-              >
-                1000元
-              </button>
+              <p class="form-label my-0">加值金額</p>
+              <div class="d-flex flex-wrap ">
+                <button
+                  class="btn btn-primary mt-3 mr-3"
+                  style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                  type="button"
+                  data-toggle="modal"
+                  data-target="#addPointInfo"
+                  @click="addPointCheckModalShow(100)"
+                >
+                  100元
+                </button>
+                <button
+                  class="btn btn-primary  mt-3 mr-3"
+                  style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                  type="button"
+                  data-toggle="modal"
+                  data-target="#addPointInfo"
+                  @click="addPointCheckModalShow(500)"
+                >
+                  500元
+                </button>
+                <button
+                  class="btn btn-primary  mt-3 mr-3"
+                  style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                  type="button"
+                  data-toggle="modal"
+                  data-target="#addPointInfo"
+                  @click="addPointCheckModalShow(1000)"
+                >
+                  1000元
+                </button>
+                <button
+                  class="btn btn-primary  mt-3 mr-3"
+                  style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                  type="button"
+                  data-toggle="modal"
+                  data-target="#addPointInfo"
+                  @click="addPointCheckModalShow(2000)"
+                >
+                  2000元
+                </button>
+              </div>
 
               <!-- Modal -->
               <div
@@ -133,7 +135,7 @@
                     </div>
                     <div class="modal-footer ">
                       <a
-                        href="https://core.newebpay.com/EPG/ahhwayee/FLSjw3"
+                        :href="donateLink[pointsWantToAdd]"
                         type="button"
                         class="btn btn-primary"
                         @click="addPoints(pointsWantToAdd)"
@@ -386,6 +388,12 @@ export default {
       },
       verifyCode: null,
       pointsWantToAdd: 0,
+      donateLink: {
+        100: 'https://core.newebpay.com/EPG/ahhwayee/QTQYgg',
+        500: 'https://core.newebpay.com/EPG/ahhwayee/3gsbMp',
+        1000: 'https://core.newebpay.com/EPG/ahhwayee/zAyINl',
+        2000: 'https://core.newebpay.com/EPG/ahhwayee/3NYekQ',
+      },
     };
   },
   // firestore() {
@@ -435,7 +443,6 @@ export default {
       )
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           if (result.msg === '更新帳號成功') {
             window.Swal.fire({
               icon: 'success',
@@ -498,7 +505,6 @@ export default {
       )
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           if (result.msg === '更新使用者名稱成功') {
             window.Swal.fire({
               icon: 'success',
@@ -627,7 +633,6 @@ export default {
       )
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           if (result.msg === '更新密碼成功') {
             window.Swal.fire({
               icon: 'success',

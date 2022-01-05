@@ -305,7 +305,9 @@
           <div class="modal-body">
             地址:
             <a
-              href="https://www.google.com.tw/maps/place/${data.address}"
+              :href="
+                `https://www.google.com.tw/maps/place/${shelterCity.address}`
+              "
               target="_blank"
               title="Google Map"
             >
@@ -519,7 +521,9 @@
             <div class="mt-3">
               地址:
               <a
-                href="https://www.google.com.tw/maps/place/${data.address}"
+                :href="
+                  `https://www.google.com.tw/maps/place/${shelterCity.address}`
+                "
                 target="_blank"
                 title="Google Map"
               >
@@ -627,7 +631,7 @@ export default {
     donateInfo(shelterCity) {
       $('#miniCart').modal('show');
       this.shelterCity = shelterCity;
-      console.log(this.shelterCity);
+      // console.log(this.shelterCity);
     },
     sortByAll() {
       this.activeBtn = 'all';
@@ -800,7 +804,7 @@ export default {
       }
     },
     howManyStars(index) {
-      return 5 - index / 10;
+      return index / 200;
     },
   },
   firestore() {

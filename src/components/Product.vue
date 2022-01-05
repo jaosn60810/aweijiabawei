@@ -21,10 +21,7 @@
               type="button"
               class="list-group-item list-group-item-action px-0"
               aria-current="true"
-              @click="
-                sortByHungry();
-                getAnimalsPics();
-              "
+              @click="sortByHungry()"
               :class="{ active: activeBtn === 'hungry' }"
             >
               <div>需要罐罐 <i class="fas fa-bone "></i></div>
@@ -33,10 +30,7 @@
             <button
               type="button"
               class="list-group-item list-group-item-action px-0"
-              @click="
-                sortBySick();
-                getAnimalsPics();
-              "
+              @click="sortBySick()"
               :class="{ active: activeBtn === 'sick' }"
             >
               <div>
@@ -91,7 +85,9 @@
                     </div>
                   </div>
                   <div class="col-6 p-0">
-                    幫助<strong>{{ Math.floor(Math.random() * 25) + 1 }}</strong
+                    幫助<strong>{{
+                      Math.floor(item.shelterId + Math.sqrt(item.shelterId))
+                    }}</strong
                     >隻 <br />毛孩的{{
                       item.shelterId % 2 === 0 ? '罐罐' : '醫療'
                     }}
@@ -107,8 +103,8 @@
           <!-- 卡片列表 -->
           <div
             class=" col-md-4 col-lg-3  mb-3"
-            v-for="(shelterCity, index) in shelterData"
-            :key="index"
+            v-for="(shelterCity, index) in shelterSortData"
+            :key="shelterCity.shelterId"
           >
             <!-- 每張卡片 -->
             <div
@@ -129,7 +125,12 @@
                 <p class="card-title h5 my-3">
                   <strong>{{ shelterCity.shelterImgName }}</strong>
                   <br />
-                  急需罐罐與醫療
+                  {{
+                    transferPointsToOtherThings(
+                      Math.floor(shelterCity.shelterNeedPoints / 10000),
+                      cardHeadTitle
+                    )
+                  }}
                 </p>
               </div>
 
@@ -471,7 +472,9 @@
               <!--食物進度條 -->
               <div class="h6 mt-3">
                 <i class="fas fa-bone "></i> 還有
-                <strong>{{ shelterCity.shelterNeedFood / 100 }}</strong>
+                <strong>{{
+                  Math.floor(shelterCity.shelterNeedFood / 10000)
+                }}</strong>
                 隻肚子餓的毛孩
               </div>
 
@@ -498,7 +501,9 @@
               <div class="h6 mt-3">
                 <i class="fas fa-briefcase-medical   "></i>
                 還有
-                <strong>{{ shelterCity.shelterNeedMedical / 100 }}</strong>
+                <strong>{{
+                  Math.floor(shelterCity.shelterNeedMedical / 10000)
+                }}</strong>
                 隻生病的毛孩
               </div>
 
@@ -609,12 +614,14 @@ export default {
       thirdCardColor: '#e4606d',
       thisWeekDonation: [],
       thisWeekDonationRandomNumber: Math.floor(Math.random() * 25) + 1,
+      cardHeadTitle: '急需罐罐與醫療',
+      shelterSortData: [],
     };
   },
   methods: {
     donate(shelterCity) {
       this.shelterCity = shelterCity;
-      console.log(this.shelterCity);
+      // console.log(this.shelterCity);
       $('#miniCart').modal('show');
     },
     getImage(images) {
@@ -632,15 +639,18 @@ export default {
     },
     sortByAll() {
       this.activeBtn = 'all';
-      this.shelterCities = shelterCities.slice(0, 10);
+      this.cardHeadTitle = '急需罐罐與醫療';
+      this.shelterSortData = this.shelterData;
     },
     sortByHungry() {
       this.activeBtn = 'hungry';
-      this.shelterCities = shelterCities.slice(10, 20);
+      this.cardHeadTitle = '急需罐罐';
+      this.shelterSortData = this.shelterNeedFood;
     },
     sortBySick() {
       this.activeBtn = 'sick';
-      this.shelterCities = shelterCities.slice(20, 30);
+      this.cardHeadTitle = '急需醫療';
+      this.shelterSortData = this.shelterNeedMedical;
     },
     getDogNum(shelterCity) {
       return this.animalShelters.filter((data) => {
@@ -654,6 +664,21 @@ export default {
           return data.animal_kind === '貓';
       }).length;
     },
+    transferPointsToOtherThings(points, otherThings) {
+      if (otherThings === '急需罐罐') {
+        // let food = Math.floor(points / 100000 + Math.sqrt(points));
+        let food = points;
+        return '有' + food + '位飢餓的同伴';
+      } else if (otherThings === '急需醫療') {
+        // let mediacl = Math.floor(points / 200000 + Math.sqrt(points));
+        let mediacl = points;
+        return '有' + mediacl + '位生病的同伴';
+      } else {
+        // let all = Math.floor(points / 300000 + Math.sqrt(points));
+        let all = points;
+        return '有' + all + '位需要幫助的同伴';
+      }
+    },
     getAnimalsPics() {
       let dogImgArr = [];
       for (let i = 0; i < 3; i++) {
@@ -663,6 +688,14 @@ export default {
       this.shelterImages = dogImgArr;
     },
     donateFood() {
+      if (this.donationFoodPoints === 0) {
+        window.Swal.fire({
+          icon: 'warning',
+          title: '您的愛心遠大於0',
+        });
+        return;
+      }
+
       if (localStorage.getItem('token') === null) {
         $('#miniCart').modal('hide');
         $('#login').modal('show');
@@ -712,6 +745,14 @@ export default {
         .catch((error) => console.log('error', error));
     },
     donateMedical() {
+      if (this.donationFoodPoints === 0) {
+        window.Swal.fire({
+          icon: 'warning',
+          title: '您的愛心遠大於0',
+        });
+        return;
+      }
+
       if (localStorage.getItem('token') === null) {
         $('#miniCart').modal('hide');
         $('#login').modal('show');
@@ -788,9 +829,15 @@ export default {
       method: 'GET',
       redirect: 'follow',
     };
-    fetch('https://finalproject-336509.appspot.com/api/shelter', requestOptions)
+    fetch(
+      'https://finalproject-336509.appspot.com/api/shelter/shelterrank/0',
+      requestOptions
+    )
       .then((response) => response.json())
-      .then((result) => (this.shelterData = result))
+      .then((result) => {
+        this.shelterData = result;
+        this.shelterSortData = result;
+      })
       .catch((error) => console.log('error', error));
 
     fetch(
@@ -808,6 +855,7 @@ export default {
       .then((response) => response.json())
       .then((result) => (this.shelterNeedMedical = result))
       .catch((error) => console.log('error', error));
+
     if (!this.thisWeekDonation.length) {
       fetch(
         'https://finalproject-336509.appspot.com/api/userdonation/marquee',

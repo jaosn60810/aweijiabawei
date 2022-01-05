@@ -410,6 +410,9 @@
               <!-- <h5 class="text-left">{{ item.productPrice | currency }}</h5>
               <h5 class="text-left">Quantity: {{ item.productQuantity }}</h5> -->
               <div class="form-group my-3">
+                <p class="h3 " v-if="token">
+                  您有 <strong>{{ userRemainPoints }}</strong> 點
+                </p>
                 <label class="form-label">
                   <i class="fas fa-bone "></i>{{ transferPointToFoods }}</label
                 >
@@ -450,7 +453,7 @@
                   type="button"
                   class="btn btn-primary"
                   style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
-                  @click="donateMedical"
+                  @click="donateMedical()"
                 >
                   捐贈醫療
                 </button>
@@ -612,6 +615,8 @@ export default {
       thisWeekDonationRandomNumber: Math.floor(Math.random() * 25) + 1,
       cardHeadTitle: '急需罐罐與醫療',
       shelterSortData: [],
+      userRemainPoints: 0,
+      token: localStorage.getItem('token'),
     };
   },
   methods: {
@@ -685,6 +690,12 @@ export default {
       this.shelterImages = dogImgArr;
     },
     donateFood() {
+      if (localStorage.getItem('token') === null) {
+        $('#miniCart').modal('hide');
+        $('#login').modal('show');
+        return;
+      }
+
       if (this.donationFoodPoints === 0) {
         window.Swal.fire({
           icon: 'warning',
@@ -693,11 +704,16 @@ export default {
         return;
       }
 
-      if (localStorage.getItem('token') === null) {
-        $('#miniCart').modal('hide');
-        $('#login').modal('show');
+      if (this.userRemainPoints < this.donationFoodPoints) {
+        window.Swal.fire({
+          icon: 'warning',
+          title: '您的愛心需要加值',
+        });
         return;
+      } else {
+        this.userRemainPoints -= this.donationFoodPoints;
       }
+
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
 
@@ -742,7 +758,13 @@ export default {
         .catch((error) => console.log('error', error));
     },
     donateMedical() {
-      if (this.donationFoodPoints === 0) {
+      if (localStorage.getItem('token') === null) {
+        $('#miniCart').modal('hide');
+        $('#login').modal('show');
+        return;
+      }
+
+      if (this.donationMedicalPoints === 0) {
         window.Swal.fire({
           icon: 'warning',
           title: '您的愛心遠大於0',
@@ -750,11 +772,16 @@ export default {
         return;
       }
 
-      if (localStorage.getItem('token') === null) {
-        $('#miniCart').modal('hide');
-        $('#login').modal('show');
+      if (this.userRemainPoints < this.donationMedicalPoints) {
+        window.Swal.fire({
+          icon: 'warning',
+          title: '您的愛心需要加值',
+        });
         return;
+      } else {
+        this.userRemainPoints -= this.donationMedicalPoints;
       }
+
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
 
@@ -822,7 +849,7 @@ export default {
     this.shelterImages = dogImgArr;
   },
   mounted() {
-    const requestOptions = {
+    let requestOptions = {
       method: 'GET',
       redirect: 'follow',
     };
@@ -891,6 +918,41 @@ export default {
         .then((response) => response.json())
         .then((result) => (this.thisWeekDonation = result))
         .catch((error) => console.log('error', error));
+    }
+
+    // 拿使用者點數
+    if (localStorage.getItem('token')) {
+      let token = JSON.parse(localStorage.getItem('token'));
+      let account = JSON.parse(localStorage.getItem('account'));
+
+      let myHeaders = new Headers();
+      let bearerToken = 'Bearer ' + token;
+
+      myHeaders.append('Authorization', bearerToken);
+
+      let requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      fetch(
+        `https://finalproject-336509.appspot.com/api/userdonation/mydata?account=${account}`,
+        requestOptions
+      )
+        .then((response) => {
+          if (response.status !== 200) {
+            localStorage.clear();
+          }
+          return response.json();
+        })
+        .then((result) => {
+          let { remainingPoints } = result.userData;
+          this.userRemainPoints = remainingPoints;
+        })
+        .catch((error) => console.log('error', error));
+    } else {
+      this.userRemainPoints = 0;
     }
   },
   computed: {

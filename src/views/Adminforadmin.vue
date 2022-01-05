@@ -161,20 +161,20 @@ export default {
               title: '登出成功',
             });
             this.login = null;
-            this.$router.replace('/');
+            this.$router.replace('/productsview');
           } else {
             // window.Toast.fire({
             //   icon: 'error',
             //   title: '登出失敗',
             // });
             localStorage.clear();
-            this.$router.replace('/');
+            this.$router.replace('/productsview');
           }
         })
         .catch((error) => {
           console.log('error', error);
           localStorage.clear();
-          this.$router.replace('/');
+          this.$router.replace('/productsview');
         });
     },
   },

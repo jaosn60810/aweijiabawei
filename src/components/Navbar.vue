@@ -172,13 +172,13 @@ export default {
             //   title: '登出失敗',
             // });
             localStorage.clear();
-            this.$router.replace('/');
+            this.$router.replace('/productsview');
           }
         })
         .catch((error) => {
           console.log('error', error);
           localStorage.clear();
-          this.$router.replace('/');
+          this.$router.replace('/productsview');
         });
     },
     MembercenterOld() {

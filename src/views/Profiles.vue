@@ -252,12 +252,12 @@
 
             <div class="form-group my-3">
               <!-- 當用戶更改<input>、<select>和<textarea> 元素並提交更改時，change事件在這個元素上觸發 -->
-              <label for="">大頭貼</label>
+              <!-- <label for="">大頭貼</label>
               <input
                 class="form-control"
                 placeholder="大頭貼網址"
                 v-model="account.photoURL"
-              />
+              /> -->
             </div>
 
             <div class="form-group my-3">

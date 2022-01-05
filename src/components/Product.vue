@@ -1,12 +1,70 @@
 <template>
   <div class="product ">
     <div class="container-fluid">
+      <!-- banner -->
+      <!-- <div class=" d-flex justify-content-center mt-5">
+        <div class="w-50">
+          <div
+            id="carouselExampleControls"
+            class="carousel slide 0 "
+            data-ride="carousel"
+          >
+            <div class="carousel-inner ">
+              <div class="carousel-item active ">
+                <img
+                  src="../assets/images/carousel-1.jpg"
+                  class="d-block w-100 img-fluid"
+                  alt="..."
+                />
+              </div>
+              <div class="carousel-item">
+                <img
+                  src="../assets/images/carousel-2.jpg"
+                  class="d-block w-100"
+                  alt="..."
+                />
+              </div>
+              <div class="carousel-item">
+                <img
+                  src="../assets/images/carousel-3.jpg"
+                  class="d-block w-100"
+                  alt="..."
+                />
+              </div>
+            </div>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-target="#carouselExampleControls"
+              data-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="sr-only">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-target="#carouselExampleControls"
+              data-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="sr-only">Next</span>
+            </button>
+          </div>
+        </div>
+      </div> -->
+      <!-- main part -->
       <div class="row mt-5">
         <!-- 測攔 -->
         <div class="col-2 ">
-          <div class="list-group mx-auto">
+          <div class="list-group mx-auto ">
             <!-- 又餓又病按鈕 -->
-
             <button
               type="button"
               class="list-group-item list-group-item-action px-0"
@@ -38,9 +96,8 @@
               </div>
             </button>
           </div>
-
           <!-- 跑馬燈 -->
-          <div class="mt-5 w-100">
+          <div class="mt-5 w-100 d-none d-lg-block">
             <vue-seamless-scroll
               :data="List"
               class="seamless-warp "
@@ -88,7 +145,7 @@
                     幫助<strong>{{
                       Math.floor(item.shelterId + Math.sqrt(item.shelterId))
                     }}</strong
-                    >隻 <br />毛孩的{{
+                    >隻 <br />毛寶的{{
                       item.shelterId % 2 === 0 ? '罐罐' : '醫療'
                     }}
                   </div>
@@ -122,11 +179,23 @@
             >
               <!-- 收容所卡片狀態 -->
               <div class="card-body d-flex flex-column">
-                <p class="card-title h5 my-3">
-                  <strong>{{ shelterCity.shelterImgName }}</strong>
-                  <br />
-                  {{ transferPointsToOtherThings(shelterCity, cardHeadTitle) }}
-                </p>
+                <div class="card-title h5 my-3">
+                  <div>
+                    <strong>{{ shelterCity.shelterImgName }}</strong>
+                    <br />
+                    {{
+                      transferPointsToOtherThings(shelterCity, cardHeadTitle)
+                    }}
+                  </div>
+                  <div>
+                    打賞幫補血<b-icon
+                      icon="heart-fill"
+                      animation="throb"
+                      font-scale="1"
+                      color="#ff00ff"
+                    ></b-icon>
+                  </div>
+                </div>
               </div>
 
               <b-form-rating
@@ -259,7 +328,8 @@
                   您有 <strong>{{ userRemainPoints }}</strong> 點
                 </p>
                 <label class="form-label">
-                  <i class="fas fa-bone "></i>{{ transferPointToFoods }}</label
+                  <div><i class="fas fa-bone "></i></div>
+                  <div>{{ transferPointToFoods }}</div></label
                 >
                 <input
                   type="number"
@@ -282,9 +352,9 @@
 
               <div class="form-group my-3">
                 <label class="form-label">
-                  <i class="fas fa-briefcase-medical  "></i
-                  >{{ transferPointToMedical }}</label
-                >
+                  <div><i class="fas fa-briefcase-medical  "></i></div>
+                  <div>{{ transferPointToMedical }}</div>
+                </label>
                 <input
                   type="number"
                   class="form-control"
@@ -322,7 +392,7 @@
                       shelterCity.realNumber
                   )
                 }}</strong>
-                隻肚子餓的毛孩
+                隻肚子餓的毛寶
               </div>
 
               <b-progress
@@ -349,7 +419,7 @@
                       shelterCity.realNumber
                   )
                 }}</strong>
-                隻生病的毛孩{{ shelterCity.shelterGetMedical }}
+                隻生病的毛寶
               </div>
 
               <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
@@ -513,12 +583,18 @@ export default {
     transferPointsToOtherThings(shelterCity, otherThings) {
       let shelterOneData = shelterCity;
       if (otherThings === '急需罐罐') {
-        let food = Math.floor(shelterOneData.shelterNeedFood / 10000);
+        let food = Math.floor(
+          (1 - shelterCity.shelterGetFood / shelterCity.shelterNeedFood) *
+            shelterCity.realNumber
+        );
 
         return '有 ' + food + ' 位飢餓的同伴';
       } else if (otherThings === '急需醫療') {
         // let mediacl = Math.floor(points / 200000 + Math.sqrt(points));
-        let mediacl = Math.floor(shelterOneData.shelterNeedMedical / 10000);
+        let mediacl = Math.floor(
+          (1 - shelterCity.shelterGetMedical / shelterCity.shelterNeedMedical) *
+            shelterCity.realNumber
+        );
         return '有 ' + mediacl + ' 位生病的同伴';
       } else {
         // let all = Math.floor(points / 300000 + Math.sqrt(points));
@@ -810,37 +886,37 @@ export default {
     }
   },
   computed: {
-    shelterDataNeedFoodAndMedical() {
-      this.shelterData.forEach((itemShelterData) => {
-        // 食物
-        this.shelterNeedFood.forEach((itemShelterNeedFood) => {
-          if (itemShelterData.shelterName === itemShelterNeedFood.shelterName) {
-            itemShelterData.shelterNeedFood =
-              itemShelterNeedFood.shelterNeedPoints;
-            itemShelterData.shelterGetFood =
-              itemShelterNeedFood.shelterGetPoints;
-          }
-        });
+    // shelterDataNeedFoodAndMedical() {
+    //   this.shelterData.forEach((itemShelterData) => {
+    //     // 食物
+    //     this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+    //       if (itemShelterData.shelterName === itemShelterNeedFood.shelterName) {
+    //         itemShelterData.shelterNeedFood =
+    //           itemShelterNeedFood.shelterNeedPoints;
+    //         itemShelterData.shelterGetFood =
+    //           itemShelterNeedFood.shelterGetPoints;
+    //       }
+    //     });
 
-        // 醫療
-        this.shelterNeedMedical.forEach((itemShelterNeedMedical) => {
-          if (
-            itemShelterData.shelterName === itemShelterNeedMedical.shelterName
-          ) {
-            itemShelterData.shelterNeedMedical =
-              itemShelterNeedMedical.shelterNeedPoints;
-            itemShelterData.shelterGetMedical =
-              itemShelterNeedMedical.shelterGetPoints;
-          }
-        });
-      });
-      return this.shelterData;
-    },
+    //     // 醫療
+    //     this.shelterNeedMedical.forEach((itemShelterNeedMedical) => {
+    //       if (
+    //         itemShelterData.shelterName === itemShelterNeedMedical.shelterName
+    //       ) {
+    //         itemShelterData.shelterNeedMedical =
+    //           itemShelterNeedMedical.shelterNeedPoints;
+    //         itemShelterData.shelterGetMedical =
+    //           itemShelterNeedMedical.shelterGetPoints;
+    //       }
+    //     });
+    //   });
+    //   return this.shelterData;
+    // },
     transferPointToFoods() {
-      return `增加 ${this.donationFoodPoints / 10} 個罐罐`;
+      return `餵飽 ${(this.donationFoodPoints / 400).toFixed(2)} 隻毛寶`;
     },
     transferPointToMedical() {
-      return `增加 ${this.donationMedicalPoints / 10} 健康度`;
+      return `醫治 ${(this.donationMedicalPoints / 200).toFixed(2)} 隻毛寶`;
     },
 
     classOption() {

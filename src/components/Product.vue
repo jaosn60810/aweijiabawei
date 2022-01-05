@@ -804,7 +804,7 @@ export default {
       }
     },
     howManyStars(index) {
-      return index / 200;
+      return index / 10;
     },
   },
   firestore() {

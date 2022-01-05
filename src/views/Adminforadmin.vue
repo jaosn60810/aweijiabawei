@@ -233,7 +233,9 @@ export default {
       })
       .then((result) => {
         let { emailAddress, userName } = result.userData;
+        // let { emailAddress, userName,userImageUrl } = result.userData;
         this.email = emailAddress;
+        // this.photoURL = userImageUrl;
         this.photoURL = 'https://i.pravatar.cc';
         this.name = userName;
       })

@@ -392,11 +392,14 @@
                   size="20rem"
                 >
                 </b-avatar
-                ><b-avatar size="7rem" class="product-avatar  "
-                  ><strong class="danger">{{
-                    shelterCity.shelterImgName
-                  }}</strong>
-                  <span>來自{{ shelterCity.shelterName }}</span>
+                ><b-avatar size="7rem" class="product-avatar">
+                  <p class=" d-flex  flex-column m-0">
+                    <strong class="danger h4 text-warning">{{
+                      shelterCity.shelterImgName
+                    }}</strong>
+                    <span class=" small">來自</span>
+                    <span class=" small">{{ shelterCity.shelterName }}</span>
+                  </p>
                 </b-avatar>
               </div>
             </div>

@@ -204,125 +204,6 @@
       </div>
     </div>
 
-    <!-- 點擊資訊按鈕的出現的燈箱 -->
-    <div
-      class="modal fade"
-      id="itemInfo"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <!-- 燈箱 head 區 -->
-          <div class="modal-header">
-            <!-- 燈箱 head 區收容所名稱 -->
-            <p class="modal-title text-left h2" id="exampleModalLabel">
-              {{ shelterCity.shelterName }}
-            </p>
-            <!-- 燈箱 head 關閉 X 按鈕 -->
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <!-- 燈箱 body 區 -->
-          <div class="modal-body">
-            <b-carousel
-              id="carousel-1"
-              :interval="4000"
-              controls
-              indicators
-              background="#ababab"
-              img-width="1024"
-              img-height="480"
-              style="text-shadow: 1px 1px 2px #333;"
-            >
-              <!-- Slides with image only -->
-              <b-carousel-slide
-                :img-src="image"
-                v-for="image in shelterImages"
-                :key="image"
-                class="modal-shelterCity-img"
-              ></b-carousel-slide>
-            </b-carousel>
-          </div>
-
-          <!-- 燈箱 body 區 -->
-          <!-- 進度條區 -->
-          <div class="modal-body">
-            <!-- 收容所進度條 -->
-            <!--食物進度條 -->
-            <i class="fas fa-bone fa-3x"></i>
-            <p class="mt-3">
-              還有
-              <strong>{{ shelterCity.shelterNeedFood / 100 }}</strong>
-              隻肚子餓的毛孩
-            </p>
-
-            <b-progress
-              :max="shelterCity.shelterNeedFood"
-              height="1rem"
-              class="mb-3"
-            >
-              <b-progress-bar :value="shelterCity.shelterNeedFood / 3">
-                <!-- <span class="progress-text"
-                  >捐款點數進度:
-                  <strong
-                    >{{ Math.floor(shelterCity.shelterNeedFood / 3) }} /
-                    {{ shelterCity.shelterNeedFood }}</strong
-                  ></span
-                > -->
-              </b-progress-bar>
-            </b-progress>
-            <!--醫療進度條 -->
-            <i class="fas fa-briefcase-medical fa-3x  "></i>
-            <p class="mt-3">
-              還有
-              <strong>{{ shelterCity.shelterNeedMedical / 100 }}</strong>
-              隻生病的毛孩
-            </p>
-
-            <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
-              <b-progress-bar :value="shelterCity.shelterNeedMedical / 2">
-                <!-- <span class="progress-text"
-                  >捐款點數進度:
-                  <strong
-                    >{{ Math.floor(shelterCity.shelterNeedMedical / 2) }} /
-                    {{ shelterCity.shelterNeedMedical }}</strong
-                  ></span
-                > -->
-              </b-progress-bar>
-            </b-progress>
-          </div>
-
-          <!-- 資訊區 -->
-          <div class="modal-body">
-            地址:
-            <a
-              :href="
-                `https://www.google.com.tw/maps/place/${shelterCity.address}`
-              "
-              target="_blank"
-              title="Google Map"
-            >
-              {{ shelterCity.address }}</a
-            ><br />
-            電話: {{ shelterCity.shelterPhoneNumber }}<br />
-            <span style="color: #d45345;"
-              >更新時間:
-              {{ new Date(shelterCity.updateTime).toLocaleString() }}</span
-            ><br />
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- 點擊打賞按鈕的出現的燈箱 -->
     <div
       class="modal fade"
@@ -353,32 +234,6 @@
           <div class="modal-body row">
             <!-- 卡片幻燈片區 -->
             <div class="col-8">
-              <!-- <img
-                :src="item.productImage"
-                width="80px"
-                class="align-self-center mr-3"
-                alt=""
-              /> -->
-              <!-- 卡片幻燈片 -->
-              <!-- <b-carousel
-                id="carousel-2"
-                :interval="4000"
-                controls
-                indicators
-                background="#ababab"
-                img-width="1024"
-                img-height="480"
-                style="text-shadow: 1px 1px 2px #333;"
-              > -->
-              <!-- Slides with image only -->
-              <!-- <b-carousel-slide
-                  :img-src="shelterCity.shelterImgUrl"
-                  v-for="image in shelterImages"
-                  :key="image"
-                  class="modal-shelterCity-img"
-                ></b-carousel-slide>
-              </b-carousel> -->
-
               <!-- 新卡片頭貼 -->
               <div class="product-avatar-list">
                 <b-avatar
@@ -399,16 +254,6 @@
               </div>
             </div>
             <div class="col-4">
-              <!-- <h5 class="text-left">
-                {{ item.productName }}
-                <span
-                  class="float-right myMOUSE"
-                  @click="$store.commit('removeFromCart', item)"
-                  >X</span
-                >
-              </h5> -->
-              <!-- <h5 class="text-left">{{ item.productPrice | currency }}</h5>
-              <h5 class="text-left">Quantity: {{ item.productQuantity }}</h5> -->
               <div class="form-group my-3">
                 <p class="h3 " v-if="token">
                   您有 <strong>{{ userRemainPoints }}</strong> 點
@@ -470,7 +315,12 @@
               <div class="h6 mt-3">
                 <i class="fas fa-bone "></i> 還有
                 <strong>{{
-                  Math.floor(shelterCity.shelterNeedFood / 10000)
+                  Math.floor(
+                    (1 -
+                      shelterCity.shelterGetFood /
+                        shelterCity.shelterNeedFood) *
+                      shelterCity.realNumber
+                  )
                 }}</strong>
                 隻肚子餓的毛孩
               </div>
@@ -481,16 +331,9 @@
                 class="mb-3"
               >
                 <b-progress-bar
-                  :value="shelterCity.shelterNeedFood / 3"
+                  :value="shelterCity.shelterGetFood"
                   variant="danger"
                 >
-                  <!-- <span class="progress-text"
-                  >捐款點數進度:
-                  <strong
-                    >{{ Math.floor(shelterCity.shelterNeedFood / 3) }} /
-                    {{ shelterCity.shelterNeedFood }}</strong
-                  ></span
-                > -->
                 </b-progress-bar>
               </b-progress>
 
@@ -499,23 +342,21 @@
                 <i class="fas fa-briefcase-medical   "></i>
                 還有
                 <strong>{{
-                  Math.floor(shelterCity.shelterNeedMedical / 10000)
+                  Math.floor(
+                    (1 -
+                      shelterCity.shelterGetMedical /
+                        shelterCity.shelterNeedMedical) *
+                      shelterCity.realNumber
+                  )
                 }}</strong>
-                隻生病的毛孩
+                隻生病的毛孩{{ shelterCity.shelterGetMedical }}
               </div>
 
               <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
                 <b-progress-bar
-                  :value="shelterCity.shelterNeedMedical / 2"
+                  :value="shelterCity.shelterGetMedical"
                   variant="danger"
                 >
-                  <!-- <span class="progress-text"
-                  >捐款點數進度:
-                  <strong
-                    >{{ Math.floor(shelterCity.shelterNeedMedical / 2) }} /
-                    {{ shelterCity.shelterNeedMedical }}</strong
-                  ></span
-                > -->
                 </b-progress-bar>
               </b-progress>
             </div>
@@ -634,6 +475,10 @@ export default {
       this.shelterCity = shelterCity;
     },
     donateInfo(shelterCity) {
+      if (!localStorage.getItem('token')) {
+        this.userRemainPoints = 0;
+        this.token = null;
+      }
       $('#miniCart').modal('show');
       this.shelterCity = shelterCity;
       // console.log(this.shelterCity);
@@ -670,15 +515,16 @@ export default {
       if (otherThings === '急需罐罐') {
         let food = Math.floor(shelterOneData.shelterNeedFood / 10000);
 
-        return '有' + food + '位飢餓的同伴';
+        return '有 ' + food + ' 位飢餓的同伴';
       } else if (otherThings === '急需醫療') {
         // let mediacl = Math.floor(points / 200000 + Math.sqrt(points));
         let mediacl = Math.floor(shelterOneData.shelterNeedMedical / 10000);
-        return '有' + mediacl + '位生病的同伴';
+        return '有 ' + mediacl + ' 位生病的同伴';
       } else {
         // let all = Math.floor(points / 300000 + Math.sqrt(points));
-        let all = Math.floor(shelterOneData.shelterNeedPoints / 10000);
-        return '有' + all + '位需要幫助的同伴';
+        // let all = Math.floor(shelterOneData.shelterNeedPoints / 10000);
+        let all = shelterOneData.realNumber;
+        return '有 ' + all + ' 位需要幫助的同伴';
       }
     },
     getAnimalsPics() {
@@ -696,7 +542,7 @@ export default {
         return;
       }
 
-      if (this.donationFoodPoints === 0) {
+      if (this.donationFoodPoints <= 0) {
         window.Swal.fire({
           icon: 'warning',
           title: '您的愛心遠大於0',
@@ -710,8 +556,6 @@ export default {
           title: '您的愛心需要加值',
         });
         return;
-      } else {
-        this.userRemainPoints -= this.donationFoodPoints;
       }
 
       let token = JSON.parse(localStorage.getItem('token'));
@@ -748,11 +592,17 @@ export default {
               icon: 'success',
               title: '捐點成功',
             });
+            this.userRemainPoints -= this.donationFoodPoints;
+            this.shelterCity.shelterGetFood += parseInt(
+              this.donationFoodPoints
+            );
+            this.donationFoodPoints = 0;
           } else {
             window.Swal.fire({
               icon: 'error',
               title: '錯誤',
             });
+            this.$router.go(0);
           }
         })
         .catch((error) => console.log('error', error));
@@ -764,7 +614,7 @@ export default {
         return;
       }
 
-      if (this.donationMedicalPoints === 0) {
+      if (this.donationMedicalPoints <= 0) {
         window.Swal.fire({
           icon: 'warning',
           title: '您的愛心遠大於0',
@@ -778,8 +628,6 @@ export default {
           title: '您的愛心需要加值',
         });
         return;
-      } else {
-        this.userRemainPoints -= this.donationMedicalPoints;
       }
 
       let token = JSON.parse(localStorage.getItem('token'));
@@ -816,11 +664,17 @@ export default {
               icon: 'success',
               title: '捐點成功',
             });
+            this.userRemainPoints -= this.donationMedicalPoints;
+            this.shelterCity.shelterGetMedical += parseInt(
+              this.donationMedicalPoints
+            );
+            this.donationMedicalPoints = 0;
           } else {
             window.Swal.fire({
               icon: 'error',
               title: '錯誤',
             });
+            this.$router.go(0);
           }
         })
         .catch((error) => console.log('error', error));

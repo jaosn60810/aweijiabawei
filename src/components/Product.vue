@@ -103,7 +103,7 @@
           <!-- 卡片列表 -->
           <div
             class=" col-md-4 col-lg-3  mb-3"
-            v-for="(shelterCity, index) in shelterSortData"
+            v-for="(shelterCity, index) in shelterData"
             :key="shelterCity.shelterId"
           >
             <!-- 每張卡片 -->
@@ -125,12 +125,7 @@
                 <p class="card-title h5 my-3">
                   <strong>{{ shelterCity.shelterImgName }}</strong>
                   <br />
-                  {{
-                    transferPointsToOtherThings(
-                      Math.floor(shelterCity.shelterNeedPoints / 10000),
-                      cardHeadTitle
-                    )
-                  }}
+                  {{ transferPointsToOtherThings(shelterCity, cardHeadTitle) }}
                 </p>
               </div>
 
@@ -187,10 +182,7 @@
                 </div> -->
                 <div class="col-12 ">
                   <button
-                    @click="
-                      donateInfo(shelterCity);
-                      shelterDataNeedFoodAndMedical;
-                    "
+                    @click="donateInfo(shelterCity)"
                     class="btn btn-primary mb-3 mx-auto w-75"
                     style="background-color:cadetblue; border-color: transparent;"
                   >
@@ -579,9 +571,9 @@ import $ from 'jquery';
 
 // import AddToCart from './AddToCart.vue';
 
-import dogImg from '../assets/data/dogImg.json';
-import animalShelters from '../assets/data/animal-shelter.json';
-import shelterCities from '../assets/data/shelterCity.json';
+// import dogImg from '../assets/data/dogImg.json';
+// import animalShelters from '../assets/data/animal-shelter.json';
+// import shelterCities from '../assets/data/shelterCity.json';
 import marquee from '../assets/data/marquee.json';
 
 import vueSeamlessScroll from 'vue-seamless-scroll';
@@ -597,10 +589,10 @@ export default {
     return {
       products: [],
       product: {},
-      productsImages: dogImg,
+      productsImages: [0, 1, 2],
       shelterCity: {},
-      shelterCities: shelterCities.slice(0, 10),
-      animalShelters: animalShelters,
+      // shelterCities: shelterCities.slice(0, 10),
+      // animalShelters: animalShelters,
       activeBtn: 'all',
       shelterImages: [],
       shelterData: [],
@@ -664,18 +656,19 @@ export default {
           return data.animal_kind === '貓';
       }).length;
     },
-    transferPointsToOtherThings(points, otherThings) {
+    transferPointsToOtherThings(shelterCity, otherThings) {
+      let shelterOneData = shelterCity;
       if (otherThings === '急需罐罐') {
-        // let food = Math.floor(points / 100000 + Math.sqrt(points));
-        let food = points;
+        let food = Math.floor(shelterOneData.shelterNeedFood / 10000);
+
         return '有' + food + '位飢餓的同伴';
       } else if (otherThings === '急需醫療') {
         // let mediacl = Math.floor(points / 200000 + Math.sqrt(points));
-        let mediacl = points;
+        let mediacl = Math.floor(shelterOneData.shelterNeedMedical / 10000);
         return '有' + mediacl + '位生病的同伴';
       } else {
         // let all = Math.floor(points / 300000 + Math.sqrt(points));
-        let all = points;
+        let all = Math.floor(shelterOneData.shelterNeedPoints / 10000);
         return '有' + all + '位需要幫助的同伴';
       }
     },
@@ -837,23 +830,53 @@ export default {
       .then((result) => {
         this.shelterData = result;
         this.shelterSortData = result;
+
+        fetch(
+          'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
+          requestOptions
+        )
+          .then((response) => response.json())
+          .then((result) => {
+            this.shelterNeedFood = result;
+            fetch(
+              'https://finalproject-336509.appspot.com/api/shelter/shelterrank/2',
+              requestOptions
+            )
+              .then((response) => response.json())
+              .then((result) => {
+                this.shelterNeedMedical = result;
+                this.shelterData.forEach((itemShelterData) => {
+                  // 食物
+                  this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+                    if (
+                      itemShelterData.shelterName ===
+                      itemShelterNeedFood.shelterName
+                    ) {
+                      itemShelterData.shelterNeedFood =
+                        itemShelterNeedFood.shelterNeedPoints;
+                      itemShelterData.shelterGetFood =
+                        itemShelterNeedFood.shelterGetPoints;
+                    }
+                  });
+
+                  // 醫療
+                  this.shelterNeedMedical.forEach((itemShelterNeedMedical) => {
+                    if (
+                      itemShelterData.shelterName ===
+                      itemShelterNeedMedical.shelterName
+                    ) {
+                      itemShelterData.shelterNeedMedical =
+                        itemShelterNeedMedical.shelterNeedPoints;
+                      itemShelterData.shelterGetMedical =
+                        itemShelterNeedMedical.shelterGetPoints;
+                    }
+                  });
+                });
+              })
+              .catch((error) => console.log('error', error));
+          })
+          .catch((error) => console.log('error', error));
       })
-      .catch((error) => console.log('error', error));
-
-    fetch(
-      'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => (this.shelterNeedFood = result))
-      .catch((error) => console.log('error', error));
-
-    fetch(
-      'https://finalproject-336509.appspot.com/api/shelter/shelterrank/2',
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => (this.shelterNeedMedical = result))
       .catch((error) => console.log('error', error));
 
     if (!this.thisWeekDonation.length) {

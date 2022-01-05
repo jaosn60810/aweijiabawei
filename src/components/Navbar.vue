@@ -4,7 +4,7 @@
       class="navbar navbar-expand-lg navbar-light"
       style="background-color: #e3f2fd;"
     >
-      <a class="navbar-brand " href="#"
+      <a class="navbar-brand " href="https://aweijiabawei.web.app/"
         ><img
           src="https://ae01.alicdn.com/kf/HTB1zkIyLXXXXXcMXXXXq6xXFXXXd/13-10-4CM-Baby-Pet-Cute-Dog-Cartoon-Window-Decals-Funny-Animal-Car-Sticker-Accessories-Black.jpg_Q90.jpg_.webp"
           alt=""
@@ -12,8 +12,8 @@
           height="100"
           class="d-inline-block align-center rounded-circle"
         />
-        阿偉呷飽未</a
-      >
+        <h1>阿偉呷飽未</h1>
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -25,45 +25,26 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse " id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item active mx-5">
             <!-- <router-link to="/" class="nav-link" href="#">首頁</router-link> -->
-            <router-link to="/productsview" class="nav-link" href="#"
-              >首頁</router-link
-            >
+            <router-link to="/" class="nav-link h1" href="#">首頁</router-link>
           </li>
 
-          <!-- <li class="nav-item">
-            <router-link to="/aboutview" class="nav-link" href="#"
-              >地圖</router-link
-            >
-          </li> -->
-
-          <!-- <li class="nav-item">
-            <router-link to="/leaderboard" class="nav-link" href="#"
-              >排行榜</router-link
-            >
-          </li> -->
-
-          <!-- <li class="nav-item">
-            <router-link class="nav-link" to="/productsview" href="#"
-              >捐助</router-link
-            >
-          </li> -->
-          <li class="nav-item">
-            <a class="nav-link" @click="Membercenter">會員中心</a>
+          <li class="nav-item mx-5">
+            <a class="nav-link h1" @click="Membercenter">會員中心</a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <a
-            class="btn my-2 my-sm-0"
+            class="btn my-2 my-sm-0 "
             data-toggle="modal"
             data-target="#login"
             v-if="login === null"
             style="border-color: cadetblue; color: cadetblue;"
-            >登入/ 註冊</a
-          >
+            ><span class="h1">登入/ 註冊</span>
+          </a>
           <a
             class="btn my-2 my-sm-0"
             @click.stop="logout()"
@@ -172,13 +153,13 @@ export default {
             //   title: '登出失敗',
             // });
             localStorage.clear();
-            this.$router.replace('/productsview');
+            this.$router.replace('/');
           }
         })
         .catch((error) => {
           console.log('error', error);
           localStorage.clear();
-          this.$router.replace('/productsview');
+          this.$router.replace('/');
         });
     },
     MembercenterOld() {

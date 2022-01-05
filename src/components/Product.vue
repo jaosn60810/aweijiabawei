@@ -110,15 +110,11 @@
                   v-for="(item, index) in List"
                   :key="index"
                 >
-                  <div class="col-3 p-0">{{ item.account }}</div>
-                  <div class="col-3 p-0">
+                  <div class="col-3 col-xl-3 p-0 d-none d-xl-block">
+                    {{ item.account }}
+                  </div>
+                  <div class="col-6 col-xl-3 p-0">
                     <div>
-                      <!-- <img
-                        :src="
-                          'https://i.pravatar.cc/150?img=' +
-                            (Math.floor(Math.random() * 25) + 1)
-                        "
-                      /> -->
                       <b-avatar
                         variant="info"
                         :badge-variant="
@@ -128,7 +124,7 @@
                           'https://placekitten.com/300/300?image=' +
                             item.shelterId
                         "
-                        size="2rem"
+                        size="4rem"
                       >
                         <template #badge
                           ><b-icon
@@ -141,13 +137,12 @@
                       ></b-avatar>
                     </div>
                   </div>
-                  <div class="col-6 p-0">
-                    幫助<strong>{{
+                  <div class="col-6 col-xl-6 p-0">
+                    {{ item.shelterId % 2 === 0 ? '餵飽' : '醫治'
+                    }}<strong>{{
                       Math.floor(item.shelterId + Math.sqrt(item.shelterId))
                     }}</strong
-                    >隻 <br />毛寶的{{
-                      item.shelterId % 2 === 0 ? '罐罐' : '醫療'
-                    }}
+                    >隻 <br />毛寶
                   </div>
                 </li>
               </ul>
@@ -191,7 +186,7 @@
                     打賞幫補血<b-icon
                       icon="heart-fill"
                       animation="throb"
-                      font-scale="1"
+                      font-scale="2.5"
                       color="#ff00ff"
                     ></b-icon>
                   </div>
@@ -211,13 +206,6 @@
                 class="mb-2"
                 color="#ff00ff"
               ></b-form-rating>
-
-              <!-- 收容所卡片名稱區 -->
-              <!-- <div class="card-body d-flex flex-column">
-                <p class="card-title h5 my-3">
-                  {{ shelterCity.shelterName }}
-                </p>
-              </div> -->
 
               <!-- 卡片幻燈片 -->
               <carousel id="pic" :perPage="1" :paginationPadding="3">
@@ -316,8 +304,10 @@
                     <strong class="danger h4 text-warning">{{
                       shelterCity.shelterImgName
                     }}</strong>
-                    <span class=" small">來自</span>
-                    <span class=" small">{{ shelterCity.shelterName }}</span>
+                    <span class=" small d-none d-sm-inline">來自</span>
+                    <span class=" small d-none d-sm-inline">{{
+                      shelterCity.shelterName
+                    }}</span>
                   </p>
                 </b-avatar>
               </div>
@@ -1054,10 +1044,13 @@ ul {
 }
 
 .product-avatar-list {
-  // position: relative;
+  position: relative;
 }
 
 .product-avatar {
-  transform: translate(5rem, -5rem);
+  // transform: translate(5rem, -5rem);
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 </style>

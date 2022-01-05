@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+// import Home from '../views/Home.vue';
 import ProductsView from '../views/ProductsView.vue';
 import Product from '../components/Product.vue';
 import Admin from '../views/Admin.vue';
@@ -19,8 +19,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home,
+    name: 'productsview',
+    component: ProductsView,
   },
   {
     path: '/leaderboard',

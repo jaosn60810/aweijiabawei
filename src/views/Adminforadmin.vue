@@ -59,7 +59,7 @@
                 </router-link>
               </li> -->
               <li>
-                <router-link to="/productsview">
+                <router-link to="/">
                   <i class="fa fa-folder"></i>
                   <span class="menu-text">首頁</span>
                 </router-link>
@@ -161,20 +161,20 @@ export default {
               title: '登出成功',
             });
             this.login = null;
-            this.$router.replace('/productsview');
+            this.$router.replace('/');
           } else {
             // window.Toast.fire({
             //   icon: 'error',
             //   title: '登出失敗',
             // });
             localStorage.clear();
-            this.$router.replace('/productsview');
+            this.$router.replace('/');
           }
         })
         .catch((error) => {
           console.log('error', error);
           localStorage.clear();
-          this.$router.replace('/productsview');
+          this.$router.replace('/');
         });
     },
   },

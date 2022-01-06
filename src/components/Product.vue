@@ -1033,7 +1033,7 @@ export default {
         //     shelterCity.realNumber
         // );
 
-        let food = Math.floor(
+        let food = Math.ceil(
           (1 - shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints) *
             shelterCity.realNumber
         );
@@ -1046,7 +1046,7 @@ export default {
         //     shelterCity.realNumber
         // );
 
-        let mediacl = Math.floor(
+        let mediacl = Math.ceil(
           (1 - shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints) *
             shelterCity.realNumber
         );

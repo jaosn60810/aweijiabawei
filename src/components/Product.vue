@@ -230,7 +230,7 @@
               <div></div>
 
               <!-- 卡片幻燈片 -->
-              <carousel
+              <!-- <carousel
                 id="pic"
                 :perPage="1"
                 :paginationPadding="3"
@@ -245,7 +245,15 @@
                     />
                   </div>
                 </slide>
-              </carousel>
+              </carousel> -->
+
+              <div class="shelterCity-img-list">
+                <img
+                  :src="shelterCity.shelterImgUrl"
+                  class="card-img-top shelterCity-img  "
+                  alt="..."
+                />
+              </div>
 
               <!-- new -->
               <!-- <div>
@@ -368,14 +376,25 @@
             <!-- 卡片幻燈片區 -->
             <div class="col-8">
               <!-- 新卡片頭貼 -->
+              <!-- 圖片 -->
               <div class="product-avatar-list">
-                <b-avatar
+                <!-- <b-avatar
                   badge-variant="info"
                   :src="shelterCity.shelterImgUrl"
                   size="100%"
                 >
-                </b-avatar
-                ><b-avatar size="7rem" class="product-avatar">
+                </b-avatar> -->
+
+                <div class="shelterCity-img-list circle">
+                  <img
+                    :src="shelterCity.shelterImgUrl"
+                    class="card-img-top card-img rounded-circle"
+                    alt="..."
+                  />
+                </div>
+
+                <!-- 來自XXX -->
+                <b-avatar size="7rem" class="product-avatar">
                   <p class=" d-flex  flex-column m-0">
                     <strong class="danger h4 text-warning">{{
                       shelterCity.shelterImgName
@@ -448,13 +467,21 @@
             <div class="col-12">
               <!-- 新卡片頭貼 -->
               <div class="product-avatar-list">
-                <b-avatar
+                <!-- <b-avatar
                   badge-variant="info"
                   :src="shelterCity.shelterImgUrl"
                   size="100%"
                 >
-                </b-avatar
-                ><b-avatar size="7rem" class="product-avatar">
+                </b-avatar> -->
+                <div class="shelterCity-img-list circle">
+                  <img
+                    :src="shelterCity.shelterImgUrl"
+                    class="card-img-top card-img rounded-circle img-fluid"
+                    alt="..."
+                  />
+                </div>
+
+                <b-avatar size="7rem" class="product-avatar">
                   <p class=" d-flex  flex-column m-0">
                     <strong class="danger h4 text-warning">{{
                       shelterCity.shelterImgName
@@ -1430,6 +1457,12 @@ export default {
 .shelterCity-img-list {
   // height: 300px;
 }
+.card-img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
+
 .shelterCity-img {
   width: 200px;
   height: 200px;

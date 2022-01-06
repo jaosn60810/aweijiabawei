@@ -887,6 +887,7 @@ export default {
       )
         .then((response) => response.json())
         .then((result) => {
+          console.log(result);
           if (result.msg === '捐點成功') {
             window.Swal.fire({
               icon: 'success',

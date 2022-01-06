@@ -62,7 +62,22 @@
       <!-- main part -->
       <div class="row mt-5">
         <!-- 測攔 -->
-        <div class="col-2 ">
+        <div class="col-12 mb-3  col-md-2 ">
+          <!-- 晃動愛心 -->
+          <div class="h3 mb-5">
+            <span class="shake-slow shake-constant">打賞幫補血</span>
+            <span class="shake-slow shake-constant" style="white-space: nowrap;"
+              >_(┐ ◟;ﾟдﾟ)ノ
+              <b-icon
+                icon="heart-fill"
+                animation="throb"
+                font-scale="1"
+                color="#ff00ff"
+              ></b-icon
+            ></span>
+          </div>
+
+          <!-- 篩選按鈕 -->
           <div class="list-group mx-auto ">
             <!-- 又餓又病按鈕 -->
             <button
@@ -148,14 +163,27 @@
               </ul>
             </vue-seamless-scroll>
           </div>
+
+          <!-- 影片 -->
+          <!-- <div>
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/8CrH_VGuY9c"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div> -->
         </div>
 
         <!-- 卡片區 -->
-        <div class="col-10 row">
+        <div class="col-12 col-md-10 row mx-auto">
           <!-- 卡片列表 -->
           <div
             class=" col-md-4 col-lg-3  mb-3"
-            v-for="(shelterCity, index) in shelterData"
+            v-for="(shelterCity, index) in shelterSortData"
             :key="shelterCity.shelterId"
           >
             <!-- 每張卡片 -->
@@ -182,17 +210,10 @@
                       transferPointsToOtherThings(shelterCity, cardHeadTitle)
                     }}
                   </div>
-                  <div>
-                    打賞幫補血<b-icon
-                      icon="heart-fill"
-                      animation="throb"
-                      font-scale="2.5"
-                      color="#ff00ff"
-                    ></b-icon>
-                  </div>
                 </div>
               </div>
 
+              <!-- 評級區 -->
               <b-form-rating
                 id="rating-readonly"
                 icon-empty="heart"
@@ -200,15 +221,21 @@
                 icon-full="heart-fill"
                 icon-clear="slash-circle"
                 show-clear
-                :value="howManyStars(index)"
-                show-value
+                :value="howManyStars(shelterCity)"
                 readonly
                 class="mb-2"
                 color="#ff00ff"
               ></b-form-rating>
 
+              <div></div>
+
               <!-- 卡片幻燈片 -->
-              <carousel id="pic" :perPage="1" :paginationPadding="3">
+              <carousel
+                id="pic"
+                :perPage="1"
+                :paginationPadding="3"
+                :autoplay="true"
+              >
                 <slide v-for="(image, index) in shelterImages" :key="index">
                   <div class="shelterCity-img-list">
                     <img
@@ -219,6 +246,47 @@
                   </div>
                 </slide>
               </carousel>
+
+              <!-- new -->
+              <!-- <div>
+                <b-carousel
+                  id="carousel-1"
+                  v-model="slide"
+                  :interval="4000"
+                  controls
+                  indicators
+                  background="#ababab"
+                  img-width="300"
+                  img-height="300"
+                  style="text-shadow: 1px 1px 2px #333;"
+                  @sliding-start="onSlideStart"
+                  @sliding-end="onSlideEnd"
+                >
+                  Slides with custom text
+                  <b-carousel-slide :img-src="shelterCity.shelterImgUrl">
+                    <div class="h1">{{ shelterCity.shelterImgName }}</div>
+                  </b-carousel-slide>
+
+                  Slides with image only
+                  <b-carousel-slide
+                    :img-src="shelterCity.shelterImgUrl"
+                  ></b-carousel-slide>
+
+                  Slides with img slot
+                  Note the classes .d-block and .img-fluid to prevent browser default image alignment
+                  <b-carousel-slide>
+                    <template #img>
+                      <img
+                        class="d-block img-fluid w-100 shelterCity-img"
+                        width="300"
+                        height="300"
+                        :src="shelterCity.shelterImgUrl"
+                        alt="image slot"
+                      />
+                    </template>
+                  </b-carousel-slide>
+                </b-carousel>
+              </div> -->
 
               <p class="card-text h3">
                 <strong>{{ shelterCity.shelterImgName }}</strong>
@@ -240,10 +308,18 @@
                 <div class="col-12 ">
                   <button
                     @click="donateInfo(shelterCity)"
-                    class="btn btn-primary mb-3 mx-auto w-75"
+                    class="btn btn-primary mb-3 mx-auto w-75 "
                     style="background-color:cadetblue; border-color: transparent;"
                   >
-                    打賞
+                    <div class="h3">
+                      打賞
+                      <b-icon
+                        icon="heart-fill"
+                        animation="throb"
+                        font-scale="1"
+                        color="#ff00ff"
+                      ></b-icon>
+                    </div>
                   </button>
                 </div>
 
@@ -296,7 +372,7 @@
                 <b-avatar
                   badge-variant="info"
                   :src="shelterCity.shelterImgUrl"
-                  size="20rem"
+                  size="100%"
                 >
                 </b-avatar
                 ><b-avatar size="7rem" class="product-avatar">
@@ -518,6 +594,9 @@ export default {
       shelterSortData: [],
       userRemainPoints: 0,
       token: localStorage.getItem('token'),
+      // 動畫
+      slide: 0,
+      sliding: null,
     };
   },
   methods: {
@@ -547,16 +626,85 @@ export default {
       this.activeBtn = 'all';
       this.cardHeadTitle = '急需罐罐與醫療';
       this.shelterSortData = this.shelterData;
+      this.shelterSortData.forEach((itemShelterData) => {
+        // 食物
+        this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+          if (itemShelterData.shelterName === itemShelterNeedFood.shelterName) {
+            itemShelterData.shelterNeedFood =
+              itemShelterNeedFood.shelterNeedPoints;
+            itemShelterData.shelterGetFood =
+              itemShelterNeedFood.shelterGetPoints;
+          }
+        });
+
+        // 醫療
+        this.shelterNeedMedical.forEach((itemShelterNeedMedical) => {
+          if (
+            itemShelterData.shelterName === itemShelterNeedMedical.shelterName
+          ) {
+            itemShelterData.shelterNeedMedical =
+              itemShelterNeedMedical.shelterNeedPoints;
+            itemShelterData.shelterGetMedical =
+              itemShelterNeedMedical.shelterGetPoints;
+          }
+        });
+      });
     },
     sortByHungry() {
       this.activeBtn = 'hungry';
       this.cardHeadTitle = '急需罐罐';
       this.shelterSortData = this.shelterNeedFood;
+      this.shelterSortData.forEach((itemShelterData) => {
+        // 食物
+        this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+          if (itemShelterData.shelterName === itemShelterNeedFood.shelterName) {
+            itemShelterData.shelterNeedFood =
+              itemShelterNeedFood.shelterNeedPoints;
+            itemShelterData.shelterGetFood =
+              itemShelterNeedFood.shelterGetPoints;
+          }
+        });
+
+        // 醫療
+        this.shelterNeedMedical.forEach((itemShelterNeedMedical) => {
+          if (
+            itemShelterData.shelterName === itemShelterNeedMedical.shelterName
+          ) {
+            itemShelterData.shelterNeedMedical =
+              itemShelterNeedMedical.shelterNeedPoints;
+            itemShelterData.shelterGetMedical =
+              itemShelterNeedMedical.shelterGetPoints;
+          }
+        });
+      });
     },
     sortBySick() {
       this.activeBtn = 'sick';
       this.cardHeadTitle = '急需醫療';
       this.shelterSortData = this.shelterNeedMedical;
+      this.shelterSortData.forEach((itemShelterData) => {
+        // 食物
+        this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+          if (itemShelterData.shelterName === itemShelterNeedFood.shelterName) {
+            itemShelterData.shelterNeedFood =
+              itemShelterNeedFood.shelterNeedPoints;
+            itemShelterData.shelterGetFood =
+              itemShelterNeedFood.shelterGetPoints;
+          }
+        });
+
+        // 醫療
+        this.shelterNeedMedical.forEach((itemShelterNeedMedical) => {
+          if (
+            itemShelterData.shelterName === itemShelterNeedMedical.shelterName
+          ) {
+            itemShelterData.shelterNeedMedical =
+              itemShelterNeedMedical.shelterNeedPoints;
+            itemShelterData.shelterGetMedical =
+              itemShelterNeedMedical.shelterGetPoints;
+          }
+        });
+      });
     },
     getDogNum(shelterCity) {
       return this.animalShelters.filter((data) => {
@@ -571,26 +719,39 @@ export default {
       }).length;
     },
     transferPointsToOtherThings(shelterCity, otherThings) {
-      let shelterOneData = shelterCity;
+      // let shelterOneData = shelterCity;
       if (otherThings === '急需罐罐') {
+        // let food = Math.floor(
+        //   (1 - shelterCity.shelterGetFood / shelterCity.shelterNeedFood) *
+        //     shelterCity.realNumber
+        // );
+
         let food = Math.floor(
-          (1 - shelterCity.shelterGetFood / shelterCity.shelterNeedFood) *
+          (1 - shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints) *
             shelterCity.realNumber
         );
 
-        return '有 ' + food + ' 位飢餓的同伴';
+        return '尚有 ' + food + ' 位飢餓的同伴';
       } else if (otherThings === '急需醫療') {
         // let mediacl = Math.floor(points / 200000 + Math.sqrt(points));
+        // let mediacl = Math.floor(
+        //   (1 - shelterCity.shelterGetMedical / shelterCity.shelterNeedMedical) *
+        //     shelterCity.realNumber
+        // );
+
         let mediacl = Math.floor(
-          (1 - shelterCity.shelterGetMedical / shelterCity.shelterNeedMedical) *
+          (1 - shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints) *
             shelterCity.realNumber
         );
-        return '有 ' + mediacl + ' 位生病的同伴';
+        return '尚有 ' + mediacl + ' 位生病的同伴';
       } else {
         // let all = Math.floor(points / 300000 + Math.sqrt(points));
-        // let all = Math.floor(shelterOneData.shelterNeedPoints / 10000);
-        let all = shelterOneData.realNumber;
-        return '有 ' + all + ' 位需要幫助的同伴';
+        let all = shelterCity.realNumber;
+        // let all = Math.floor(
+        //   (1 - shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints) *
+        //     shelterCity.realNumber
+        // );
+        return '共有 ' + all + ' 位同伴';
       }
     },
     getAnimalsPics() {
@@ -666,8 +827,9 @@ export default {
           } else {
             window.Swal.fire({
               icon: 'error',
-              title: '錯誤',
+              title: '請重新登入',
             });
+            localStorage.clear();
             this.$router.go(0);
           }
         })
@@ -738,8 +900,9 @@ export default {
           } else {
             window.Swal.fire({
               icon: 'error',
-              title: '錯誤',
+              title: '請重新登入',
             });
+            localStorage.clear();
             this.$router.go(0);
           }
         })
@@ -750,8 +913,20 @@ export default {
         $('#login').modal('show');
       }
     },
-    howManyStars(index) {
-      return index / 10;
+    howManyStars(shelterCity) {
+      let all =
+        ((shelterCity.shelterNeedPoints - shelterCity.shelterGetPoints) /
+          shelterCity.shelterNeedPoints) *
+        5;
+
+      return 5 - all;
+    },
+    // 動畫
+    onSlideStart() {
+      this.sliding = true;
+    },
+    onSlideEnd() {
+      this.sliding = false;
     },
   },
   firestore() {

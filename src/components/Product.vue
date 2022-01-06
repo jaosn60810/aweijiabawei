@@ -634,7 +634,6 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           this.shelterData = result;
-          this.shelterSortData = result;
 
           fetch(
             'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
@@ -725,7 +724,6 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           this.shelterData = result;
-          this.shelterSortData = result;
 
           fetch(
             'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
@@ -816,7 +814,6 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           this.shelterData = result;
-          this.shelterSortData = result;
 
           fetch(
             'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
@@ -919,6 +916,8 @@ export default {
           (1 - shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints) *
             shelterCity.realNumber
         );
+
+        console.log(shelterCity.shelterGetPoints);
 
         return '尚有 ' + food + ' 位飢餓的同伴';
       } else if (otherThings === '急需醫療') {

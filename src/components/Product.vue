@@ -623,6 +623,69 @@ export default {
       // console.log(this.shelterCity);
     },
     sortByAll() {
+      let requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+      fetch(
+        'https://finalproject-336509.appspot.com/api/shelter/shelterrank/0',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          this.shelterData = result;
+          this.shelterSortData = result;
+
+          fetch(
+            'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
+            requestOptions
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              this.shelterNeedFood = result;
+              fetch(
+                'https://finalproject-336509.appspot.com/api/shelter/shelterrank/2',
+                requestOptions
+              )
+                .then((response) => response.json())
+                .then((result) => {
+                  this.shelterNeedMedical = result;
+                  this.shelterData.forEach((itemShelterData) => {
+                    // 食物
+                    this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+                      if (
+                        itemShelterData.shelterName ===
+                        itemShelterNeedFood.shelterName
+                      ) {
+                        itemShelterData.shelterNeedFood =
+                          itemShelterNeedFood.shelterNeedPoints;
+                        itemShelterData.shelterGetFood =
+                          itemShelterNeedFood.shelterGetPoints;
+                      }
+                    });
+
+                    // 醫療
+                    this.shelterNeedMedical.forEach(
+                      (itemShelterNeedMedical) => {
+                        if (
+                          itemShelterData.shelterName ===
+                          itemShelterNeedMedical.shelterName
+                        ) {
+                          itemShelterData.shelterNeedMedical =
+                            itemShelterNeedMedical.shelterNeedPoints;
+                          itemShelterData.shelterGetMedical =
+                            itemShelterNeedMedical.shelterGetPoints;
+                        }
+                      }
+                    );
+                  });
+                })
+                .catch((error) => console.log('error', error));
+            })
+            .catch((error) => console.log('error', error));
+        })
+        .catch((error) => console.log('error', error));
+
       this.activeBtn = 'all';
       this.cardHeadTitle = '急需罐罐與醫療';
       this.shelterSortData = this.shelterData;
@@ -651,6 +714,69 @@ export default {
       });
     },
     sortByHungry() {
+      let requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+      fetch(
+        'https://finalproject-336509.appspot.com/api/shelter/shelterrank/0',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          this.shelterData = result;
+          this.shelterSortData = result;
+
+          fetch(
+            'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
+            requestOptions
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              this.shelterNeedFood = result;
+              fetch(
+                'https://finalproject-336509.appspot.com/api/shelter/shelterrank/2',
+                requestOptions
+              )
+                .then((response) => response.json())
+                .then((result) => {
+                  this.shelterNeedMedical = result;
+                  this.shelterData.forEach((itemShelterData) => {
+                    // 食物
+                    this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+                      if (
+                        itemShelterData.shelterName ===
+                        itemShelterNeedFood.shelterName
+                      ) {
+                        itemShelterData.shelterNeedFood =
+                          itemShelterNeedFood.shelterNeedPoints;
+                        itemShelterData.shelterGetFood =
+                          itemShelterNeedFood.shelterGetPoints;
+                      }
+                    });
+
+                    // 醫療
+                    this.shelterNeedMedical.forEach(
+                      (itemShelterNeedMedical) => {
+                        if (
+                          itemShelterData.shelterName ===
+                          itemShelterNeedMedical.shelterName
+                        ) {
+                          itemShelterData.shelterNeedMedical =
+                            itemShelterNeedMedical.shelterNeedPoints;
+                          itemShelterData.shelterGetMedical =
+                            itemShelterNeedMedical.shelterGetPoints;
+                        }
+                      }
+                    );
+                  });
+                })
+                .catch((error) => console.log('error', error));
+            })
+            .catch((error) => console.log('error', error));
+        })
+        .catch((error) => console.log('error', error));
+
       this.activeBtn = 'hungry';
       this.cardHeadTitle = '急需罐罐';
       this.shelterSortData = this.shelterNeedFood;
@@ -679,6 +805,69 @@ export default {
       });
     },
     sortBySick() {
+      let requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+      fetch(
+        'https://finalproject-336509.appspot.com/api/shelter/shelterrank/0',
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          this.shelterData = result;
+          this.shelterSortData = result;
+
+          fetch(
+            'https://finalproject-336509.appspot.com/api/shelter/shelterrank/1',
+            requestOptions
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              this.shelterNeedFood = result;
+              fetch(
+                'https://finalproject-336509.appspot.com/api/shelter/shelterrank/2',
+                requestOptions
+              )
+                .then((response) => response.json())
+                .then((result) => {
+                  this.shelterNeedMedical = result;
+                  this.shelterData.forEach((itemShelterData) => {
+                    // 食物
+                    this.shelterNeedFood.forEach((itemShelterNeedFood) => {
+                      if (
+                        itemShelterData.shelterName ===
+                        itemShelterNeedFood.shelterName
+                      ) {
+                        itemShelterData.shelterNeedFood =
+                          itemShelterNeedFood.shelterNeedPoints;
+                        itemShelterData.shelterGetFood =
+                          itemShelterNeedFood.shelterGetPoints;
+                      }
+                    });
+
+                    // 醫療
+                    this.shelterNeedMedical.forEach(
+                      (itemShelterNeedMedical) => {
+                        if (
+                          itemShelterData.shelterName ===
+                          itemShelterNeedMedical.shelterName
+                        ) {
+                          itemShelterData.shelterNeedMedical =
+                            itemShelterNeedMedical.shelterNeedPoints;
+                          itemShelterData.shelterGetMedical =
+                            itemShelterNeedMedical.shelterGetPoints;
+                        }
+                      }
+                    );
+                  });
+                })
+                .catch((error) => console.log('error', error));
+            })
+            .catch((error) => console.log('error', error));
+        })
+        .catch((error) => console.log('error', error));
+
       this.activeBtn = 'sick';
       this.cardHeadTitle = '急需醫療';
       this.shelterSortData = this.shelterNeedMedical;

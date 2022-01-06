@@ -169,12 +169,14 @@ export default {
             // });
             localStorage.clear();
             this.$router.replace('/');
+            this.$router.go(0);
           }
         })
         .catch((error) => {
           console.log('error', error);
           localStorage.clear();
           this.$router.replace('/');
+          this.$router.go(0);
         });
     },
   },

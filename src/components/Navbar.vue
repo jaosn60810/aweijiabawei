@@ -51,7 +51,7 @@
             v-if="login !== null"
             style="border-color: cadetblue; color: cadetblue;"
           >
-            登出
+            <span class="h1">登出</span>
           </a>
           <!-- <a
             class="fas fa-shopping-cart mx-3 my-3"
@@ -154,12 +154,14 @@ export default {
             // });
             localStorage.clear();
             this.$router.replace('/');
+            this.$router.go(0);
           }
         })
         .catch((error) => {
           console.log('error', error);
           localStorage.clear();
           this.$router.replace('/');
+          this.$router.go(0);
         });
     },
     MembercenterOld() {

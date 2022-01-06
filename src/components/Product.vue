@@ -503,12 +503,14 @@
                 <div class="h6 mt-3">
                   <i class="fas fa-bone "></i> 還有
                   <strong>{{
-                    (
-                      (1 -
-                        shelterCity.shelterGetFood /
-                          shelterCity.shelterNeedFood) *
-                      shelterCity.realNumber
-                    ).toFixed(2)
+                    checkNegative(
+                      (
+                        (1 -
+                          shelterCity.shelterGetFood /
+                            shelterCity.shelterNeedFood) *
+                        shelterCity.realNumber
+                      ).toFixed(2)
+                    )
                   }}</strong>
                   隻肚子餓的毛寶
                 </div>
@@ -551,12 +553,14 @@
                   <i class="fas fa-briefcase-medical   "></i>
                   還有
                   <strong>{{
-                    (
-                      (1 -
-                        shelterCity.shelterGetMedical /
-                          shelterCity.shelterNeedMedical) *
-                      shelterCity.realNumber
-                    ).toFixed(2)
+                    checkNegative(
+                      (
+                        (1 -
+                          shelterCity.shelterGetMedical /
+                            shelterCity.shelterNeedMedical) *
+                        shelterCity.realNumber
+                      ).toFixed(2)
+                    )
                   }}</strong>
                   隻生病的毛寶
                 </div>
@@ -600,12 +604,14 @@
               <div class="h6 mt-3">
                 <i class="fas fa-bone "></i> 還有
                 <strong>{{
-                  (
-                    (1 -
-                      shelterCity.shelterGetFood /
-                        shelterCity.shelterNeedFood) *
-                    shelterCity.realNumber
-                  ).toFixed(2)
+                  checkNegative(
+                    (
+                      (1 -
+                        shelterCity.shelterGetFood /
+                          shelterCity.shelterNeedFood) *
+                      shelterCity.realNumber
+                    ).toFixed(2)
+                  )
                 }}</strong>
                 隻肚子餓的毛寶
               </div>
@@ -626,12 +632,14 @@
                 <i class="fas fa-briefcase-medical   "></i>
                 還有
                 <strong>{{
-                  (
-                    (1 -
-                      shelterCity.shelterGetMedical /
-                        shelterCity.shelterNeedMedical) *
-                    shelterCity.realNumber
-                  ).toFixed(2)
+                  checkNegative(
+                    (
+                      (1 -
+                        shelterCity.shelterGetMedical /
+                          shelterCity.shelterNeedMedical) *
+                      shelterCity.realNumber
+                    ).toFixed(2)
+                  )
                 }}</strong>
                 隻生病的毛寶
               </div>
@@ -1039,6 +1047,9 @@ export default {
           }
         });
       });
+    },
+    checkNegative(number) {
+      return number <= 0 ? 0 : number;
     },
     getDogNum(shelterCity) {
       return this.animalShelters.filter((data) => {

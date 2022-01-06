@@ -364,7 +364,7 @@
           </div>
 
           <!-- 燈箱 body 上半部 -->
-          <div class="modal-body row">
+          <div class="modal-body row d-none d-sm-flex">
             <!-- 卡片幻燈片區 -->
             <div class="col-8">
               <!-- 新卡片頭貼 -->
@@ -442,10 +442,132 @@
             </div>
           </div>
 
+          <!-- 燈箱 body 上半部  手機板-->
+          <div class="modal-body row d-flex d-sm-none">
+            <!-- 卡片幻燈片區 -->
+            <div class="col-12">
+              <!-- 新卡片頭貼 -->
+              <div class="product-avatar-list">
+                <b-avatar
+                  badge-variant="info"
+                  :src="shelterCity.shelterImgUrl"
+                  size="100%"
+                >
+                </b-avatar
+                ><b-avatar size="7rem" class="product-avatar">
+                  <p class=" d-flex  flex-column m-0">
+                    <strong class="danger h4 text-warning">{{
+                      shelterCity.shelterImgName
+                    }}</strong>
+                    <span class=" small d-none d-sm-inline">來自</span>
+                    <span class=" small d-none d-sm-inline">{{
+                      shelterCity.shelterName
+                    }}</span>
+                  </p>
+                </b-avatar>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group my-3">
+                <p class="h3 " v-if="token">
+                  您有 <strong>{{ userRemainPoints }}</strong> 點
+                </p>
+                <!--食物進度條 -->
+                <div class="h6 mt-3">
+                  <i class="fas fa-bone "></i> 還有
+                  <strong>{{
+                    Math.floor(
+                      (1 -
+                        shelterCity.shelterGetFood /
+                          shelterCity.shelterNeedFood) *
+                        shelterCity.realNumber
+                    )
+                  }}</strong>
+                  隻肚子餓的毛寶
+                </div>
+
+                <b-progress
+                  :max="shelterCity.shelterNeedFood"
+                  height="1rem"
+                  class="mb-3"
+                >
+                  <b-progress-bar
+                    :value="shelterCity.shelterGetFood"
+                    variant="danger"
+                  >
+                  </b-progress-bar>
+                </b-progress>
+                <label class="form-label"> </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="點數"
+                  v-model="donationFoodPoints"
+                />
+              </div>
+
+              <div class="form-group my-3 d-flex justify-content-between">
+                <div>{{ transferPointToFoods }}</div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                  @click="donateFood()"
+                >
+                  捐贈食物
+                </button>
+              </div>
+
+              <div class="form-group my-3">
+                <!--醫療進度條 -->
+                <div class="h6 mt-3">
+                  <i class="fas fa-briefcase-medical   "></i>
+                  還有
+                  <strong>{{
+                    Math.floor(
+                      (1 -
+                        shelterCity.shelterGetMedical /
+                          shelterCity.shelterNeedMedical) *
+                        shelterCity.realNumber
+                    )
+                  }}</strong>
+                  隻生病的毛寶
+                </div>
+
+                <b-progress :max="shelterCity.shelterNeedMedical" height="1rem">
+                  <b-progress-bar
+                    :value="shelterCity.shelterGetMedical"
+                    variant="danger"
+                  >
+                  </b-progress-bar>
+                </b-progress>
+                <label class="form-label"> </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="點數"
+                  v-model="donationMedicalPoints"
+                />
+              </div>
+
+              <div class="form-group my-3 d-flex justify-content-between">
+                <div>{{ transferPointToMedical }}</div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                  @click="donateMedical()"
+                >
+                  捐贈醫療
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- 燈箱 body 下半部 -->
           <div class="modal-body ">
             <!-- 進度條 -->
-            <div class="">
+            <div class="d-none d-sm-block">
               <!-- 收容所進度條 -->
               <!--食物進度條 -->
               <div class="h6 mt-3">
@@ -472,7 +594,6 @@
                 >
                 </b-progress-bar>
               </b-progress>
-
               <!--醫療進度條 -->
               <div class="h6 mt-3">
                 <i class="fas fa-briefcase-medical   "></i>

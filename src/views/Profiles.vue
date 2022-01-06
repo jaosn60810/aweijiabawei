@@ -753,15 +753,17 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           if (result.msg === '儲值成功') {
-            $('#addPointInfo').modal('hide');
-            window.Swal.fire({
-              icon: 'success',
-              title: '儲值成功',
-            });
-            if (this.profile.remainingPoints === '恭喜您將愛心全數捐出') {
-              this.profile.remainingPoints = 0;
-            }
-            this.profile.remainingPoints += this.pointsWantToAdd * 30;
+            setTimeout(() => {
+              $('#addPointInfo').modal('hide');
+              window.Swal.fire({
+                icon: 'success',
+                title: '儲值成功',
+              });
+              if (this.profile.remainingPoints === '恭喜您將愛心全數捐出') {
+                this.profile.remainingPoints = 0;
+              }
+              this.profile.remainingPoints += this.pointsWantToAdd * 30;
+            }, 3000);
           } else {
             window.Swal.fire({
               icon: 'error',

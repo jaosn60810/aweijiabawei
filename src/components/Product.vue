@@ -917,8 +917,6 @@ export default {
             shelterCity.realNumber
         );
 
-        console.log(shelterCity.shelterGetPoints);
-
         return '尚有 ' + food + ' 位飢餓的同伴';
       } else if (otherThings === '急需醫療') {
         // let mediacl = Math.floor(points / 200000 + Math.sqrt(points));
@@ -1075,7 +1073,6 @@ export default {
       )
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           if (result.msg === '捐點成功') {
             window.Swal.fire({
               icon: 'success',

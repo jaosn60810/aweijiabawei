@@ -190,10 +190,12 @@
                       ><i class="fas fa-bone "></i>
                       {{
                         Math.floor(
-                          profile.monthDonation / 10 +
-                            Math.sqrt(profile.monthDonation)
-                        )
-                      }}個</b-card-text
+                          (profile.monthDonation *
+                            (foodDonation.length /
+                              (foodDonation.length + medicalDonation.length))) /
+                            400
+                        ) || '您的愛心正要發芽'
+                      }}</b-card-text
                     >
                   </b-card>
 
@@ -208,10 +210,12 @@
                       ><i class="fas fa-briefcase-medical medical-icon"></i>
                       {{
                         Math.floor(
-                          profile.monthDonation / 20 +
-                            Math.sqrt(profile.monthDonation)
-                        )
-                      }}次</b-card-text
+                          (profile.monthDonation *
+                            (medicalDonation.length /
+                              (foodDonation.length + medicalDonation.length))) /
+                            200
+                        ) || '您的愛心正要發芽'
+                      }}</b-card-text
                     >
                   </b-card>
 
@@ -226,10 +230,19 @@
                       ><i class="fas fa-dog"></i>
                       {{
                         Math.floor(
-                          profile.monthDonation / 30 +
-                            Math.sqrt(profile.monthDonation)
-                        )
-                      }}隻</b-card-text
+                          (profile.monthDonation *
+                            (foodDonation.length /
+                              (foodDonation.length + medicalDonation.length))) /
+                            400
+                        ) +
+                          Math.floor(
+                            (profile.monthDonation *
+                              (medicalDonation.length /
+                                (foodDonation.length +
+                                  medicalDonation.length))) /
+                              200
+                          ) || '您的愛心正要發芽'
+                      }}</b-card-text
                     >
                   </b-card>
                 </b-card-group>
@@ -394,6 +407,8 @@ export default {
         1000: 'https://core.newebpay.com/EPG/ahhwayee/zAyINl',
         2000: 'https://core.newebpay.com/EPG/ahhwayee/3NYekQ',
       },
+      foodDonation: [],
+      medicalDonation: [],
     };
   },
   // firestore() {
@@ -855,6 +870,14 @@ export default {
         this.profile.monthDonation = monthDonation || '正要開始';
         this.profile.yearDonation = yearDonation || '正要開始';
         this.profile.soFarDonation = soFarDonation || '正要開始';
+
+        let foodDonation = allDonation.filter((item) => item.purposeId === 1);
+        this.foodDonation = foodDonation;
+
+        let medicalDonation = allDonation.filter(
+          (item) => item.purposeId === 2
+        );
+        this.medicalDonation = medicalDonation;
       })
       .catch((error) => console.log('error', error));
   },

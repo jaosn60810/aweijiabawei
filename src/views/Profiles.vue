@@ -761,7 +761,7 @@ export default {
             if (this.profile.remainingPoints === '恭喜您將愛心全數捐出') {
               this.profile.remainingPoints = 0;
             }
-            this.profile.remainingPoints += this.pointsWantToAdd * 100;
+            this.profile.remainingPoints += this.pointsWantToAdd * 30;
           } else {
             window.Swal.fire({
               icon: 'error',

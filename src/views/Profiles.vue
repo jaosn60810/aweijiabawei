@@ -259,7 +259,7 @@
               <input
                 class="form-control"
                 placeholder="名稱"
-                v-model="account.name"
+                v-model.trim="account.name"
               />
             </div>
 
@@ -289,7 +289,7 @@
               <input
                 class="form-control"
                 placeholder="帳號"
-                v-model="account.account"
+                v-model.trim="account.account"
               />
             </div>
 
@@ -309,7 +309,7 @@
               <input
                 class="form-control account-email"
                 placeholder="電子信箱"
-                v-model="account.email"
+                v-model.trim="account.email"
               />
             </div>
 
@@ -318,7 +318,7 @@
               <input
                 class="form-control"
                 placeholder="驗證碼"
-                v-model="verifyCode"
+                v-model.trim="verifyCode"
               />
             </div>
 
@@ -346,7 +346,7 @@
               <input
                 class="form-control"
                 placeholder="密碼"
-                v-model="account.password"
+                v-model.trim="account.password"
               />
             </div>
 
@@ -431,6 +431,14 @@ export default {
         });
     },
     resetAccount() {
+      if (!this.account.account.trim()) {
+        window.Swal.fire({
+          icon: 'error',
+          title: '請勿輸入空白',
+        });
+        return;
+      }
+
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
 
@@ -477,6 +485,13 @@ export default {
         .catch((error) => console.log('error', error));
     },
     resetName() {
+      if (!this.account.name.trim()) {
+        window.Swal.fire({
+          icon: 'error',
+          title: '請勿輸入空白',
+        });
+        return;
+      }
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
 
@@ -536,6 +551,13 @@ export default {
         .catch((error) => console.log('error', error));
     },
     sendConfirmEmail() {
+      if (!this.account.email.trim()) {
+        window.Swal.fire({
+          icon: 'error',
+          title: '請勿輸入空白',
+        });
+        return;
+      }
       var myHeaders = new Headers();
       myHeaders.append('Content-Type', 'application/json');
 
@@ -577,6 +599,13 @@ export default {
         .catch((error) => console.log('error', error));
     },
     resetEmail() {
+      if (!this.account.email.trim() || !this.verifyCode.trim()) {
+        window.Swal.fire({
+          icon: 'error',
+          title: '請勿輸入空白',
+        });
+        return;
+      }
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
 
@@ -621,6 +650,13 @@ export default {
         .catch((error) => console.log('error', error));
     },
     resetPassword() {
+      if (!this.account.password.trim()) {
+        window.Swal.fire({
+          icon: 'error',
+          title: '請勿輸入空白',
+        });
+        return;
+      }
       let token = JSON.parse(localStorage.getItem('token'));
       let bearerToken = 'Bearer ' + token;
 

@@ -1071,10 +1071,16 @@ export default {
         //     shelterCity.realNumber
         // );
 
-        let food = Math.ceil(
-          (1 - shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints) *
-            shelterCity.realNumber
-        );
+        let percentage = 0;
+
+        if (shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints >= 1) {
+          percentage = 1;
+        } else {
+          percentage =
+            shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints;
+        }
+
+        let food = Math.ceil((1 - percentage) * shelterCity.realNumber);
 
         return '尚有 ' + food + ' 位飢餓的同伴';
       } else if (otherThings === '急需醫療') {
@@ -1084,10 +1090,16 @@ export default {
         //     shelterCity.realNumber
         // );
 
-        let mediacl = Math.ceil(
-          (1 - shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints) *
-            shelterCity.realNumber
-        );
+        let percentage = 0;
+
+        if (shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints >= 1) {
+          percentage = 1;
+        } else {
+          percentage =
+            shelterCity.shelterGetPoints / shelterCity.shelterNeedPoints;
+        }
+
+        let mediacl = Math.ceil((1 - percentage) * shelterCity.realNumber);
         return '尚有 ' + mediacl + ' 位生病的同伴';
       } else {
         // let all = Math.floor(points / 300000 + Math.sqrt(points));

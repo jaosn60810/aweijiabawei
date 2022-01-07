@@ -101,7 +101,7 @@
                       <label for="account">帳號</label>
                       <input
                         type="text"
-                        v-model="account"
+                        v-model.trim="account"
                         class="form-control register-account"
                         placeholder="帳號名稱"
                         required
@@ -121,7 +121,7 @@
                       <label for="email">電子信箱</label>
                       <input
                         type="email"
-                        v-model="email"
+                        v-model.trim="email"
                         class="form-control register-email"
                         aria-describedby="emailHelp"
                         placeholder="電子信箱"
@@ -142,7 +142,7 @@
                       <label for="verify-code">驗證碼</label>
                       <input
                         type="text"
-                        v-model="verifyCode"
+                        v-model.trim="verifyCode"
                         class="form-control"
                         placeholder="驗證碼"
                         required
@@ -153,7 +153,7 @@
                       <label for="password">密碼</label>
                       <input
                         type="password"
-                        v-model="password"
+                        v-model.trim="password"
                         class="form-control"
                         placeholder="密碼"
                         required
@@ -164,7 +164,7 @@
                       <label for="name">姓名</label>
                       <input
                         type="text"
-                        v-model="name"
+                        v-model.trim="name"
                         class="form-control"
                         placeholder="姓名"
                         required

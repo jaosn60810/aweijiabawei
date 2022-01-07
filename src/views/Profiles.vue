@@ -344,9 +344,11 @@
             <div class="form-group my-3">
               <label for="form-label">密碼</label>
               <input
+                type="password"
                 class="form-control"
                 placeholder="密碼"
                 v-model.trim="account.password"
+                id="password"
               />
             </div>
 
@@ -358,6 +360,14 @@
                 @click="resetPassword"
               >
                 修改密碼
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary ml-3"
+                style="background-color: cadetblue; border-color:transparent; color:rgb(5, 28, 34);"
+                @click="showPassword"
+              >
+                顯示密碼
               </button>
             </div>
           </div>
@@ -830,6 +840,10 @@ export default {
           }
         );
       }
+    },
+    showPassword() {
+      console.log('asd');
+      $('#password').attr('type', 'text');
     },
   },
   mounted() {

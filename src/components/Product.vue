@@ -1279,10 +1279,23 @@ export default {
       }
     },
     howManyStars(shelterCity) {
-      let all =
-        ((shelterCity.shelterNeedPoints - shelterCity.shelterGetPoints) /
-          shelterCity.shelterNeedPoints) *
-        5;
+      let all = 0;
+      if (this.cardHeadTitle === '急需罐罐') {
+        all =
+          ((shelterCity.shelterNeedFood - shelterCity.shelterGetFood) /
+            shelterCity.shelterNeedFood) *
+          5;
+      } else if (this.cardHeadTitle === '急需醫療') {
+        all =
+          ((shelterCity.shelterNeedMedical - shelterCity.shelterGetMedical) /
+            shelterCity.shelterNeedMedical) *
+          5;
+      } else {
+        all =
+          ((shelterCity.shelterNeedPoints - shelterCity.shelterGetPoints) /
+            shelterCity.shelterNeedPoints) *
+          5;
+      }
 
       return 5 - all;
     },

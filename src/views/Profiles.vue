@@ -842,7 +842,6 @@ export default {
       }
     },
     showPassword() {
-      console.log('asd');
       $('#password').attr('type', 'text');
     },
   },

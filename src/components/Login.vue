@@ -304,7 +304,7 @@ export default {
       };
 
       fetch(
-        `https://finalproject-336509.appspot.com/api/auth/isaccountexist?account=${this.account}`,
+        `https://finalproject-336509.appspot.com/api/auth/isaccountexist?account=${this.account.trim()}`,
         requestOptions
       )
         .then((response) => response.json())

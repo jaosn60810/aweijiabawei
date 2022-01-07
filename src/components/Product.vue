@@ -1178,7 +1178,11 @@ export default {
             this.$router.go(0);
           }
         })
-        .catch((error) => console.log('error', error));
+        .catch((error) => {
+          console.log('error', error);
+          localStorage.clear();
+          this.$router.go(0);
+        });
     },
     donateMedical() {
       if (localStorage.getItem('token') === null) {
@@ -1251,7 +1255,11 @@ export default {
             this.$router.go(0);
           }
         })
-        .catch((error) => console.log('error', error));
+        .catch((error) => {
+          console.log('error', error);
+          localStorage.clear();
+          this.$router.go(0);
+        });
     },
     goToLogin() {
       if (localStorage.getItem('token') === null) {

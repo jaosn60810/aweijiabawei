@@ -370,6 +370,14 @@ export default {
         .catch((error) => console.log('error', error));
     },
     login() {
+      if (!this.loginAccount.trim() || !this.loginPassword.trim()) {
+        window.Swal.fire({
+          icon: 'error',
+          title: '帳號密碼錯誤',
+          text: '請輸入正確帳號密碼',
+        });
+        return;
+      }
       var myHeaders = new Headers();
       myHeaders.append('Content-Type', 'application/json');
 

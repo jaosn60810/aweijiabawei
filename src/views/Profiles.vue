@@ -150,7 +150,7 @@
             </div>
 
             <div class="form-group my-3">
-              <label class="form-label">本月捐款</label>
+              <label class="form-label">本月捐點</label>
               <input
                 class="form-control"
                 v-model="profile.monthDonation"

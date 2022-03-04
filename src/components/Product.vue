@@ -184,7 +184,7 @@
           <div
             class=" col-md-4 col-lg-3  mb-3"
             v-for="(shelterCity, index) in shelterSortData"
-            :key="shelterCity.shelterId"
+            :key="shelterCity.ShelterOrder"
           >
             <!-- 每張卡片 -->
             <div
@@ -204,11 +204,17 @@
               <div class="card-body d-flex flex-column">
                 <div class="card-title h5 my-3">
                   <div>
-                    <strong>{{ shelterCity.shelterImgName }}</strong>
+                    <strong
+                      >小{{
+                        shelterCity.ShelterName.charAt(
+                          Math.floor(
+                            Math.random() * shelterCity.ShelterName.length
+                          )
+                        )
+                      }}</strong
+                    >
                     <br />
-                    {{
-                      transferPointsToOtherThings(shelterCity, cardHeadTitle)
-                    }}
+                    共有{{ shelterCity.MaxAmls }}位同伴
                   </div>
                 </div>
               </div>
@@ -221,7 +227,7 @@
                 icon-full="heart-fill"
                 icon-clear="slash-circle"
                 show-clear
-                :value="howManyStars(shelterCity)"
+                :value="Math.floor(Math.random() * 6)"
                 readonly
                 class="mb-2"
                 color="#ff00ff"
@@ -249,7 +255,10 @@
 
               <div class="shelterCity-img-list">
                 <img
-                  :src="shelterCity.shelterImgUrl"
+                  :src="
+                    `https://placedog.net/${Math.floor(Math.random() * 1000) +
+                      1}`
+                  "
                   class="card-img-top shelterCity-img  "
                   alt="..."
                 />
@@ -297,7 +306,7 @@
               </div> -->
 
               <p class="card-text h3">
-                <strong>{{ shelterCity.shelterImgName }}</strong>
+                <strong>{{ shelterCity.ShelterName }}</strong>
               </p>
 
               <!-- 收容所卡片按鈕區-->
@@ -359,7 +368,7 @@
           <!-- 燈相 header -->
           <div class="modal-header">
             <p class="modal-title text-left h2" id="exampleModalLabel">
-              {{ shelterCity.shelterName }}
+              {{ shelterCity.UserTag }}
             </p>
             <button
               type="button"
@@ -387,7 +396,10 @@
 
                 <div class="shelterCity-img-list circle">
                   <img
-                    :src="shelterCity.shelterImgUrl"
+                    :src="
+                      `https://placedog.net/${Math.floor(Math.random() * 1000) +
+                        1}`
+                    "
                     class="card-img-top card-img rounded-circle"
                     alt="..."
                   />
@@ -401,7 +413,7 @@
                     }}</strong>
                     <span class=" small d-none d-sm-inline">來自</span>
                     <span class=" small d-none d-sm-inline">{{
-                      shelterCity.shelterName
+                      shelterCity.ShelterName
                     }}</span>
                   </p>
                 </b-avatar>
@@ -603,16 +615,7 @@
               <!--食物進度條 -->
               <div class="h6 mt-3">
                 <i class="fas fa-bone "></i> 還有
-                <strong>{{
-                  checkNegative(
-                    (
-                      (1 -
-                        shelterCity.shelterGetFood /
-                          shelterCity.shelterNeedFood) *
-                      shelterCity.realNumber
-                    ).toFixed(2)
-                  )
-                }}</strong>
+                <strong>{{ Math.floor(Math.random() * 100 + 1) }}</strong>
                 隻肚子餓的毛寶
               </div>
 
@@ -631,16 +634,7 @@
               <div class="h6 mt-3">
                 <i class="fas fa-briefcase-medical   "></i>
                 還有
-                <strong>{{
-                  checkNegative(
-                    (
-                      (1 -
-                        shelterCity.shelterGetMedical /
-                          shelterCity.shelterNeedMedical) *
-                      shelterCity.realNumber
-                    ).toFixed(2)
-                  )
-                }}</strong>
+                <strong>{{ Math.floor(Math.random() * 100 + 1) }}</strong>
                 隻生病的毛寶
               </div>
 
@@ -663,12 +657,11 @@
                 target="_blank"
                 title="Google Map"
               >
-                {{ shelterCity.address }}</a
+                {{ shelterCity.Address }}</a
               ><br />
-              電話: {{ shelterCity.shelterPhoneNumber }}<br />
+              電話: {{ shelterCity.Tel }}<br />
               <span style="color: #d45345;"
-                >更新時間:
-                {{ new Date(shelterCity.updateTime).toLocaleString() }}</span
+                >開放時間: {{ shelterCity.Memo }}</span
               ><br />
             </div>
           </div>
@@ -713,7 +706,7 @@ import $ from 'jquery';
 
 // import dogImg from '../assets/data/dogImg.json';
 // import animalShelters from '../assets/data/animal-shelter.json';
-// import shelterCities from '../assets/data/shelterCity.json';
+import shelterCities from '../assets/data/shelterCity.json';
 import marquee from '../assets/data/marquee.json';
 
 import vueSeamlessScroll from 'vue-seamless-scroll';
@@ -747,7 +740,7 @@ export default {
       thisWeekDonation: [],
       thisWeekDonationRandomNumber: Math.floor(Math.random() * 25) + 1,
       cardHeadTitle: '急需罐罐與醫療',
-      shelterSortData: [],
+      shelterSortData: shelterCities,
       userRemainPoints: 0,
       token: localStorage.getItem('token'),
       // 動畫

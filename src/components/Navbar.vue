@@ -31,6 +31,12 @@
             <!-- <router-link to="/" class="nav-link" href="#">首頁</router-link> -->
             <router-link to="/" class="nav-link h1" href="#">首頁</router-link>
           </li>
+          <li class="nav-item active mx-5">
+            <!-- <router-link to="/" class="nav-link" href="#">首頁</router-link> -->
+            <router-link to="/aboutview" class="nav-link h1" href="#"
+              >地圖</router-link
+            >
+          </li>
 
           <li class="nav-item mx-5">
             <a class="nav-link h1" @click="Membercenter">會員中心</a>

@@ -16,7 +16,7 @@
               @change="
                 cityChange();
                 updateMap();
-                showPopup(shelter[0].shelterId, 12);
+                showPopup(shelter[0].ShelterOrder, 12);
               "
             >
               <option value="all">全部</option>
@@ -36,51 +36,46 @@
               id="areaName"
               class="form-control"
               v-model="select.store"
-              @change="
+              @blur="
                 updateMap();
-                showPopup(shelter[0].shelterId, 15);
+                showPopup(shelter[0].ShelterOrder, 15);
               "
             >
               <option value="all">請選擇動物收容所</option>
               <option
-                :value="a.shelterName"
+                :value="a.ShelterName"
                 v-for="a in cityShelters"
-                :key="a.shelterName"
+                :key="a.ShelterName"
               >
-                {{ a.shelterName }}
+                {{ a.ShelterName }}
               </option>
             </select>
           </div>
         </div>
         <!-- 各收容所資料 -->
-        <div class="overflow-auto bd-links">
+        <div class="overflow-auto bd-links d-none d-md-block">
           <div
             class="card "
             :class="{
-              highlight: a.realNumber / a.containMaxNumber < 0.5,
+              highlight: a.MaxAmls > 100,
             }"
             v-for="a in shelter"
-            :key="a.shelterName"
+            :key="a.ShelterName"
           >
-            <div class="card-body" @click="showPopup(a.shelterId, 15)">
+            <div class="card-body" @click="showPopup(a.ShelterOrder, 15)">
               <p class="card-title h3">
-                <strong>{{ a.shelterName }}</strong>
+                <strong>{{ a.ShelterName }}</strong>
               </p>
 
               <p class="card-text">
                 <i class="fas fa-bone fa-3x"></i>
               </p>
-              <b-progress
-                :max="a.containMaxNumber"
-                height="2rem"
-                animated
-                show-value
-              >
-                <b-progress-bar :value="a.realNumber">
+              <b-progress :max="a.MaxAmls" height="2rem" animated show-value>
+                <b-progress-bar :value="a.MaxAmls / 10">
                   <span class="progress-text"
                     >捐款點數進度:
                     <strong
-                      >{{ a.realNumber }} / {{ a.containMaxNumber }}</strong
+                      >{{ a.MaxAmls / 10 }} / {{ a.MaxAmls }}</strong
                     ></span
                   >
                 </b-progress-bar>
@@ -89,17 +84,12 @@
               <p class="card-text">
                 <i class="fas fa-briefcase-medical fa-3x"></i>
               </p>
-              <b-progress
-                :max="a.containMaxNumber"
-                height="2rem"
-                animated
-                show-value
-              >
-                <b-progress-bar :value="a.realNumber">
+              <b-progress :max="a.MaxAmls" height="2rem" animated show-value>
+                <b-progress-bar :value="a.MaxAmls / 20">
                   <span class="progress-text"
                     >捐款點數進度:
                     <strong
-                      >{{ a.realNumber }} / {{ a.containMaxNumber }}</strong
+                      >{{ a.MaxAmls / 20 }} / {{ a.MaxAmls }}</strong
                     ></span
                   >
                 </b-progress-bar>
@@ -121,7 +111,7 @@
 <script>
 import Cart from '../components/Cart';
 import L from 'leaflet';
-// import shelterData from '../assets/data/shelterCity.json';
+import shelterData from '../assets/data/shelterCity.json';
 import asData from '../assets/data/animal-shelter.json';
 
 let openStreetMap = {};
@@ -131,7 +121,7 @@ export default {
   data: () => ({
     asAPI: 'Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL',
     asData,
-    shelterData: [],
+    shelterData: shelterData,
     animals: [],
     dataReady: false,
     select: {
@@ -148,14 +138,14 @@ export default {
   },
   computed: {
     cities() {
-      return [...new Set(this.shelterData.map(({ city }) => city))];
+      return [...new Set(this.shelterData.map(({ CountyName }) => CountyName))];
     },
     cityShelters() {
       return this.shelterData.filter((shelter) => {
         if (this.select.city === 'all' && this.select.store === 'all') {
           return shelter.shelterName;
         } else {
-          return shelter.city === this.select.city;
+          return shelter.CountyName === this.select.city;
         }
       });
     },
@@ -164,9 +154,9 @@ export default {
         if (this.select.city === 'all' && this.select.store === 'all') {
           return shelter.shelterName;
         } else if (this.select.store === 'all') {
-          return shelter.city === this.select.city;
+          return shelter.CountyName === this.select.city;
         } else {
-          return shelter.shelterName === this.select.store;
+          return shelter.ShelterName === this.select.store;
         }
       });
     },
@@ -182,18 +172,16 @@ export default {
     },
     documentReady() {
       this.shelterData.forEach((data) => {
-        const marker = L.marker([data.latitude, data.longitude], {
-          title: data.shelterId,
+        const marker = L.marker([data.LAT, data.LNG], {
+          title: data.ShelterOrder,
         }).addTo(openStreetMap)
-          .bindPopup(`<p><strong style="font-size: 20px;">${
-          data.shelterName
-        }</strong></p>
-          地址: <a :href="https://www.google.com.tw/maps/place/${data.address}"
+          .bindPopup(`<p><strong style="font-size: 20px;">${data.ShelterName}</strong></p>
+          地址: <a :href="https://www.google.com.tw/maps/place/${data.Address}"
                 target="_blank" title="Google Map">
-                ${data.address}</a><br>
-          電話: ${data.shelterPhoneNumber}<br>
+                ${data.Address}</a><br>
+          電話: ${data.Tel}<br>
           <span style="color: #d45345;">
-          ${new Date(data.updateTime).toLocaleString()}</span><br>
+          ${data.Memo}</span><br>
           `);
         this.markers.push(marker);
       });
@@ -229,25 +217,19 @@ export default {
 
       // add markers
       this.shelter.forEach((data) => {
-        const icon =
-          data.realNumber / data.containMaxNumber < 0.5
-            ? icons.red
-            : icons.green;
+        const icon = data.MaxAmls > 100 ? icons.red : icons.green;
         // 透過藥局經緯度疊加標記
-        const marker = L.marker([data.latitude, data.longitude], {
-          title: data.shelterId,
+        const marker = L.marker([data.LAT, data.LNG], {
+          title: data.ShelterOrder,
           icon,
         }).addTo(openStreetMap)
-          .bindPopup(`<p><strong style="font-size: 20px;">${
-          data.shelterName
-        }</strong></p>
-          地址: <a href="https://www.google.com.tw/maps/place/${data.address}"
+          .bindPopup(`<p><strong style="font-size: 20px;">${data.ShelterName}</strong></p>
+          地址: <a href="https://www.google.com.tw/maps/place/${data.Address}"
                 target="_blank" title="Google Map">
-                ${data.address}</a><br>
-          電話: ${data.shelterPhoneNumber}<br>
-          <span style="color: #d45345;">${new Date(
-            data.updateTime
-          ).toLocaleString()}</span><br>
+                ${data.Address}</a><br>
+          電話: ${data.Tel}<br>
+          <span style="color: #d45345;">
+          ${data.Memo}</span><br>
           `);
         this.markers.push(marker);
       });
@@ -255,9 +237,11 @@ export default {
     showPopup(id, zoom) {
       this.markers.forEach((marker) => {
         const markerID = marker.options.title;
+
         const position = marker.getLatLng();
         if (markerID === id) {
           openStreetMap.setView(position, zoom);
+
           marker.openPopup();
         }
       });

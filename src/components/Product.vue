@@ -114,7 +114,7 @@
                 icon-full="heart-fill"
                 icon-clear="slash-circle"
                 show-clear
-                :value="((33 - index) / 33) * 6"
+                :value="(index / 33) * 6"
                 readonly
                 class="mb-2"
                 color="#ff00ff"

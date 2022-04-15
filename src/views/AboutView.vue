@@ -1,22 +1,19 @@
 <template>
-  <div class = "aboutview">
+  <div class="aboutview">
     <Navbar></Navbar>
     <About></About>
-    <Cart></Cart>
   </div>
 </template>
 
 <script>
-import Navbar from '../components/Navbar'
-import About from '../components/About'
-import Cart from '../components/Cart'
+import Navbar from '../components/Navbar';
+import About from '../components/About';
 
 export default {
-  name: "aboutview",
-  components:{
-    Navbar, About, Cart
-  }
+  name: 'aboutview',
+  components: {
+    Navbar,
+    About,
+  },
 };
 </script>
-  
-  

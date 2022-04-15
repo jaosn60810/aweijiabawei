@@ -1,7 +1,7 @@
 import Vue from 'vue'; //當我們install vue的同時也install webpack
 import App from './App.vue';
 import router from './router';
-import { fb } from './firebase';
+
 import store from './Store.js';
 import 'popper.js';
 import 'bootstrap';
@@ -51,24 +51,8 @@ const Toast = Swal.mixin({
 window.Toast = Toast;
 window.Swal = Swal;
 
-let app = '';
-
-fb.auth().onAuthStateChanged(function() {
-  if (!app) {
-    new Vue({
-      router,
-      store,
-      render: (h) => h(App),
-    }).$mount('#app');
-  }
-});
-
-//金額格式
-Vue.filter('currency', function(num) {
-  return 'NTD ' + num;
-});
-
-const originalPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch((err) => err);
-};
+new Vue({
+  router,
+  store,
+  render: (h) => h(App),
+}).$mount('#app');

@@ -104,12 +104,10 @@
         <div id="map"></div>
       </div>
     </div>
-    <Cart></Cart>
   </div>
 </template>
 
 <script>
-import Cart from '../components/Cart';
 import L from 'leaflet';
 import shelterData from '../assets/data/shelterCity.json';
 import asData from '../assets/data/animal-shelter.json';
@@ -133,9 +131,7 @@ export default {
   props: {
     msg: String,
   },
-  components: {
-    Cart,
-  },
+
   computed: {
     cities() {
       return [...new Set(this.shelterData.map(({ CountyName }) => CountyName))];

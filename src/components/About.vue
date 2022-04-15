@@ -36,7 +36,7 @@
               id="areaName"
               class="form-control"
               v-model="select.store"
-              @blur="
+              @change="
                 updateMap();
                 showPopup(shelter[0].ShelterOrder, 15);
               "
@@ -53,7 +53,7 @@
           </div>
         </div>
         <!-- 各收容所資料 -->
-        <div class="overflow-auto bd-links d-none d-md-block">
+        <div class="overflow-auto bd-links d-none d-md-block ">
           <div
             class="card "
             :class="{
@@ -110,18 +110,13 @@
 <script>
 import L from 'leaflet';
 import shelterData from '../assets/data/shelterCity.json';
-import asData from '../assets/data/animal-shelter.json';
 
 let openStreetMap = {};
 
 export default {
   name: 'about',
   data: () => ({
-    asAPI: 'Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL',
-    asData,
     shelterData: shelterData,
-    animals: [],
-    dataReady: false,
     select: {
       city: 'all',
       store: 'all',
@@ -165,22 +160,6 @@ export default {
   methods: {
     cityChange() {
       this.select.store = 'all';
-    },
-    documentReady() {
-      this.shelterData.forEach((data) => {
-        const marker = L.marker([data.LAT, data.LNG], {
-          title: data.ShelterOrder,
-        }).addTo(openStreetMap)
-          .bindPopup(`<p><strong style="font-size: 20px;">${data.ShelterName}</strong></p>
-          地址: <a :href="https://www.google.com.tw/maps/place/${data.Address}"
-                target="_blank" title="Google Map">
-                ${data.Address}</a><br>
-          電話: ${data.Tel}<br>
-          <span style="color: #d45345;">
-          ${data.Memo}</span><br>
-          `);
-        this.markers.push(marker);
-      });
     },
     updateMap() {
       // clear markers
@@ -237,23 +216,12 @@ export default {
         const position = marker.getLatLng();
         if (markerID === id) {
           openStreetMap.setView(position, zoom);
-
           marker.openPopup();
         }
       });
     },
   },
   mounted() {
-    const requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-    };
-
-    fetch('https://finalproject-336509.appspot.com/api/shelter', requestOptions)
-      .then((response) => response.json())
-      .then((result) => (this.shelterData = result))
-      .catch((error) => console.log('error', error));
-
     openStreetMap = L.map('map', {
       center: [24, 120.8],
       // 可以嘗試改變 zoom 的數值
@@ -266,8 +234,6 @@ export default {
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       maxZoom: 20,
     }).addTo(openStreetMap);
-
-    // this.documentReady();
   },
 };
 </script>

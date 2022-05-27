@@ -160,7 +160,7 @@
 
     <!-- 點擊打賞按鈕的出現的燈箱 -->
     <div
-      class="modal fade"
+      class="modal fade p-0"
       id="miniCart"
       tabindex="-1"
       role="dialog"

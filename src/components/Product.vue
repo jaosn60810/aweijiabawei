@@ -4,7 +4,7 @@
       <!-- main part -->
       <div class="row mt-5">
         <!-- 測攔 -->
-        <div class="col-12 mb-3  col-md-2 ">
+        <div class="col-12 mb-3  col-lg-2 ">
           <!-- 晃動愛心 -->
           <div class="h3 mb-5">
             <span class="shake-slow shake-constant">打賞幫補血</span>
@@ -92,7 +92,7 @@
                     ? secondCardColor
                     : index === 2
                     ? thirdCardColor
-                    : 'white',
+                    : 'white'
               }"
             >
               <!-- 收容所卡片狀態 -->
@@ -321,17 +321,17 @@
 </template>
 
 <script>
-import $ from 'jquery';
+import $ from 'jquery'
 
-import shelterCities from '../assets/data/shelterCity.json';
-import marquee from '../assets/data/marquee.json';
+import shelterCities from '../assets/data/shelterCity.json'
+import marquee from '../assets/data/marquee.json'
 
-import vueSeamlessScroll from 'vue-seamless-scroll';
+import vueSeamlessScroll from 'vue-seamless-scroll'
 
 export default {
   name: 'product',
   components: {
-    vueSeamlessScroll,
+    vueSeamlessScroll
   },
   data() {
     return {
@@ -342,43 +342,43 @@ export default {
       List: marquee,
       firstCardColor: '#dc3545',
       secondCardColor: '#e04b59',
-      thirdCardColor: '#e4606d',
-    };
+      thirdCardColor: '#e4606d'
+    }
   },
   methods: {
     donateInfo(shelterCity, index) {
-      $('#miniCart').modal('show');
-      this.shelterCity = shelterCity;
-      this.shelterCity.shelterGetMedical = 0;
-      this.shelterCity.shelterGetFood = 0;
-      this.shelterCity.index = index;
-      this.shelterCity.name = `小${this.shelterCity.ShelterName[0]}`;
+      $('#miniCart').modal('show')
+      this.shelterCity = shelterCity
+      this.shelterCity.shelterGetMedical = 0
+      this.shelterCity.shelterGetFood = 0
+      this.shelterCity.index = index
+      this.shelterCity.name = `小${this.shelterCity.ShelterName[0]}`
     },
 
     donateFood() {
-      this.shelterCity.shelterGetFood += this.donationFoodPoints;
+      this.shelterCity.shelterGetFood += this.donationFoodPoints
       window.Swal.fire({
         icon: 'success',
-        title: '食物捐款成功',
-      });
-      this.donationFoodPoints = 0;
+        title: '食物捐款成功'
+      })
+      this.donationFoodPoints = 0
     },
     donateMedical() {
-      this.shelterCity.shelterGetMedical += this.donationMedicalPoints;
+      this.shelterCity.shelterGetMedical += this.donationMedicalPoints
       window.Swal.fire({
         icon: 'success',
-        title: '醫療捐款成功',
-      });
-      this.donationMedicalPoints = 0;
-    },
+        title: '醫療捐款成功'
+      })
+      this.donationMedicalPoints = 0
+    }
   },
 
   computed: {
     transferPointToFoods() {
-      return `餵飽 ${(this.donationFoodPoints / 400).toFixed(2)} 隻毛寶`;
+      return `餵飽 ${(this.donationFoodPoints / 400).toFixed(2)} 隻毛寶`
     },
     transferPointToMedical() {
-      return `醫治 ${(this.donationMedicalPoints / 200).toFixed(2)} 隻毛寶`;
+      return `醫治 ${(this.donationMedicalPoints / 200).toFixed(2)} 隻毛寶`
     },
 
     classOption() {
@@ -391,11 +391,11 @@ export default {
         singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
         singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
         waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
-        autoPlay: true,
-      };
-    },
-  },
-};
+        autoPlay: true
+      }
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
